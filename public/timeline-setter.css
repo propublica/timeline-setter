@@ -1,0 +1,173 @@
+    
+    
+    #timeline {
+      width:85%;
+      height:500px;
+      margin:0 auto;
+      padding:10px;
+      position:relative;
+    }
+    .timeline_inner {
+      width:100%;
+      height:50%;
+      margin:0;padding:0;
+      position:relative;
+      
+    }
+    .timeline_upper {
+      position:relative;
+    }
+    .timeline_middle {
+      height:15px;
+      border-bottom:1px solid #f0f0f0;
+      border-top:1px solid #f0f0f0;
+      color:#999;
+      font-family:"Helvetica Neue",Helvetica,arial,sans-serif;
+      font-size:11px;
+      font-weight:bold;
+      text-transform:uppercase;
+      padding:5px 0 5px 0;
+      position:relative;
+      z-index:0;
+      background:#fff;
+    }
+    .timeline_middle:hover {
+/*      border-bottom:1px solid #141414;
+      border-top:1px solid #141414;
+*/      color:#141414;
+    }
+    .dept_ed_label, .tina_brooks_label {
+      color:#999;
+    }
+    .dept_ed_label_active {
+      color:#74942C;
+    }
+    .tina_brooks_label_active {
+      color:#7C93AF;      
+    }
+    .timeline_lower {
+      position:relative; 
+    }
+    .item {
+      z-index:1;
+      width:150px;
+      height:160px;
+      position:absolute;
+      border:1px solid #EBEBEB;
+      -webkit-border-radius: 3px;
+      -moz-border-radius: 3px;
+      border-radius: 3px;
+      padding:10px;
+      background:#F7F7F7;
+      cursor:pointer;
+      color:#999;
+    }
+    .item_lower {
+      -webkit-box-shadow:#D9D9D9 0px 3px 4px;
+      -moz-box-shadow:#D9D9D9 0px 3px 4px;
+      box-shadow:#D9D9D9 0px 3px 4px;
+    }
+    .item_upper {
+      -webkit-box-shadow:#D9D9D9 0px -3px 4px;
+      -moz-box-shadow:#D9D9D9 0px -3px 4px;
+      box-shadow:#D9D9D9 0px -3px 4px;
+    }
+    
+    .item_active {
+    	z-index:998;
+/*      -webkit-box-shadow: #CECECE 0px 0px 15px;
+      -moz-box-shadow: #CECECE 0px 0px 15px;
+      box-shadow: #CECECE 0px 0px 15px;
+*/    	color:#333;
+    }
+    .timeline_upper .item_active {
+      border-bottom:1px solid #74942C;
+      
+    }
+    .timeline_lower .item_active {
+      border-top:1px solid #7C93AF;
+    }
+    .item_label {
+      font-family:Georgia,"Times New Roman",Times,serif;
+      font-size:12px;
+      line-height:12px;
+      line-height:15px;
+      float:left;
+      height:80%;
+    }
+    .item_year {
+      font-family:"Helvetica Neue",Helvetica,arial,sans-serif;
+      font-weight:bold;
+      font-size:16px;
+      padding-top:10px;
+      float:left;
+      clear:left;
+      width:150px;
+    }
+    .css_arrow {
+      border-style: solid;
+      height: 0px;
+      margin: 0px 10px;
+      width: 0px;
+      position:absolute;
+      border-width: 10px 10px 10px 10px;
+    }
+    .expand_left .css_arrow {
+      margin: 0 13.5%;
+    }
+    .css_arrow_down {
+      border-color: #EBEBEB transparent transparent  transparent;
+      top:100%;
+    }
+    .item_active .css_arrow_down {
+      border-color: #74942C transparent transparent  transparent;
+      
+    }
+    .css_arrow_up {
+      border-color: transparent transparent #EBEBEB transparent;
+      top: -20px;
+    }
+    .item_active .css_arrow_up {
+      border-color: transparent transparent #7C93AF transparent;
+    }
+    .doc_img {
+     display:none;
+      float:right;
+    }
+    .doc_img img {
+      height:110px;
+      -webkit-box-shadow:#CECECE 0px 0px 15px;
+      -moz-box-shadow:#CECECE 0px 0px 15px;
+      box-shadow:#CECECE 0px 0px 15px;
+    }
+    .read_btn {
+      -webkit-box-shadow: #CECECE 0px 0px 2px;
+      -moz-box-shadow: #CECECE 0px 0px 2px;
+      box-shadow: #CECECE 0px 0px 2px;
+      
+      -webkit-user-select: none;
+      background: #E9F0F8;
+      border-bottom-left-radius: 4px 4px;
+      border-bottom-right-radius: 4px 4px;
+      border-top-left-radius: 4px 4px;
+      border-top-right-radius: 4px 4px;
+      color: black;
+      cursor: pointer;
+      font-weight: bold;
+      padding: 5px;
+      
+      margin-top:8px;
+      
+      font-size:11px;
+      font-family:"Helvetica Neue",Helvetica,arial,sans-serif;
+      text-transform:uppercase;
+      font-weight:normal;
+      text-align:center;
+    }
+    .read_btn:hover {
+      color:black;cursor:pointer;text-decoration:none;background:#cecece;
+    }
+    #timeline a {
+      text-decoration:none;
+      color:#333;
+    }

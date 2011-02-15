@@ -1,0 +1,13 @@
+#!/usr/bin/env ruby
+
+require File.expand_path("../../base.rb", __FILE__)
+
+csv = ARGV[0]
+raise "specify a csv" unless csv
+
+sheet = File.open(csv).read
+events = TimelineSetter::Parser.new sheet
+html = TimelineSetter::Timeline.new(events.events).timeline
+File.open(File.expand_path("../../public/timeline.html", __FILE__),'w+') do |doc|
+  doc.write html
+end
