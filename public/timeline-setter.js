@@ -13,12 +13,18 @@ TimelineSetter.prototype.createNotches = function() {
   var that = this;
   _(this.items).each(function(item) {
     var timestamp = item.timestamp;
-    var position = ((that.max - timestamp) / (that.max - that.min)) * 100;
+    var position = that.calculatePosition(timestamp);
     $(".timeline_notchbar").append(
       "<div class='timeline_notch notch_" + timestamp + "' data-timestamp='" + timestamp + "'>&nbsp;</div>"
     );
-    $(".notch_" + timestamp).css("left",position + "%");
+    $(".notch_" + timestamp).css("right",position + "%");
   });
+}
+
+TimelineSetter.prototype.calculatePosition = function(timestamp) {
+  var position =  ((this.max - timestamp) / (this.max - this.min)) * 100;
+  console.log(position);
+  return position;
 }
 
 TimelineSetter.prototype.template = function(timestamp) {
@@ -36,8 +42,10 @@ $(document).ready(function() {
   page_timeline.createNotches();
   $(".timeline_notch").hover(function() {
     var timestamp = $(this).attr("data-timestamp");
-    var html = page_timeline.template(timestamp)
-    $("#timeline_card_container").html(html).attr("style",$(this).attr("style"))
+    var html = page_timeline.template(timestamp);
+    var position = page_timeline.calculatePosition(timestamp);
+    $("#timeline_card_container").html(html).css("right",position + "%");
   },function() {
+    var el = $("#timeline_card_container");
   });
 });

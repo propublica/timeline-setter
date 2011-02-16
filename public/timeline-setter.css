@@ -50,7 +50,7 @@
     }
     .item {
       z-index:1;
-      width:150px;
+      width:250px;
       height:160px;
       position:absolute;
       border:1px solid #EBEBEB;
@@ -80,11 +80,7 @@
       box-shadow: #CECECE 0px 0px 15px;
 */    	color:#333;
     }
-    .timeline_upper .item_active {
-      border-bottom:1px solid #74942C;
-      
-    }
-    .timeline_lower .item_active {
+    .item_active {
       border-top:1px solid #7C93AF;
     }
     .item_label {
@@ -94,6 +90,7 @@
       line-height:15px;
       float:left;
       height:80%;
+      width:150px;
     }
     .item_year {
       font-family:"Helvetica Neue",Helvetica,arial,sans-serif;
@@ -131,7 +128,6 @@
       border-color: transparent transparent #7C93AF transparent;
     }
     .doc_img {
-     display:none;
       float:right;
     }
     .doc_img img {
@@ -175,7 +171,7 @@
     
     /* */
     .timeline_notchbar_container {
-      padding:0 10px 0 5px;
+      padding:0 5px 0 10px;
       border:1px solid #cecece;
       -webkit-box-shadow: #CECECE 0px 0px 2px;
       -moz-box-shadow: #CECECE 0px 0px 2px;
@@ -201,5 +197,4 @@
     #timeline_card_container {
       top:50px;
       position:absolute;
-      margin-left:-20px;
     }

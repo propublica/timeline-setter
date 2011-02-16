@@ -12,7 +12,7 @@
   var timelineData = <%= self.to_json %>;
 </script>
 <script id="card_tmpl" type="text/jst">
-  <div class="item">
+  <div class="item item_active" data-timestamp="<%%= timestamp %>">
     <div class="item_label">
       <%%= event_description %>
     </div>
@@ -26,7 +26,7 @@
     <div class="item_year">
       <%%= event_date %>
     </div>
-      <div class="css_arrow css_arrow_down"></div>
+      <div class="css_arrow css_arrow_up"></div>
   </div>
 </script>
 <script src="timeline-setter.js"></script>
