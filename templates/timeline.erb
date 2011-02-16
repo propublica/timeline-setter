@@ -1,0 +1,14 @@
+<link href="timeline-setter.css" rel="stylesheet" />
+<script src="http://www.propublica.org/js/public/assets/all.js?1296850807"></script>
+
+<div id="timeline">
+  <div class="timeline_inner timeline_upper">
+  <% @html.each do |event| %>
+    <%= event %>
+  <% end %>
+  </div>
+</div>
+<script type="text/javascript">
+  var timelineData = <%= self.to_json %>;
+</script>
+<script src="timeline-setter.js"></script>
