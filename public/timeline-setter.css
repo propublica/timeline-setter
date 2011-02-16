@@ -171,3 +171,35 @@
       text-decoration:none;
       color:#333;
     }
+    
+    
+    /* */
+    .timeline_notchbar_container {
+      padding:0 10px 0 5px;
+      border:1px solid #cecece;
+      -webkit-box-shadow: #CECECE 0px 0px 2px;
+      -moz-box-shadow: #CECECE 0px 0px 2px;
+      box-shadow: #CECECE 0px 0px 2px;
+      background:#f7f7f7;
+    }
+    
+    .timeline_notchbar {
+      height:20px;
+      position:relative;
+      width:100%;
+    }
+    .timeline_notch {
+      height:100%;
+      width:5px;
+      background:#999;
+      position:absolute;
+      cursor:pointer;
+    }
+    .timeline_notch:hover {
+      background:#cecece;
+    }
+    #timeline_card_container {
+      top:50px;
+      position:absolute;
+      margin-left:-20px;
+    }

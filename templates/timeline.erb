@@ -2,13 +2,31 @@
 <script src="http://www.propublica.org/js/public/assets/all.js?1296850807"></script>
 
 <div id="timeline">
-  <div class="timeline_inner timeline_upper">
-  <% @html.each do |event| %>
-    <%= event %>
-  <% end %>
+  <div class="timeline_notchbar_container">
+    <div class="timeline_notchbar"></div>
   </div>
+  <div id="timeline_card_container"></div>
 </div>
+
 <script type="text/javascript">
   var timelineData = <%= self.to_json %>;
+</script>
+<script id="card_tmpl" type="text/jst">
+  <div class="item">
+    <div class="item_label">
+      <%%= event_description %>
+    </div>
+      <%% if (event_link){ %>
+        <div class="doc_img">
+          <a target="_blank" href="<%%= event_link %>"><img src="<%%= event_thumbnail %>"></a>
+          <div class="read_btn"><a target="_blank" href="<%%= event_link %>">Read More</a></div>
+        </div>
+      <%% } %>
+
+    <div class="item_year">
+      <%%= event_date %>
+    </div>
+      <div class="css_arrow css_arrow_down"></div>
+  </div>
 </script>
 <script src="timeline-setter.js"></script>
