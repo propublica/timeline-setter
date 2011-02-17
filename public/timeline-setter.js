@@ -12,11 +12,12 @@ TimelineSetter.prototype.createNotches = function() {
   console.log("min: "+ this.min);
   var that = this;
   _(this.items).each(function(item) {
-    var timestamp = item.timestamp;
-    var position = that.calculatePosition(timestamp);
-    $(".timeline_notchbar").append(
-      "<div class='timeline_notch notch_" + timestamp + "' data-timestamp='" + timestamp + "'>&nbsp;</div>"
-    );
+    var timestamp,position,tmpl,html;
+    timestamp = item.timestamp;
+    position = that.calculatePosition(timestamp);
+    tmpl = _.template($("#notch_tmpl").html());
+    html = tmpl(item)
+    $(".timeline_notchbar").append(html);
     $(".notch_" + timestamp).css("right",position + "%");
   });
 }
@@ -32,20 +33,32 @@ TimelineSetter.prototype.template = function(timestamp) {
   })[0];
   tmpl = _.template($("#card_tmpl").html());
   html = tmpl(item);
-  return html; 
+  return html;
 }
 
+TimelineSetter.prototype.cardPosition = function(timestamp) {
+  var barWidth,cardWidth,notchPosition,cardPosition;
+  barWidth = $(".timeline_notchbar").width();
+  cardWidth = 250;
+  notchPosition = this.calculatePosition(timestamp);
+  return cardPosition = notchPosition > 50 ? notchPosition : (notchPosition + ((cardWidth / barWidth) * 100))
+}
 
 $(document).ready(function() {
   var page_timeline = new TimelineSetter(timelineData);
   page_timeline.createNotches();
+  
+  
   $(".timeline_notch").hover(function() {
-    var timestamp = $(this).attr("data-timestamp");
-    var html = page_timeline.template(timestamp);
-    var position = page_timeline.calculatePosition(timestamp);
-    $("#timeline_card_container").show().html(html).css("right",position + "%");
+    var timestamp,html,position;
+    timestamp = $(this).attr("data-timestamp");
+    html = page_timeline.template(timestamp);
+    cardPosition = page_timeline.cardPosition(timestamp);
+    console.log(cardPosition);
+    $("#timeline_card_container").show().html(html).css("right",cardPosition + "%");
+    $(".css_arrow").show().css("right",(page_timeline.calculatePosition(timestamp) - 2.8) + "%");
   },function() {
-    // var el = $("#timeline_card_container");
+    var el = $("#timeline_card_container");
     // window.setTimeout(function(){
     //   el.hide();
     // },1000)

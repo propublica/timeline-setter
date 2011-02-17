@@ -5,11 +5,17 @@
   <div class="timeline_notchbar_container">
     <div class="timeline_notchbar"></div>
   </div>
+  <div class="timeline_arrow_container">
+    <div class="css_arrow css_arrow_up" style="display:none;"></div>
+  </div>
   <div id="timeline_card_container"></div>
 </div>
 
 <script type="text/javascript">
   var timelineData = <%= self.to_json %>;
+</script>
+<script id="notch_tmpl" type="text/jst">
+  <div class="timeline_notch notch_<%%= timestamp %>" data-timestamp="<%%= timestamp %>">&nbsp;</div>
 </script>
 <script id="card_tmpl" type="text/jst">
   <div class="item item_active" data-timestamp="<%%= timestamp %>">
@@ -26,7 +32,6 @@
     <div class="item_year">
       <%%= event_date %>
     </div>
-      <div class="css_arrow css_arrow_up"></div>
   </div>
 </script>
 <script src="timeline-setter.js"></script>
