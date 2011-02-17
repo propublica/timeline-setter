@@ -8,8 +8,6 @@ function TimelineSetter(timelineData) {
 };
 
 TimelineSetter.prototype.createNotches = function() {
-  console.log("max: "+ this.max);
-  console.log("min: "+ this.min);
   var that = this;
   _(this.items).each(function(item) {
     var timestamp,position,tmpl,html;
@@ -21,6 +19,22 @@ TimelineSetter.prototype.createNotches = function() {
     $(".notch_" + timestamp).css("right",position + "%");
   });
 };
+
+TimelineSetter.prototype.createYearNotches = function() {
+  // find earliest year and latest year in the set,
+  // and add notches for every year in between
+  var years = [];
+  var earliestYear = new Date();
+  var latestYear = new Date();
+  earliestYear.setTime(this.min * 1000);
+  latestYear.setTime(this.max * 1000);
+  earliestYear = earliestYear.getFullYear();
+  latestYear = latestYear.getFullYear();
+  for (i = earliestYear; i < latestYear; i++) {
+    years.push(Date.parse(i))
+  }
+  return years;
+}
 
 TimelineSetter.prototype.calculatePosition = function(timestamp) {
   return ((this.max - timestamp) / (this.max - this.min)) * 100;
@@ -68,6 +82,7 @@ TimelineSetter.prototype.zoom = function(direction) {
 }
 
 TimelineSetter.prototype.scrub = function(direction) {
+  console.log(this.curScrub)
   //don't allow scrubbage if we're not zoomed in
   if (!this.curZoom || this.curZoom === 100) return;
   
@@ -75,11 +90,13 @@ TimelineSetter.prototype.scrub = function(direction) {
   this.curScrub = this.curScrub ? this.curScrub : 0;
   if (direction === "right") {
    if (this.curScrub === 80) return;
+   console.log('right')
    this.curScrub += 20;
   }
   
   if (direction === "left") {
     if (this.curScrub === 0) return;
+    console.log('left')
     this.curScrub -= 20;
   }
   var dir = direction === "left" ? "+" : "-";
@@ -104,10 +121,10 @@ $(document).ready(function() {
     $(".css_arrow").show().css("right",(page_timeline.calculatePosition(timestamp) - 2.8) + "%");
   },function() {
     var el = $("#timeline_card_container");
-    // window.setTimeout(function(){
-    //   $(".css_arrow").hide();
-    //   el.hide();
-    // },1000)
+    window.setTimeout(function(){
+      $(".css_arrow").hide();
+      el.hide();
+    },1000)
   });
   
   _(["zoom", "scrub"]).each(function(q) {

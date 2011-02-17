@@ -17,6 +17,9 @@
 <script type="text/javascript">
   var timelineData = <%= self.to_json %>;
 </script>
+<script id="yearnotch_tmpl" type="text/jst">
+  <div class="timeline_year_notch yearnotch_<%%= timestamp %>" data-timestamp="<%%= timestamp %>"></div>
+</script>
 <script id="notch_tmpl" type="text/jst">
   <div class="timeline_notch notch_<%%= timestamp %>" data-timestamp="<%%= timestamp %>">&nbsp;</div>
 </script>
