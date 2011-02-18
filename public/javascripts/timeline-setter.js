@@ -92,15 +92,15 @@ TimelineSetter.prototype.scrub = function(direction) {
   //scrubbing "right" will move the notchbar "left" and vice versa
   //      << [=====] >>
   if (direction === "right") {
-   if (this.curScrub <= -120) return;
+   if (this.curScrub <= -(this.curZoom ? (this.curZoom * .80) : 100)) return;
    console.log('right')
-   this.curScrub -= 20;
+   this.curScrub -= this.curZoom ? (20 * (this.curZoom / 100)) : 20;
   }
   
   if (direction === "left") {
     if (this.curScrub >= 20) return;
     console.log('left')
-    this.curScrub += 20;
+    this.curScrub += this.curZoom ? (20 * (this.curZoom / 100)) : 20;
   }
 
   console.log(this.curScrub + "%");
