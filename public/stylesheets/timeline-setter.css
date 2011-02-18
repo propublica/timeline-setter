@@ -233,3 +233,23 @@
       top:19px;
       position:absolute;
     }
+    .timeline_controls {
+      margin: 0 0 10px 0;
+    }
+    .timeline_controls a {
+      border:1px solid #cecece;
+      background:#f0f0f0;
+      padding:3px 5px 3px 5px;
+      color:#999;
+      font-family:"Helvetica Neue",Arial,sans-serif;
+      font-weight:normal;
+      font-size:14px;
+      border-bottom-left-radius: 2px 2px;
+      border-bottom-right-radius: 2px 2px;
+      border-top-left-radius: 2px 2px;
+      border-top-right-radius: 2px 2px;
+      
+    }
+    .timeline_controls a:hover {
+      background:#fff;
+    }

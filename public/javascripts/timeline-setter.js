@@ -154,10 +154,10 @@ $(document).ready(function() {
     $(".css_arrow").show().css("right",(page_timeline.calculatePosition(timestamp) - 2) + "%");
   },function() {
     var el = $("#timeline_card_container");
-    // window.setTimeout(function(){
-    //   $(".css_arrow").hide();
-    //   el.hide();
-    // },1000)
+    window.setTimeout(function(){
+      $(".css_arrow").hide();
+      el.hide();
+    },2000)
   });
   
   _(["zoom", "scrub"]).each(function(q) {
