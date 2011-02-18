@@ -150,6 +150,9 @@ $(document).ready(function() {
     timestamp = $(this).attr("data-timestamp");
     html = page_timeline.template(timestamp);
     cardPosition = page_timeline.cardPosition(timestamp);
+    
+    // this stuff needs to be aware of how zoomed in the container is, 
+    // otherwise cards will fall off the sides if notches are too close to edges
     $("#timeline_card_container").show().html(html).css("right",cardPosition + "%");
     $(".css_arrow").show().css("right",(page_timeline.calculatePosition(timestamp) - 2) + "%");
   },function() {
