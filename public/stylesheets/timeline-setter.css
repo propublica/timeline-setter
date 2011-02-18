@@ -182,6 +182,16 @@
       position:relative;
       overflow:hidden;
     }
+    #timeline_card_scroller {
+      width:100%;
+      position:relative;
+      overflow:hidden;
+      height:400px;
+    }
+    #timeline_card_scroller_inner {
+      width:100%;
+      position:relative;
+    }
     .timeline_arrow_container {
       position:relative;
       -webkit-box-shadow:none;
@@ -196,12 +206,25 @@
       position:relative;
       width:100%;
     }
-    .timeline_notch {
+    .timeline_notch, .timeline_year_notch {
       height:100%;
       width:5px;
       background:#999;
       position:absolute;
       cursor:pointer;
+    }
+    .timeline_year_notch {
+      background:#999;
+      width:1px;
+      color:#999;
+    }
+    .timeline_year_notch_year_text {
+      display:block;
+      font-family:Arial,sans-serif;
+      font-size:9px;
+      padding:2px 0 0 5px;
+    }
+    .timeline_year_notch:hover {
     }
     .timeline_notch:hover {
       background:#cecece;

@@ -13,8 +13,8 @@ TimelineSetter.prototype.createNotches = function() {
     var timestamp,position,tmpl,html;
     timestamp = item.timestamp;
     position = that.calculatePosition(timestamp);
-    tmpl = _.template($("#notch_tmpl").html());
-    html = tmpl(item);
+    html = TimelineSetter.domTemplate("#notch_tmpl",item);
+
     $(".timeline_notchbar").append(html);
     $(".notch_" + timestamp).css("right",position + "%");
   });
@@ -23,18 +23,22 @@ TimelineSetter.prototype.createNotches = function() {
 TimelineSetter.prototype.createYearNotches = function() {
   // find earliest year and latest year in the set,
   // and add notches for every year in between
-  var years = [];
-  var earliestYear = new Date();
-  var latestYear = new Date();
-  earliestYear.setTime(this.min * 1000);
-  latestYear.setTime(this.max * 1000);
+  var years,earliestYear,latestYear,i;
+  years = [];
+  earliestYear = new Date(); earliestYear.setTime(this.min * 1000);
+  latestYear = new Date(); latestYear.setTime(this.max * 1000);
   earliestYear = earliestYear.getFullYear();
   latestYear = latestYear.getFullYear();
-  for (i = earliestYear; i < latestYear; i++) {
-    years.push(Date.parse(i))
+  for (i = earliestYear; i < latestYear + 1; i++) {
+    var timestamp,year,html;
+    timestamp = Date.parse(i) / 1000;
+    year = i;
+    html = TimelineSetter.domTemplate("#year_notch_tmpl", {'timestamp' : timestamp, 'year' : year })
+    $(".timeline_notchbar").append(html);
+    $(".year_notch_" + timestamp).css("right",this.calculatePosition(timestamp) + "%");
   }
-  return years;
 }
+
 
 TimelineSetter.prototype.calculatePosition = function(timestamp) {
   return ((this.max - timestamp) / (this.max - this.min)) * 100;
@@ -45,8 +49,7 @@ TimelineSetter.prototype.template = function(timestamp) {
   item = _(this.items).select(function(q) {
     return q.timestamp === Number(timestamp);
   })[0];
-  tmpl = _.template($("#card_tmpl").html());
-  html = tmpl(item);
+  html = TimelineSetter.domTemplate("#card_tmpl",item)
   return html;
 };
 
@@ -76,40 +79,49 @@ TimelineSetter.prototype.zoom = function(direction) {
   } else {
     this.curZoom -= 100;
   }
-  var dir = direction === "in" ? "+" : "-";
-  console.log(dir + "=" + this.curZoom + "%")
-  $(".timeline_notchbar").animate({ width : dir + "=" + this.curZoom + "%"});
+  console.log(this.curZoom + "%")
+  $(".timeline_notchbar, #timeline_card_scroller_inner").animate({ width : this.curZoom + "%"});
 }
 
 TimelineSetter.prototype.scrub = function(direction) {
   console.log(this.curScrub)
   //don't allow scrubbage if we're not zoomed in
   if (!this.curZoom || this.curZoom === 100) return;
-  
-  
   this.curScrub = this.curScrub ? this.curScrub : 0;
+
+  //scrubbing "right" will move the notchbar "left" and vice versa
+  //      << [=====] >>
   if (direction === "right") {
-   if (this.curScrub === 80) return;
+   if (this.curScrub <= -120) return;
    console.log('right')
-   this.curScrub += 20;
+   this.curScrub -= 20;
   }
   
   if (direction === "left") {
-    if (this.curScrub === 0) return;
+    if (this.curScrub >= 20) return;
     console.log('left')
-    this.curScrub -= 20;
+    this.curScrub += 20;
   }
-  var dir = direction === "left" ? "+" : "-";
-  console.log(dir + "=" + this.curScrub + "%");
-  $(".timeline_notchbar").animate(
-    { left : dir + "=" + this.curScrub + "%" }
+
+  console.log(this.curScrub + "%");
+  $(".timeline_notchbar, #timeline_card_scroller_inner").animate(
+    { left : this.curScrub + "%" }
   );
 } 
+
+/* ---- */
+
+TimelineSetter.domTemplate = function(el,data) {
+  tmpl = _.template($(el).html());
+  return html = tmpl(data);
+}
+
+/* ---- */
 
 $(document).ready(function() {
   var page_timeline = new TimelineSetter(timelineData);
   page_timeline.createNotches();
-  
+  page_timeline.createYearNotches();
   
   $(".timeline_notch").hover(function() {
     var timestamp,html,cardPosition;
@@ -121,10 +133,10 @@ $(document).ready(function() {
     $(".css_arrow").show().css("right",(page_timeline.calculatePosition(timestamp) - 2.8) + "%");
   },function() {
     var el = $("#timeline_card_container");
-    window.setTimeout(function(){
-      $(".css_arrow").hide();
-      el.hide();
-    },1000)
+    // window.setTimeout(function(){
+    //   $(".css_arrow").hide();
+    //   el.hide();
+    // },1000)
   });
   
   _(["zoom", "scrub"]).each(function(q) {
