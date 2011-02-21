@@ -24,11 +24,15 @@ TimelineSetter.prototype.createYearNotches = function() {
   // find earliest year and latest year in the set,
   // and add notches for every year in between
   var years,earliestYear,latestYear,i;
-  years = [];
-  earliestYear = new Date(); earliestYear.setTime(this.min * 1000);
-  latestYear = new Date(); latestYear.setTime(this.max * 1000);
-  earliestYear = earliestYear.getFullYear();
-  latestYear = latestYear.getFullYear();
+  var getYearFromTimestamp = function(timestamp) {
+    var d = new Date();
+    d.setTime(timestamp * 1000);
+    return d.getFullYear()
+  }
+
+  earliestYear = getYearFromTimestamp(this.min);
+  latestYear = getYearFromTimestamp(this.max)
+
   for (i = earliestYear; i < latestYear + 1; i++) {
     var timestamp,year,html;
     timestamp = Date.parse(i) / 1000;
