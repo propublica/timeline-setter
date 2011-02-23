@@ -111,24 +111,25 @@ TimelineSetter.prototype.zoom = function(direction) {
 
 TimelineSetter.prototype.scrub = function(direction) {
   //don't allow scrubbage if we're not zoomed in
-  if (!this.curZoom || this.curZoom === 100) return;
+  if (!this.curZoom || this.curZoom === this.initialZoom) return;
   this.curScrub = this.curScrub ? this.curScrub : 0;
-
+  console.log('scrubbin curOffset', this.curOffset)
+  
   //scrubbing "right" will move the notchbar "left" and vice versa
   //      << [=====] >>
   if (direction === "right") {
-   if (this.curScrub <= -(this.curZoom ? (this.curZoom * .80) : 100)) return;
-   this.curScrub -= this.curZoom ? (20 * (this.curZoom / 100)) : 20;
+  console.log('scrubbin', 'right')
+   this.curScrub += (this.curOffset * .30);
   }
   
   if (direction === "left") {
-    if (this.curScrub >= 20) return;
-    this.curScrub += this.curZoom ? (20 * (this.curZoom / 100)) : 20;
+    console.log('scrubbin', 'left')
+    this.curScrub -= (this.curOffset * .30);
   }
 
-  $(".timeline_notchbar, #timeline_card_scroller_inner").animate(
-    { left : this.curScrub + "%" }
-  );
+  $(".timeline_notchbar, #timeline_card_scroller_inner").animate({ 
+    left : this.curScrub 
+  });
 } 
 
 TimelineSetter.prototype.autoResize = function(width) {
