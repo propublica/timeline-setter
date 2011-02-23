@@ -106,19 +106,19 @@ TimelineSetter.prototype.zoom = function(direction) {
       left  : this.curOffset
     });
   }
-  
+  delete(this.curScrub);
 }
 
 TimelineSetter.prototype.scrub = function(direction) {
   //don't allow scrubbage if we're not zoomed in
   if (!this.curZoom || this.curZoom === this.initialZoom) return;
-  this.curScrub = this.curScrub ? this.curScrub : 0;
+  this.curScrub = this.curScrub ? this.curScrub : this.curOffset;
   console.log('scrubbin curOffset', this.curOffset)
   
   //scrubbing "right" will move the notchbar "left" and vice versa
   //      << [=====] >>
   if (direction === "right") {
-  console.log('scrubbin', 'right')
+    console.log('scrubbin', 'right')
    this.curScrub += (this.curOffset * .30);
   }
   
