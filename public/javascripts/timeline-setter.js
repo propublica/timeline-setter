@@ -55,9 +55,13 @@ TimelineSetter.prototype.template = function(timestamp) {
 };
 
 TimelineSetter.prototype.showCard = function(timestamp, html) {
-  var eventNotchOffset = $(".notch_" + timestamp).offset();
-  console.log(eventNotchOffset.left)
-  $("#timeline_card_container").show().html(html).offset({left : eventNotchOffset.left - 15, top : eventNotchOffset.top + 41})
+  var eventNotchOffset        = $(".notch_" + timestamp).offset();
+  var timelineContainerWidth  = $("#timeline").width();
+  
+  console.log(timelineContainerWidth - eventNotchOffset.left)
+  var cardOffsetLeft = ((timelineContainerWidth - eventNotchOffset.left) < 250) ? eventNotchOffset.left - 250 : eventNotchOffset.left
+  
+  $("#timeline_card_container").show().html(html).offset({left : cardOffsetLeft - 15, top : eventNotchOffset.top + 41})
   $(".css_arrow").show().offset({left : eventNotchOffset.left, top : eventNotchOffset.top + 22})
 }
 
