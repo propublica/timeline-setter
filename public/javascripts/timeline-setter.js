@@ -8,6 +8,8 @@ function TimelineSetter(timelineData) {
   this.notchbar = $(".timeline_notchbar");
 };
 
+TimelineSetter.TOP_COLORS = ['#7C93AF', '#EBEBEB'];
+
 TimelineSetter.prototype.createNotches = function() {
   var that = this;
   _(this.items).each(function(item) {
@@ -97,28 +99,26 @@ TimelineSetter.prototype.zoom = function(direction, cb) {
       left  : this.curOffset
     });
   }
-  delete(this.curScrub);
-  
+    
   if (cb){ cb() };
 }
 
 TimelineSetter.prototype.scrub = function(direction, cb) {
   //don't allow scrubbage if we're not zoomed in
   if (!this.curZoom || this.curZoom === this.initialZoom) return;
-  this.curScrub = this.curScrub ? this.curScrub : this.curOffset;
   
   //scrubbing "right" will move the notchbar "left" and vice versa
   //      << [=====] >>
   if (direction === "right") {
-    this.curScrub += (this.curOffset * .30);
+    this.curOffset += (this.curOffset * .30);
   }
   
   if (direction === "left") {
-    this.curScrub -= (this.curOffset * .30);
+    this.curOffset -= (this.curOffset * .30);
   }
 
   $(".timeline_notchbar, #timeline_card_scroller_inner").animate({ 
-    left : this.curScrub 
+    left : this.curOffset 
   });
   
   if (cb){ cb() };
@@ -180,6 +180,8 @@ $(document).ready(function() {
       page_timeline[q](direction);
     })
   })
+  
+  $(".timeline_notchbar").draggable({axis : 'x'});
   
   $(window).resize(_.throttle(function() {
     var timelineWidth = $("#timeline").width();
