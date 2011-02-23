@@ -54,20 +54,11 @@ TimelineSetter.prototype.template = function(timestamp) {
   return html;
 };
 
-TimelineSetter.prototype.cardPosition = function(timestamp) {
-  var barWidth,cardWidth,notchPosition,cardPosition;
-  barWidth = this.notchbar.width();
-  cardWidth = 300;
-  notchPosition = this.calculatePosition(timestamp);
-  var cardPosition = notchPosition > 50 ? notchPosition : (notchPosition + ((cardWidth / barWidth) * 100));
-  console.log(cardPosition);
-  return cardPosition;
-};
-
-TimelineSetter.prototype.bounds = function() {
-  if (!this.curZoom) return;
-  
-  
+TimelineSetter.prototype.showCard = function(timestamp, html) {
+  var eventNotchOffset = $(".notch_" + timestamp).offset();
+  console.log(eventNotchOffset.left)
+  $("#timeline_card_container").show().html(html).offset({left : eventNotchOffset.left - 15, top : eventNotchOffset.top + 41})
+  $(".css_arrow").show().offset({left : eventNotchOffset.left, top : eventNotchOffset.top + 22})
 }
 
 TimelineSetter.prototype.next = function() {
@@ -79,15 +70,13 @@ TimelineSetter.prototype.prev = function() {
 
 };
 
-TimelineSetter.prototype.zoom = function(direction) {
+TimelineSetter.prototype.zoom = function(direction, cb) {
   var el            = $(".timeline_notchbar, #timeline_card_scroller_inner")
   var barWidth      = el.width();
   var barOffsetLeft = el.offset().left;
   this.initialZoom  = this.initialZoom ? this.initialZoom : barWidth;
   this.curZoom      = this.curZoom     ? this.curZoom     : barWidth;
   this.curOffset    = this.curOffset   ? this.curOffset   : barOffsetLeft;
-  console.log('initial', this.initialZoom)
-  console.log('cur', this.curZoom)
   
   if (direction === "in") {
     this.curOffset -= this.curZoom / 2
@@ -107,29 +96,30 @@ TimelineSetter.prototype.zoom = function(direction) {
     });
   }
   delete(this.curScrub);
+  
+  cb();
 }
 
-TimelineSetter.prototype.scrub = function(direction) {
+TimelineSetter.prototype.scrub = function(direction, cb) {
   //don't allow scrubbage if we're not zoomed in
   if (!this.curZoom || this.curZoom === this.initialZoom) return;
   this.curScrub = this.curScrub ? this.curScrub : this.curOffset;
-  console.log('scrubbin curOffset', this.curOffset)
   
   //scrubbing "right" will move the notchbar "left" and vice versa
   //      << [=====] >>
   if (direction === "right") {
-    console.log('scrubbin', 'right')
-   this.curScrub += (this.curOffset * .30);
+    this.curScrub += (this.curOffset * .30);
   }
   
   if (direction === "left") {
-    console.log('scrubbin', 'left')
     this.curScrub -= (this.curOffset * .30);
   }
 
   $(".timeline_notchbar, #timeline_card_scroller_inner").animate({ 
     left : this.curScrub 
   });
+  
+  cb();
 } 
 
 TimelineSetter.prototype.autoResize = function(width) {
@@ -171,12 +161,12 @@ $(document).ready(function() {
     page_timeline.currentCard = timestamp;
     timestamp = $(this).attr("data-timestamp");
     html = page_timeline.template(timestamp);
-    cardPosition = page_timeline.cardPosition(timestamp);
     
     // this stuff needs to be aware of how zoomed in the container is, 
     // otherwise cards will fall off the sides if notches are too close to edges
-    $("#timeline_card_container").show().html(html).css("right",cardPosition + "%");
-    $(".css_arrow").show().css("right",(page_timeline.calculatePosition(timestamp) - 3) + "%");
+    //SHOWCARDHERE
+    page_timeline.showCard(timestamp, html);
+    
   },function() {
     var el = $("#timeline_card_container");
     window.setTimeout(function(){

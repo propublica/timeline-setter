@@ -255,3 +255,6 @@
     .timeline_controls a:hover {
       background:#fff;
     }
+    .infinite_motion {
+      -webkit-box-shadow: 0px 0px 10px #999; 
+    }
