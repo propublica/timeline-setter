@@ -11,12 +11,4 @@
 * add to CLI to "install" all assets for a timeline in any folder
 
 ## Bugs
-* don't allow scrolling 'off the side' when zoomed in
-* make cards fly out correctly when notches are near edges (right now, they go off the page)
-* make sure card arrows stick to card and line up with notches
  
- 
-## Notes
-
-* use notch $.offset to position cards
-* use scrub after zoom to recenter

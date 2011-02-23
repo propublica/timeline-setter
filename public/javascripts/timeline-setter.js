@@ -57,8 +57,6 @@ TimelineSetter.prototype.template = function(timestamp) {
 TimelineSetter.prototype.showCard = function(timestamp, html) {
   var eventNotchOffset        = $(".notch_" + timestamp).offset();
   var timelineContainerWidth  = $("#timeline").width();
-  
-  console.log(timelineContainerWidth - eventNotchOffset.left)
   var cardOffsetLeft = ((timelineContainerWidth - eventNotchOffset.left) < 250) ? eventNotchOffset.left - 250 : eventNotchOffset.left
   
   $("#timeline_card_container").show().html(html).offset({left : cardOffsetLeft - 15, top : eventNotchOffset.top + 41})
@@ -101,7 +99,7 @@ TimelineSetter.prototype.zoom = function(direction, cb) {
   }
   delete(this.curScrub);
   
-  cb();
+  if (cb){ cb() };
 }
 
 TimelineSetter.prototype.scrub = function(direction, cb) {
@@ -123,7 +121,7 @@ TimelineSetter.prototype.scrub = function(direction, cb) {
     left : this.curScrub 
   });
   
-  cb();
+  if (cb){ cb() };
 } 
 
 TimelineSetter.prototype.autoResize = function(width) {
@@ -166,9 +164,6 @@ $(document).ready(function() {
     timestamp = $(this).attr("data-timestamp");
     html = page_timeline.template(timestamp);
     
-    // this stuff needs to be aware of how zoomed in the container is, 
-    // otherwise cards will fall off the sides if notches are too close to edges
-    //SHOWCARDHERE
     page_timeline.showCard(timestamp, html);
     
   },function() {
