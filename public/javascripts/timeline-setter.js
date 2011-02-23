@@ -5,6 +5,7 @@ function TimelineSetter(timelineData) {
   });
   this.max = _(this.times).max();
   this.min = _(this.times).min();
+  this.notchbar = $(".timeline_notchbar");
 };
 
 TimelineSetter.prototype.createNotches = function() {
@@ -55,11 +56,19 @@ TimelineSetter.prototype.template = function(timestamp) {
 
 TimelineSetter.prototype.cardPosition = function(timestamp) {
   var barWidth,cardWidth,notchPosition,cardPosition;
-  barWidth = $(".timeline_notchbar").width();
+  barWidth = this.notchbar.width();
   cardWidth = 300;
   notchPosition = this.calculatePosition(timestamp);
-  return cardPosition = notchPosition > 50 ? notchPosition : (notchPosition + ((cardWidth / barWidth) * 100));
+  var cardPosition = notchPosition > 50 ? notchPosition : (notchPosition + ((cardWidth / barWidth) * 100));
+  console.log(cardPosition);
+  return cardPosition;
 };
+
+TimelineSetter.prototype.bounds = function() {
+  if (!this.curZoom) return;
+  
+  
+}
 
 TimelineSetter.prototype.next = function() {
   if (!this.currentCard) return;
@@ -71,20 +80,36 @@ TimelineSetter.prototype.prev = function() {
 };
 
 TimelineSetter.prototype.zoom = function(direction) {
-  this.curZoom = this.curZoom ? this.curZoom : 100;
+  var el            = $(".timeline_notchbar, #timeline_card_scroller_inner")
+  var barWidth      = el.width();
+  var barOffsetLeft = el.offset().left;
+  this.initialZoom  = this.initialZoom ? this.initialZoom : barWidth;
+  this.curZoom      = this.curZoom     ? this.curZoom     : barWidth;
+  this.curOffset    = this.curOffset   ? this.curOffset   : barOffsetLeft;
+  console.log('initial', this.initialZoom)
+  console.log('cur', this.curZoom)
+  
   if (direction === "in") {
-    this.curZoom += 100;
-  } else if (this.curZoom === 100) {
+    this.curOffset -= this.curZoom / 2
+    this.curZoom *= 2;
+    el.animate({ 
+      width : this.curZoom, 
+      left  : this.curOffset
+    });
+  } else if (this.curZoom && (this.curZoom < (this.initialZoom * 2))) { 
     return;
   } else {
-    this.curZoom -= 100;
+    this.curZoom /= 2;
+    this.curOffset += this.curZoom/2
+    el.animate({ 
+      width : this.curZoom, 
+      left  : this.curOffset
+    });
   }
-  console.log(this.curZoom + "%")
-  $(".timeline_notchbar, #timeline_card_scroller_inner").animate({ width : this.curZoom + "%"});
+  
 }
 
 TimelineSetter.prototype.scrub = function(direction) {
-  console.log(this.curScrub)
   //don't allow scrubbage if we're not zoomed in
   if (!this.curZoom || this.curZoom === 100) return;
   this.curScrub = this.curScrub ? this.curScrub : 0;
@@ -93,17 +118,14 @@ TimelineSetter.prototype.scrub = function(direction) {
   //      << [=====] >>
   if (direction === "right") {
    if (this.curScrub <= -(this.curZoom ? (this.curZoom * .80) : 100)) return;
-   console.log('right')
    this.curScrub -= this.curZoom ? (20 * (this.curZoom / 100)) : 20;
   }
   
   if (direction === "left") {
     if (this.curScrub >= 20) return;
-    console.log('left')
     this.curScrub += this.curZoom ? (20 * (this.curZoom / 100)) : 20;
   }
 
-  console.log(this.curScrub + "%");
   $(".timeline_notchbar, #timeline_card_scroller_inner").animate(
     { left : this.curScrub + "%" }
   );
@@ -112,7 +134,6 @@ TimelineSetter.prototype.scrub = function(direction) {
 TimelineSetter.prototype.autoResize = function(width) {
   var optimalWidth = 960;
   var zoomIntervals = Math.floor(Math.floor(width / optimalWidth * 100) / 20)
-  console.log(zoomIntervals)
   if (zoomIntervals === this.curZoomIntervals) return;
   var i;
   
@@ -154,7 +175,7 @@ $(document).ready(function() {
     // this stuff needs to be aware of how zoomed in the container is, 
     // otherwise cards will fall off the sides if notches are too close to edges
     $("#timeline_card_container").show().html(html).css("right",cardPosition + "%");
-    $(".css_arrow").show().css("right",(page_timeline.calculatePosition(timestamp) - 2) + "%");
+    $(".css_arrow").show().css("right",(page_timeline.calculatePosition(timestamp) - 3) + "%");
   },function() {
     var el = $("#timeline_card_container");
     window.setTimeout(function(){

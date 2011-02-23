@@ -183,6 +183,7 @@
       overflow:hidden;
     }
     #timeline_card_scroller {
+      padding:0 5px 0 10px;
       width:100%;
       position:relative;
       overflow:hidden;
@@ -205,6 +206,7 @@
       height:20px;
       position:relative;
       width:100%;
+      margin: 0 auto;
     }
     .timeline_notch, .timeline_year_notch {
       height:100%;
