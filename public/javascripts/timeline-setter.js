@@ -5,7 +5,10 @@ function TimelineSetter(timelineData) {
   });
   this.max = _(this.times).max();
   this.min = _(this.times).min();
+  this.notchbar = $(".timeline_notchbar");
 };
+
+TimelineSetter.TOP_COLORS = ['#7C93AF', '#EBEBEB'];
 
 TimelineSetter.prototype.createNotches = function() {
   var that = this;
@@ -57,13 +60,14 @@ TimelineSetter.prototype.template = function(timestamp) {
   return html;
 };
 
-TimelineSetter.prototype.cardPosition = function(timestamp) {
-  var barWidth,cardWidth,notchPosition,cardPosition;
-  barWidth = $(".timeline_notchbar").width();
-  cardWidth = 300;
-  notchPosition = this.calculatePosition(timestamp);
-  return cardPosition = notchPosition > 50 ? notchPosition : (notchPosition + ((cardWidth / barWidth) * 100));
-};
+TimelineSetter.prototype.showCard = function(timestamp, html) {
+  var eventNotchOffset        = $(".notch_" + timestamp).offset();
+  var timelineContainerWidth  = $("#timeline").width();
+  var cardOffsetLeft = ((timelineContainerWidth - eventNotchOffset.left) < 250) ? eventNotchOffset.left - 250 : eventNotchOffset.left
+  
+  $("#timeline_card_container").show().html(html).offset({left : cardOffsetLeft - 15, top : eventNotchOffset.top + 41})
+  $(".css_arrow").show().offset({left : eventNotchOffset.left, top : eventNotchOffset.top + 22})
+}
 
 TimelineSetter.prototype.next = function() {
   if (!this.currentCard) return;
@@ -74,49 +78,59 @@ TimelineSetter.prototype.prev = function() {
 
 };
 
-TimelineSetter.prototype.zoom = function(direction) {
-  this.curZoom = this.curZoom ? this.curZoom : 100;
+TimelineSetter.prototype.zoom = function(direction, cb) {
+  var el            = $(".timeline_notchbar, #timeline_card_scroller_inner")
+  var barWidth      = el.width();
+  var barOffsetLeft = el.offset().left;
+  this.initialZoom  = this.initialZoom ? this.initialZoom : barWidth;
+  this.curZoom      = this.curZoom     ? this.curZoom     : barWidth;
+  this.curOffset    = this.curOffset   ? this.curOffset   : barOffsetLeft;
+  
   if (direction === "in") {
-    this.curZoom += 100;
-  } else if (this.curZoom === 100) {
+    this.curOffset -= this.curZoom / 2
+    this.curZoom *= 2;
+    el.animate({ 
+      width : this.curZoom, 
+      left  : this.curOffset
+    });
+  } else if (this.curZoom && (this.curZoom < (this.initialZoom * 2))) { 
     return;
   } else {
-    this.curZoom -= 100;
+    this.curZoom /= 2;
+    this.curOffset += this.curZoom/2
+    el.animate({ 
+      width : this.curZoom, 
+      left  : this.curOffset
+    });
   }
-  console.log(this.curZoom + "%")
-  $(".timeline_notchbar, #timeline_card_scroller_inner").animate({ width : this.curZoom + "%"});
+    
+  if (cb){ cb() };
 }
 
-TimelineSetter.prototype.scrub = function(direction) {
-  console.log(this.curScrub)
+TimelineSetter.prototype.scrub = function(direction, cb) {
   //don't allow scrubbage if we're not zoomed in
-  if (!this.curZoom || this.curZoom === 100) return;
-  this.curScrub = this.curScrub ? this.curScrub : 0;
-
+  if (!this.curZoom || this.curZoom === this.initialZoom) return;
+  
   //scrubbing "right" will move the notchbar "left" and vice versa
   //      << [=====] >>
   if (direction === "right") {
-   if (this.curScrub <= -(this.curZoom ? (this.curZoom * .80) : 100)) return;
-   console.log('right')
-   this.curScrub -= this.curZoom ? (20 * (this.curZoom / 100)) : 20;
+    this.curOffset += (this.curOffset * .30);
   }
   
   if (direction === "left") {
-    if (this.curScrub >= 20) return;
-    console.log('left')
-    this.curScrub += this.curZoom ? (20 * (this.curZoom / 100)) : 20;
+    this.curOffset -= (this.curOffset * .30);
   }
 
-  console.log(this.curScrub + "%");
-  $(".timeline_notchbar, #timeline_card_scroller_inner").animate(
-    { left : this.curScrub + "%" }
-  );
+  $(".timeline_notchbar, #timeline_card_scroller_inner").animate({ 
+    left : this.curOffset 
+  });
+  
+  if (cb){ cb() };
 } 
 
 TimelineSetter.prototype.autoResize = function(width) {
   var optimalWidth = 960;
   var zoomIntervals = Math.floor(Math.floor(width / optimalWidth * 100) / 20)
-  console.log(zoomIntervals)
   if (zoomIntervals === this.curZoomIntervals) return;
   var i;
   
@@ -153,12 +167,9 @@ $(document).ready(function() {
     page_timeline.currentCard = timestamp;
     timestamp = $(this).attr("data-timestamp");
     html = page_timeline.template(timestamp);
-    cardPosition = page_timeline.cardPosition(timestamp);
     
-    // this stuff needs to be aware of how zoomed in the container is, 
-    // otherwise cards will fall off the sides if notches are too close to edges
-    $("#timeline_card_container").show().html(html).css("right",cardPosition + "%");
-    $(".css_arrow").show().css("right",(page_timeline.calculatePosition(timestamp) - 2) + "%");
+    page_timeline.showCard(timestamp, html);
+    
   },function() {
     var el = $("#timeline_card_container");
     window.setTimeout(function(){
@@ -173,6 +184,8 @@ $(document).ready(function() {
       page_timeline[q](direction);
     })
   })
+  
+  $(".timeline_notchbar").draggable({axis : 'x'});
   
   $(window).resize(_.throttle(function() {
     var timelineWidth = $("#timeline").width();
