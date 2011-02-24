@@ -3,8 +3,8 @@ function TimelineSetter(timelineData) {
   this.times = _(this.items).map(function(q){
     return q.timestamp;
   });
-  this.max = _(this.times).max();
-  this.min = _(this.times).min();
+  this.max      = _(this.times).max();
+  this.min      = _(this.times).min();
   this.notchbar = $(".timeline_notchbar");
 };
 
@@ -18,14 +18,18 @@ TimelineSetter.prototype.itemFromTimestamp = function(timestamp) {
 }
 
 TimelineSetter.prototype.createSeries = function() {
-  var series = _(_(this.items).map(function(q) { return q.event_series })).uniq();
-  var series_colors = {};
+  var series    = _(_(this.items).map(function(q) { return q.event_series })).uniq();
+  series_colors = {};
   for(i = 0; i < series.length; i++) { 
     series_colors[series[i]] = TimelineSetter.TOP_COLORS[i];
   }
   _(this.items).each(function(q) {
     q.topcolor = series_colors[q['event_series']]
   })
+  window.series        = this.series        = series
+  window.series_colors = this.series_colors = series_colors;
+  $(".series_nav_container").append(TimelineSetter.domTemplate("#series_legend_tmpl", window.series))
+  console.log(this.series_colors)
 }
 
 TimelineSetter.prototype.createNotches = function() {
@@ -34,8 +38,8 @@ TimelineSetter.prototype.createNotches = function() {
   _(this.items).each(function(item) {
     var timestamp,position,tmpl,html;
     timestamp = item.timestamp;
-    position = that.calculatePosition(timestamp);
-    html = TimelineSetter.domTemplate("#notch_tmpl",item);
+    position  = that.calculatePosition(timestamp);
+    html      = TimelineSetter.domTemplate("#notch_tmpl",item);
 
     $(".timeline_notchbar").append(html);
     $(".notch_" + timestamp).css("right",position + "%");
@@ -54,13 +58,13 @@ TimelineSetter.prototype.createYearNotches = function() {
   }
 
   earliestYear = getYearFromTimestamp(this.min);
-  latestYear = getYearFromTimestamp(this.max)
+  latestYear   = getYearFromTimestamp(this.max)
 
   for (i = earliestYear; i < latestYear + 1; i++) {
     var timestamp,year,html;
     timestamp = Date.parse(i) / 1000;
-    year = i;
-    html = TimelineSetter.domTemplate("#year_notch_tmpl", {'timestamp' : timestamp, 'year' : year })
+    year      = i;
+    html      = TimelineSetter.domTemplate("#year_notch_tmpl", {'timestamp' : timestamp, 'year' : year })
     $(".timeline_notchbar").append(html);
     $(".year_notch_" + timestamp).css("right",this.calculatePosition(timestamp) + "%");
   }
@@ -154,12 +158,16 @@ TimelineSetter.prototype.scrub = function(direction, cb) {
 // NB: de-draggifying also 'disables' the buttons you can't do when not zoomed in. 
 TimelineSetter.prototype.draggify = function() {
   if (this.curZoom >= this.initialZoom * 2) {
-    this.notchbar.addClass("timeline_notchbar_draggable").draggable({axis : 'x', disabled : false});
+    this.notchbar
+      .addClass("timeline_notchbar_draggable")
+      .draggable({axis : 'x', disabled : false})
     $(".timeline_controls a")
       .removeClass("timeline_controls_disabled");
     ;    
   } else {
-    this.notchbar.removeClass("timeline_notchbar_draggable").draggable({disabled : true});
+    this.notchbar
+      .removeClass("timeline_notchbar_draggable")
+      .draggable({disabled : true});
     $(".timeline_controls a.timeline_scrub, .timeline_controls a.timeline_zoom_out")
       .addClass("timeline_controls_disabled");
     ;
@@ -214,11 +222,11 @@ $(document).ready(function() {
     page_timeline.showCard(timestamp, html);
     
   },function() {
-    var el = $("#timeline_card_container");
-    window.setTimeout(function(){
-      $(".css_arrow").hide();
-      el.hide();
-    },2000)
+    // var el = $("#timeline_card_container");
+    // window.setTimeout(function(){
+    //   $(".css_arrow").hide();
+    //   el.hide();
+    // },2000)
   });
   
   _(["zoom", "scrub"]).each(function(q) {

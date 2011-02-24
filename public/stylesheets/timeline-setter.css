@@ -240,6 +240,7 @@
     }
     .timeline_controls {
       margin: 0 0 10px 0;
+      float:left;
     }
     .timeline_controls a {
       border:1px solid #cecece;
@@ -264,4 +265,28 @@
     }
     .infinite_motion {
       -webkit-box-shadow: 0px 0px 10px #999; 
+    }
+    /* legend */
+    
+    .series_nav_container {
+      font-family:Arial,sans-serif;
+      font-size:11px;
+    }
+    .series_legend_swatch {
+      width: 16px;
+      height: 16px;
+      display: inline-block;
+      float: left;
+      -webkit-border-radius: 2px;
+      -moz-border-radius: 2px;
+      border-radius: 2px;
+      border-top-left-radius: 2px 2px;
+      border-top-right-radius: 2px 2px;
+      border-bottom-right-radius: 2px 2px;
+      border-bottom-left-radius: 2px 2px;
+      margin-right:5px;
+    }
+    .series_legend_item {
+      float:left;
+      margin:-3px 10px 0 10px;
     }
