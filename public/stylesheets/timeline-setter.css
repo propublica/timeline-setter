@@ -207,6 +207,8 @@
       position:relative;
       width:100%;
       margin: 0 auto;
+    }
+    .timeline_notchbar_draggable {
       cursor: col-resize;
     }
     .timeline_notch, .timeline_year_notch {
@@ -251,7 +253,11 @@
       border-bottom-right-radius: 2px 2px;
       border-top-left-radius: 2px 2px;
       border-top-right-radius: 2px 2px;
-      
+    }
+    .timeline_controls a.timeline_controls_disabled {
+      color:#cecece !important;
+      background:#f7f7f7 !important;
+      cursor:default;
     }
     .timeline_controls a:hover {
       background:#fff;

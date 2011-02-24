@@ -93,7 +93,8 @@ TimelineSetter.prototype.zoom = function(direction, cb) {
       width : this.curZoom, 
       left  : this.curOffset
     });
-  } else if (this.curZoom && (this.curZoom < (this.initialZoom * 2))) { 
+  } else if (this.curZoom && (this.curZoom < (this.initialZoom * 2))) {
+    this.draggify();
     return;
   } else {
     this.curZoom /= 2;
@@ -103,7 +104,7 @@ TimelineSetter.prototype.zoom = function(direction, cb) {
       left  : this.curOffset
     });
   }
-    
+  this.draggify();
   if (cb){ cb() };
 }
 
@@ -126,7 +127,22 @@ TimelineSetter.prototype.scrub = function(direction, cb) {
   });
   
   if (cb){ cb() };
-} 
+}
+
+// NB: de-draggifying also 'disables' the buttons you can't do when not zoomed in. 
+TimelineSetter.prototype.draggify = function() {
+  if (this.curZoom >= this.initialZoom * 2) {
+    this.notchbar.addClass("timeline_notchbar_draggable").draggable({axis : 'x', disabled : false});
+    $(".timeline_controls a")
+      .removeClass("timeline_controls_disabled");
+    ;    
+  } else {
+    this.notchbar.removeClass("timeline_notchbar_draggable").draggable({disabled : true});
+    $(".timeline_controls a.timeline_scrub, .timeline_controls a.timeline_zoom_out")
+      .addClass("timeline_controls_disabled");
+    ;
+  }
+}
 
 TimelineSetter.prototype.autoResize = function(width) {
   var optimalWidth = 960;
@@ -156,18 +172,23 @@ TimelineSetter.domTemplate = function(el,data) {
 
 /* ---- */
 
+TimelineSetter.bootStrap = function(timelineData) {
+  var timeline = new TimelineSetter(timelineData);
+  timeline.createNotches();
+  timeline.createYearNotches();
+  timeline.autoResize($("#timeline").width());
+  timeline.draggify();
+  return timeline;
+}
+
 $(document).ready(function() {
-  var page_timeline = new TimelineSetter(timelineData);
-  page_timeline.createNotches();
-  page_timeline.createYearNotches();
-  page_timeline.autoResize($("#timeline").width());
+  var page_timeline = TimelineSetter.bootStrap(timelineData);
   
   $(".timeline_notch").hover(function() {
     var timestamp,html,cardPosition;
     page_timeline.currentCard = timestamp;
     timestamp = $(this).attr("data-timestamp");
     html = page_timeline.template(timestamp);
-    
     page_timeline.showCard(timestamp, html);
     
   },function() {
@@ -185,7 +206,6 @@ $(document).ready(function() {
     })
   })
   
-  $(".timeline_notchbar").draggable({axis : 'x'});
   
   $(window).resize(_.throttle(function() {
     var timelineWidth = $("#timeline").width();
