@@ -8,10 +8,29 @@ function TimelineSetter(timelineData) {
   this.notchbar = $(".timeline_notchbar");
 };
 
-TimelineSetter.TOP_COLORS = ['#7C93AF', '#EBEBEB'];
+TimelineSetter.TOP_COLORS = ['#7C93AF', '#74942C', '#C44846'];
+
+TimelineSetter.prototype.itemFromTimestamp = function(timestamp) {
+  item = _(this.items).select(function(q) {
+    return q.timestamp === Number(timestamp);
+  })[0];
+  return item;
+}
+
+TimelineSetter.prototype.createSeries = function() {
+  var series = _(_(this.items).map(function(q) { return q.event_series })).uniq();
+  var series_colors = {};
+  for(i = 0; i < series.length; i++) { 
+    series_colors[series[i]] = TimelineSetter.TOP_COLORS[i];
+  }
+  _(this.items).each(function(q) {
+    q.topcolor = series_colors[q['event_series']]
+  })
+}
 
 TimelineSetter.prototype.createNotches = function() {
   var that = this;
+  this.createSeries();
   _(this.items).each(function(item) {
     var timestamp,position,tmpl,html;
     timestamp = item.timestamp;
@@ -21,6 +40,7 @@ TimelineSetter.prototype.createNotches = function() {
     $(".timeline_notchbar").append(html);
     $(".notch_" + timestamp).css("right",position + "%");
   });
+  console.log(this.items)
 };
 
 TimelineSetter.prototype.createYearNotches = function() {
@@ -53,10 +73,7 @@ TimelineSetter.prototype.calculatePosition = function(timestamp) {
 
 TimelineSetter.prototype.template = function(timestamp) {
   var item,tmpl,html;
-  item = _(this.items).select(function(q) {
-    return q.timestamp === Number(timestamp);
-  })[0];
-  html = TimelineSetter.domTemplate("#card_tmpl",item)
+  html = TimelineSetter.domTemplate("#card_tmpl",this.itemFromTimestamp(timestamp))
   return html;
 };
 
@@ -65,8 +82,13 @@ TimelineSetter.prototype.showCard = function(timestamp, html) {
   var timelineContainerWidth  = $("#timeline").width();
   var cardOffsetLeft = ((timelineContainerWidth - eventNotchOffset.left) < 250) ? eventNotchOffset.left - 250 : eventNotchOffset.left
   
-  $("#timeline_card_container").show().html(html).offset({left : cardOffsetLeft - 15, top : eventNotchOffset.top + 41})
-  $(".css_arrow").show().offset({left : eventNotchOffset.left, top : eventNotchOffset.top + 22})
+  $("#timeline_card_container")
+    .show().html(html)
+    .offset({left : cardOffsetLeft - 15, top : eventNotchOffset.top + 41})
+  $(".css_arrow")
+    .show()
+    .css("border-bottom-color",this.itemFromTimestamp(timestamp).topcolor)
+    .offset({left : eventNotchOffset.left, top : eventNotchOffset.top + 22})
 }
 
 TimelineSetter.prototype.next = function() {

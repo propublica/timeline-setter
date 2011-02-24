@@ -32,10 +32,10 @@
     <div class="timeline_year_notch year_notch_<%%= timestamp %>" data-timestamp="<%%= timestamp %>"><span class="timeline_year_notch_year_text"><%%= year %></span></div>
   </script>
   <script id="notch_tmpl" type="text/jst">
-    <div class="timeline_notch notch_<%%= timestamp %>" data-timestamp="<%%= timestamp %>">&nbsp;</div>
+    <div style="background:<%%= topcolor %>" class="timeline_notch notch_<%%= timestamp %>" data-timestamp="<%%= timestamp %>">&nbsp;</div>
   </script>
   <script id="card_tmpl" type="text/jst">
-    <div class="item item_active" data-timestamp="<%%= timestamp %>">
+    <div class="item item_active" data-timestamp="<%%= timestamp %>" style="border-top:1px solid <%%= topcolor %>">
       <div class="item_label">
         <%%= event_description %>
       </div>
