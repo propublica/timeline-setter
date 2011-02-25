@@ -1,7 +1,7 @@
 # TimelineSetter ToDo
 
 ## Features
-* Add support for 'series' of data (color coded). Sniff out series, and toggle view by series
+* toggle view by series
 * Allow different types of media. Expand cards to fit.
 
 * Next/Previous card buttons (figure out how to jive this with hover. Move to click instead?)

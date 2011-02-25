@@ -289,4 +289,8 @@
     .series_legend_item {
       float:left;
       margin:-3px 10px 0 10px;
+      cursor:pointer;
+    }
+    .series_legend_item_inactive {
+      opacity:.50;
     }

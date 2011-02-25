@@ -8,7 +8,7 @@ function TimelineSetter(timelineData) {
   this.notchbar = $(".timeline_notchbar");
 };
 
-TimelineSetter.TOP_COLORS = ['#7C93AF', '#74942C', '#C44846'];
+TimelineSetter.TOP_COLORS = ['#7C93AF', '#74942C', '#C44846', "#000"];
 
 TimelineSetter.prototype.itemFromTimestamp = function(timestamp) {
   item = _(this.items).select(function(q) {
@@ -29,6 +29,11 @@ TimelineSetter.prototype.createSeries = function() {
   window.series        = this.series        = series
   window.series_colors = this.series_colors = series_colors;
   $(".series_nav_container").append(TimelineSetter.domTemplate("#series_legend_tmpl", window.series))
+  $(".series_nav_container .series_legend_item").click(function() {
+    var series = $(this).attr("data-series");
+    $(this).toggleClass("series_legend_item_inactive")
+    $("div[data-notch-series= " + series + "]").toggle();
+  })
   console.log(this.series_colors)
 }
 

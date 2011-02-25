@@ -34,11 +34,11 @@
     <div class="timeline_year_notch year_notch_<%%= timestamp %>" data-timestamp="<%%= timestamp %>"><span class="timeline_year_notch_year_text"><%%= year %></span></div>
   </script>
   <script id="notch_tmpl" type="text/jst">
-    <div style="background:<%%= topcolor %>" class="timeline_notch notch_<%%= timestamp %>" data-timestamp="<%%= timestamp %>">&nbsp;</div>
+    <div style="background:<%%= topcolor %>" data-notch-series="<%%= event_series %>" class="timeline_notch notch_<%%= timestamp %>" data-timestamp="<%%= timestamp %>">&nbsp;</div>
   </script>
   <script id="series_legend_tmpl" type="text/jst">
     <%% _(window.series).each(function(series) { %>
-      <div class="series_legend_item"><span class="series_legend_swatch" style="background:<%%= window.series_colors[series] %>">&nbsp;</span> <span class="series_legend_text"><%%= series %></span></div>
+      <div class="series_legend_item" data-series="<%%= series %>"><span class="series_legend_swatch" style="background:<%%= window.series_colors[series] %>">&nbsp;</span> <span class="series_legend_text"><%%= series %></span></div>
     <%% }); %>
   </script>
   <script id="card_tmpl" type="text/jst">
