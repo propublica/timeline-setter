@@ -123,6 +123,8 @@ TimelineSetter.prototype.zoom = function(direction, cb) {
     el.animate({ 
       width : this.curZoom, 
       left  : this.curOffset
+    }, function() {
+      if(cb) { cb(); }
     });
   } else if (this.curZoom && (this.curZoom < (this.initialZoom * 2))) {
     this.draggify();
@@ -133,10 +135,11 @@ TimelineSetter.prototype.zoom = function(direction, cb) {
     el.animate({ 
       width : this.curZoom, 
       left  : this.curOffset
+    }, function() {
+      if (cb) { cb(); }
     });
   }
   this.draggify();
-  if (cb){ cb() };
 }
 
 TimelineSetter.prototype.scrub = function(direction, cb) {
@@ -155,9 +158,10 @@ TimelineSetter.prototype.scrub = function(direction, cb) {
 
   $(".timeline_notchbar, #timeline_card_scroller_inner").animate({ 
     left : this.curOffset 
+  }, function() {
+    if(cb) { cb(); }
   });
   
-  if (cb){ cb() };
 }
 
 // NB: de-draggifying also 'disables' the buttons you can't do when not zoomed in. 
@@ -218,13 +222,19 @@ TimelineSetter.bootStrap = function(timelineData) {
 
 $(document).ready(function() {
   var page_timeline = TimelineSetter.bootStrap(timelineData);
+  _.extend(page_timeline, Backbone.Events)
+  
+  page_timeline.notchbar.bind("drag", function() {
+    page_timeline.showCard(window.curCardTimestamp,window.curCardHtml);
+  });
+  
   
   $(".timeline_notch").hover(function() {
     var timestamp,html,cardPosition;
     page_timeline.currentCard = timestamp;
-    timestamp = $(this).attr("data-timestamp");
-    html = page_timeline.template(timestamp);
-    page_timeline.showCard(timestamp, html);
+    window.curCardTimestamp = $(this).attr("data-timestamp");
+    window.curCardHtml = page_timeline.template(curCardTimestamp);
+    page_timeline.showCard(window.curCardTimestamp, window.curCardHtml);
     
   },function() {
     // var el = $("#timeline_card_container");
@@ -235,9 +245,16 @@ $(document).ready(function() {
   });
   
   _(["zoom", "scrub"]).each(function(q) {
+    page_timeline.bind(q, function() {
+      page_timeline.showCard(window.curCardTimestamp, window.curCardHtml);
+      console.log(q)
+    })
+    
     $(".timeline_" + q).click(function() {
       var direction = $(this).attr("data-" + q + "-direction");
-      page_timeline[q](direction);
+      page_timeline[q](direction, function() {
+        page_timeline.trigger(q)
+      });
     })
   })
   
@@ -246,5 +263,7 @@ $(document).ready(function() {
     var timelineWidth = $("#timeline").width();
     page_timeline.autoResize(timelineWidth);
   },200))
+  
+  
 });
 

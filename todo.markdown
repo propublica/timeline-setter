@@ -1,7 +1,8 @@
 # TimelineSetter ToDo
 
 ## Features
-* toggle view by series
+* zoom to fit by series
+
 * Allow different types of media. Expand cards to fit.
 
 * Next/Previous card buttons (figure out how to jive this with hover. Move to click instead?)
