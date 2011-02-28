@@ -6,7 +6,7 @@ function TimelineSetter(timelineData) {
   this.max      = _(this.times).max();
   this.min      = _(this.times).min();
   this.notchbar = $(".timeline_notchbar");
-  _.bindAll(this, 'zoom', 'scrub')
+  _.bindAll(this, 'zoom', 'scrub', 'pixelScrub')
 };
 
 TimelineSetter.TOP_COLORS = ['#7C93AF', '#74942C', '#C44846', "#000"];
@@ -152,17 +152,16 @@ TimelineSetter.prototype.zoom = function(direction, cb) {
 }
 
 TimelineSetter.prototype.scrub = function(direction, cb) {
-  console.log(this)
   //don't allow scrubbage if we're not zoomed in
   if (!this.curZoom || this.curZoom === this.initialZoom) return;
   
   //scrubbing "right" will move the notchbar "left" and vice versa
   //      << [=====] >>
-  if (direction === "right") {
+  if (direction === "left") {
     this.curOffset += (this.curZoom * .20);
   }
   
-  if (direction === "left") {
+  if (direction === "right") {
     this.curOffset -= (this.curZoom * .20);
   }
 
@@ -171,6 +170,10 @@ TimelineSetter.prototype.scrub = function(direction, cb) {
   }, function() {
     if (cb) { cb(); }
   });  
+}
+
+TimelineSetter.prototype.pixelScrub = function(delta) {
+  this.notchbar.css("left", this.notchbar.position().left + delta)
 }
 
 // NB: de-draggifying also 'disables' the buttons you can't do when not zoomed in. 
@@ -237,7 +240,12 @@ $(document).ready(function() {
     page_timeline.showCard(window.curCardTimestamp,window.curCardHtml);
   });
   
-  
+  _(["pixelScrub", "mousewheel", "DOMMouseScroll", "dblclick"]).each(function(q) {
+    page_timeline.bind(q, function() {
+      page_timeline.showCard(window.curCardTimestamp, window.curCardHtml);
+    })
+  })
+    
   $(".timeline_notch").hover(function() {
     var timestamp,html,cardPosition;
     page_timeline.currentCard = timestamp;
@@ -266,20 +274,31 @@ $(document).ready(function() {
     })
   })
   
-  var throttledScrub = _.throttle(page_timeline.scrub, 100)
+  var throttledScrub = _.throttle(page_timeline.pixelScrub, 5)
   
-  $(".timeline_notchbar_container").bind('mousewheel', function(e) {
-      e.preventDefault();
-      console.log("scrolling", e.wheelDelta)
-      throttledScrub((function(e) { return (e.wheelDelta > 0 ? "right" : "left") })(e))
+  $(".timeline_notchbar_container").bind('mousewheel DOMMouseScroll', function(e) {
+    e.preventDefault();
+    if (e.wheelDelta) {
+      throttledScrub(e.wheelDelta)
+      page_timeline.trigger('mousewheel')
+      return;
+    }
+    page_timeline.pixelScrub(-e.detail)
+    page_timeline.trigger('DOMMouseScroll')
   });
   
+  $(".timeline_notchbar_container").bind('dblclick', function(e) {
+    e.preventDefault();
+    page_timeline.zoom("in", function() {
+      page_timeline.trigger('dblclick')
+    });
+  });
   
   $(window).resize(_.throttle(function() {
     var timelineWidth = $("#timeline").width();
     page_timeline.autoResize(timelineWidth);
   },200))
   
-  //window.globalTimeline = page_timeline
+  window.globalTimeline = page_timeline
 });
 
