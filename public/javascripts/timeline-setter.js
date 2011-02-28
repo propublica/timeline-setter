@@ -34,7 +34,6 @@ TimelineSetter.prototype.createSeries = function() {
     $(this).toggleClass("series_legend_item_inactive")
     $("div[data-notch-series= " + series + "]").toggle();
   })
-  console.log(this.series_colors)
 }
 
 TimelineSetter.prototype.createNotches = function() {
@@ -49,7 +48,6 @@ TimelineSetter.prototype.createNotches = function() {
     $(".timeline_notchbar").append(html);
     $(".notch_" + timestamp).css("right",position + "%");
   });
-  console.log(this.items)
 };
 
 TimelineSetter.prototype.createYearNotches = function() {
@@ -89,8 +87,16 @@ TimelineSetter.prototype.template = function(timestamp) {
 TimelineSetter.prototype.showCard = function(timestamp, html) {
   var eventNotchOffset        = $(".notch_" + timestamp).offset();
   var timelineContainerWidth  = $("#timeline").width();
+  var timelineOffset          = $("#timeline").offset();
   var cardOffsetLeft = ((timelineContainerWidth - eventNotchOffset.left) < 250) ? eventNotchOffset.left - 250 : eventNotchOffset.left
   
+  // if outside the bounds of #timeline, hide the card and return
+  if ((cardOffsetLeft < timelineOffset.left) || ((cardOffsetLeft + 250) > (timelineContainerWidth + timelineOffset.left))) {
+    $("#timeline_card_container, .css_arrow").hide()
+    return;
+  }
+  
+  // otherwise show the card
   $("#timeline_card_container")
     .show().html(html)
     .offset({left : cardOffsetLeft - 15, top : eventNotchOffset.top + 41})
@@ -124,7 +130,7 @@ TimelineSetter.prototype.zoom = function(direction, cb) {
       width : this.curZoom, 
       left  : this.curOffset
     }, function() {
-      if(cb) { cb(); }
+      if (cb) { cb(); }
     });
   } else if (this.curZoom && (this.curZoom < (this.initialZoom * 2))) {
     this.draggify();
@@ -159,7 +165,7 @@ TimelineSetter.prototype.scrub = function(direction, cb) {
   $(".timeline_notchbar, #timeline_card_scroller_inner").animate({ 
     left : this.curOffset 
   }, function() {
-    if(cb) { cb(); }
+    if (cb) { cb(); }
   });
   
 }
@@ -247,7 +253,6 @@ $(document).ready(function() {
   _(["zoom", "scrub"]).each(function(q) {
     page_timeline.bind(q, function() {
       page_timeline.showCard(window.curCardTimestamp, window.curCardHtml);
-      console.log(q)
     })
     
     $(".timeline_" + q).click(function() {
