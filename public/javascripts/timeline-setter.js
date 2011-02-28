@@ -6,6 +6,7 @@ function TimelineSetter(timelineData) {
   this.max      = _(this.times).max();
   this.min      = _(this.times).min();
   this.notchbar = $(".timeline_notchbar");
+  _.bindAll(this, 'zoom', 'scrub')
 };
 
 TimelineSetter.TOP_COLORS = ['#7C93AF', '#74942C', '#C44846', "#000"];
@@ -85,6 +86,8 @@ TimelineSetter.prototype.template = function(timestamp) {
 };
 
 TimelineSetter.prototype.showCard = function(timestamp, html) {
+  if (!timestamp) return;
+  
   var eventNotchOffset        = $(".notch_" + timestamp).offset();
   var timelineContainerWidth  = $("#timeline").width();
   var timelineOffset          = $("#timeline").offset();
@@ -149,25 +152,25 @@ TimelineSetter.prototype.zoom = function(direction, cb) {
 }
 
 TimelineSetter.prototype.scrub = function(direction, cb) {
+  console.log(this)
   //don't allow scrubbage if we're not zoomed in
   if (!this.curZoom || this.curZoom === this.initialZoom) return;
   
   //scrubbing "right" will move the notchbar "left" and vice versa
   //      << [=====] >>
   if (direction === "right") {
-    this.curOffset += (this.curOffset * .30);
+    this.curOffset += (this.curZoom * .20);
   }
   
   if (direction === "left") {
-    this.curOffset -= (this.curOffset * .30);
+    this.curOffset -= (this.curZoom * .20);
   }
 
   $(".timeline_notchbar, #timeline_card_scroller_inner").animate({ 
     left : this.curOffset 
   }, function() {
     if (cb) { cb(); }
-  });
-  
+  });  
 }
 
 // NB: de-draggifying also 'disables' the buttons you can't do when not zoomed in. 
@@ -263,12 +266,20 @@ $(document).ready(function() {
     })
   })
   
+  var throttledScrub = _.throttle(page_timeline.scrub, 100)
+  
+  $(".timeline_notchbar_container").bind('mousewheel', function(e) {
+      e.preventDefault();
+      console.log("scrolling", e.wheelDelta)
+      throttledScrub((function(e) { return (e.wheelDelta > 0 ? "right" : "left") })(e))
+  });
+  
   
   $(window).resize(_.throttle(function() {
     var timelineWidth = $("#timeline").width();
     page_timeline.autoResize(timelineWidth);
   },200))
   
-  
+  //window.globalTimeline = page_timeline
 });
 
