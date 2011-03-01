@@ -2,6 +2,8 @@ function TimelineSetter(timelineData) {
   this.items = timelineData;
   this.times = _(this.items).map(function(q){
     return q.timestamp;
+  }).sort(function(a,b) {
+    return a - b;
   });
   this.max      = _(this.times).max();
   this.min      = _(this.times).min();
@@ -107,6 +109,13 @@ TimelineSetter.prototype.showCard = function(timestamp, html) {
     .show()
     .css("border-bottom-color",this.itemFromTimestamp(timestamp).topcolor)
     .offset({left : eventNotchOffset.left, top : eventNotchOffset.top + 22})
+}
+
+TimelineSetter.prototype.showFirstCard = function(cb) {
+  var timestamp = this.times[0];
+  var html      = this.template(timestamp);
+  this.showCard(timestamp, html);
+  if (cb) { cb(timestamp) };
 }
 
 TimelineSetter.prototype.next = function() {
@@ -236,6 +245,27 @@ $(document).ready(function() {
   var page_timeline = TimelineSetter.bootStrap(timelineData);
   _.extend(page_timeline, Backbone.Events)
   
+    page_timeline.showFirstCard(function(timestamp) {
+      $(".notch_" + timestamp).addClass("timeline_notch_active");
+    });
+  
+  /* events */
+  
+  
+  // notch click
+  $(".timeline_notch").click(function() {
+    var timestamp,html,cardPosition;
+    page_timeline.currentCard = timestamp;
+    window.curCardTimestamp = $(this).attr("data-timestamp");
+    window.curCardHtml = page_timeline.template(curCardTimestamp);
+    page_timeline.showCard(window.curCardTimestamp, window.curCardHtml);
+    $(".timeline_notch").removeClass("timeline_notch_active")
+    $(this).addClass("timeline_notch_active")
+  });
+
+
+
+
   page_timeline.notchbar.bind("drag", function() {
     page_timeline.showCard(window.curCardTimestamp,window.curCardHtml);
   });
@@ -245,21 +275,7 @@ $(document).ready(function() {
       page_timeline.showCard(window.curCardTimestamp, window.curCardHtml);
     })
   })
-    
-  $(".timeline_notch").hover(function() {
-    var timestamp,html,cardPosition;
-    page_timeline.currentCard = timestamp;
-    window.curCardTimestamp = $(this).attr("data-timestamp");
-    window.curCardHtml = page_timeline.template(curCardTimestamp);
-    page_timeline.showCard(window.curCardTimestamp, window.curCardHtml);
-    
-  },function() {
-    // var el = $("#timeline_card_container");
-    // window.setTimeout(function(){
-    //   $(".css_arrow").hide();
-    //   el.hide();
-    // },2000)
-  });
+
   
   _(["zoom", "scrub"]).each(function(q) {
     page_timeline.bind(q, function() {
@@ -298,6 +314,8 @@ $(document).ready(function() {
     var timelineWidth = $("#timeline").width();
     page_timeline.autoResize(timelineWidth);
   },200))
+  
+  /* make it global */
   
   window.globalTimeline = page_timeline
 });

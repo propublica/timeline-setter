@@ -89,7 +89,7 @@
       line-height:12px;
       line-height:15px;
       float:left;
-      height:80%;
+      height:85%;
       width:150px;
     }
     .item_year {
@@ -267,8 +267,8 @@
     .timeline_controls a:hover {
       background:#fff;
     }
-    .infinite_motion {
-      -webkit-box-shadow: 0px 0px 10px #999; 
+    .timeline_notch_active {
+      -webkit-box-shadow: 0px 0px 10px #333; 
     }
     /* legend */
     
