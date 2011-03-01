@@ -1,13 +1,50 @@
 #!/usr/bin/env ruby
 
+# $ ./bin/timeline-setter -c ./test.csv -o /Users/ashaw/htdocs/timeline/timeline.html -a
+
+require 'optparse'
+require 'fileutils'
 require File.expand_path("../../lib/timeline_setter.rb", __FILE__)
 
-csv = ARGV[0]
-raise "specify a csv" unless csv
+options = {}
+option_parser = OptionParser.new do |opts|
+  opts.banner = <<-BANNER
+    TimelineSetter: [options]
+  BANNER
+  
+  opts.on('-c', '--csv CSV', 'CSV input file') do |c|
+    options[:csv] = c
+  end
+  opts.on('-o', '--output OUTPUT', 'Output directory to install timeline into. If this isn\'t specified, file will be copied to /tmp/') do |o|
+    options[:output] = o
+  end
+  opts.on('-a', '--with-assets', 'Output timeline supporting assets as well') do |a|
+    options[:assets] = a
+  end
+  
+  opts.on_tail("-h", "--help", "Show this message") do
+    puts opts
+    exit
+  end
+end
+option_parser.parse!
 
-sheet = File.open(csv).read
-events = TimelineSetter::Parser.new sheet
-html = TimelineSetter::Timeline.new(events.events).timeline
-File.open(File.expand_path("../../public/timeline.html", __FILE__),'w+') do |doc|
+if options.empty?
+  puts option_parser.on_tail
+  exit
+end
+
+sheet    = File.open(options[:csv]).read
+events   = TimelineSetter::Parser.new sheet
+html     = TimelineSetter::Timeline.new(events.events).timeline
+outdir   = options[:output] ? (File.dirname(options[:output]) + '/') : '/tmp/'
+
+if options[:assets]
+  FileUtils.cp_r(Dir.glob('public/*'), outdir)
+end
+
+File.open(outdir + 'timeline.html', 'w+') do |doc|
   doc.write html
 end
+
+puts "== Files copied to #{outdir}"
