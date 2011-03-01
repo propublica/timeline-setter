@@ -8,10 +8,10 @@ function TimelineSetter(timelineData) {
   this.max      = _(this.times).max();
   this.min      = _(this.times).min();
   this.notchbar = $(".timeline_notchbar");
-  _.bindAll(this, 'zoom', 'scrub', 'pixelScrub')
+  _.bindAll(this, 'showCard', 'zoom', 'scrub', 'pixelScrub', 'go', 'next', 'prev')
 };
 
-TimelineSetter.TOP_COLORS = ['#7C93AF', '#74942C', '#C44846', "#000"];
+TimelineSetter.TOP_COLORS = ['#7C93AF', '#74942C', '#C44846', "#444"];
 
 TimelineSetter.prototype.itemFromTimestamp = function(timestamp) {
   item = _(this.items).select(function(q) {
@@ -89,26 +89,37 @@ TimelineSetter.prototype.template = function(timestamp) {
 
 TimelineSetter.prototype.showCard = function(timestamp, html) {
   if (!timestamp) return;
+  $("#timeline_card_container").html(html) // do this first, so we can get the computed width
+                                           // important so we can calculate the offset
+  
   
   var eventNotchOffset        = $(".notch_" + timestamp).offset();
   var timelineContainerWidth  = $("#timeline").width();
   var timelineOffset          = $("#timeline").offset();
-  var cardOffsetLeft = ((timelineContainerWidth - eventNotchOffset.left) < 250) ? eventNotchOffset.left - 250 : eventNotchOffset.left
-  
-  // if outside the bounds of #timeline, hide the card and return
-  if ((cardOffsetLeft < timelineOffset.left) || ((cardOffsetLeft + 250) > (timelineContainerWidth + timelineOffset.left))) {
+  var cardWidth               = $(".item_active").width();
+  var cardOffsetLeft = ((timelineContainerWidth - eventNotchOffset.left) < cardWidth) ? eventNotchOffset.left - (cardWidth - 20) : eventNotchOffset.left
+
+  // if outside the bounds of #timeline, hide the card and return ...
+  if ((cardOffsetLeft < timelineOffset.left) || ((cardOffsetLeft + cardWidth) > (timelineContainerWidth + timelineOffset.left))) {
     $("#timeline_card_container, .css_arrow").hide()
     return;
   }
-  
-  // otherwise show the card
+  // ... otherwise show the card ...
   $("#timeline_card_container")
-    .show().html(html)
-    .offset({left : cardOffsetLeft - 15, top : eventNotchOffset.top + 41})
+    .show()
+    .offset({left : cardOffsetLeft - 15, top : eventNotchOffset.top + 41})  
+  
+  // ... and the css arrow
   $(".css_arrow")
     .show()
     .css("border-bottom-color",this.itemFromTimestamp(timestamp).topcolor)
     .offset({left : eventNotchOffset.left, top : eventNotchOffset.top + 22})
+  $(".timeline_notch").removeClass("timeline_notch_active")
+  $(".notch_" + timestamp).addClass("timeline_notch_active")
+  
+  // cache where we are for prev and next
+  this.curCardTimestamp = timestamp;
+  this.curCardHtml = html;
 }
 
 TimelineSetter.prototype.showFirstCard = function(cb) {
@@ -118,14 +129,32 @@ TimelineSetter.prototype.showFirstCard = function(cb) {
   if (cb) { cb(timestamp) };
 }
 
+TimelineSetter.prototype.go = function(showCardFunc, direction) {
+  var curCardTimestamp  = typeof(this.curCardTimestamp) === "undefined" ? this.times[0] : this.curCardTimestamp;
+  var curCardIdx        = _.indexOf(this.times,curCardTimestamp);
+  var numOfCards        = this.times.length - 1;
+  var that              = this;
+  var timestamp;
+  
+  
+  if (direction === "next") {
+    timestamp = (curCardIdx < numOfCards ? this.times[curCardIdx + 1] : false);
+  } else {
+    timestamp = (curCardIdx > 0 ? this.times[curCardIdx - 1] : false);
+  }
+  if (timestamp === false) return;
+  showCardFunc.apply(that, [timestamp, that.template(timestamp)])
+}
+
 TimelineSetter.prototype.next = function() {
-  if (!this.currentCard) return;
-};
+  return this.go(this.showCard, 'next');
+}
 
 TimelineSetter.prototype.prev = function() {
-  if (!this.currentCard) return;
+  return this.go(this.showCard, 'prev');
+}
 
-};
+
 
 TimelineSetter.prototype.zoom = function(direction, cb) {
   var el            = $(".timeline_notchbar, #timeline_card_scroller_inner")
@@ -254,32 +283,26 @@ $(document).ready(function() {
   
   // notch click
   $(".timeline_notch").click(function() {
-    var timestamp,html,cardPosition;
-    page_timeline.currentCard = timestamp;
-    window.curCardTimestamp = $(this).attr("data-timestamp");
-    window.curCardHtml = page_timeline.template(curCardTimestamp);
-    page_timeline.showCard(window.curCardTimestamp, window.curCardHtml);
-    $(".timeline_notch").removeClass("timeline_notch_active")
-    $(this).addClass("timeline_notch_active")
+    var timestamp = $(this).attr("data-timestamp")
+    var html      = page_timeline.template(timestamp);
+    page_timeline.showCard(timestamp, html);
   });
 
 
-
-
   page_timeline.notchbar.bind("drag", function() {
-    page_timeline.showCard(window.curCardTimestamp,window.curCardHtml);
+    page_timeline.showCard(page_timeline.curCardTimestamp,page_timeline.curCardHtml);
   });
   
   _(["pixelScrub", "mousewheel", "DOMMouseScroll", "dblclick"]).each(function(q) {
     page_timeline.bind(q, function() {
-      page_timeline.showCard(window.curCardTimestamp, window.curCardHtml);
+      page_timeline.showCard(page_timeline.curCardTimestamp, page_timeline.curCardHtml);
     })
   })
 
   
   _(["zoom", "scrub"]).each(function(q) {
     page_timeline.bind(q, function() {
-      page_timeline.showCard(window.curCardTimestamp, window.curCardHtml);
+      page_timeline.showCard(page_timeline.curCardTimestamp, page_timeline.curCardHtml);
     })
     
     $(".timeline_" + q).click(function() {
@@ -290,7 +313,7 @@ $(document).ready(function() {
     })
   })
   
-  var throttledScrub = _.throttle(page_timeline.pixelScrub, 5)
+  var throttledScrub = _.throttle(page_timeline.pixelScrub, 40)
   
   $(".timeline_notchbar_container").bind('mousewheel DOMMouseScroll', function(e) {
     e.preventDefault();

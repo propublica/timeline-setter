@@ -50,16 +50,15 @@
     }
     .item {
       z-index:1;
-      width:300px;
+/*      width:300px;
       height:200px;
-      position:absolute;
+*/      position:absolute;
       border:1px solid #EBEBEB;
       -webkit-border-radius: 3px;
       -moz-border-radius: 3px;
       border-radius: 3px;
       padding:10px;
       background:#F7F7F7;
-      cursor:pointer;
       color:#999;
     }
     .item_lower {
@@ -73,6 +72,9 @@
       box-shadow:#D9D9D9 0px -3px 4px;
     }
     
+    .item_user_html {
+      padding-bottom:15px;
+    }
     .item_active {
     	z-index:998;
 /*      -webkit-box-shadow: #CECECE 0px 0px 15px;
@@ -88,10 +90,9 @@
       font-size:12px;
       line-height:12px;
       line-height:15px;
-      float:left;
       height:85%;
-      width:150px;
-    }
+/*      width:150px;
+*/    }
     .item_year {
       font-family:"Helvetica Neue",Helvetica,arial,sans-serif;
       font-weight:bold;

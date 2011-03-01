@@ -47,13 +47,15 @@
   <script id="card_tmpl" type="text/jst">
     <div class="item item_active" data-timestamp="<%%= timestamp %>" style="border-top:1px solid <%%= topcolor %>">
       <div class="item_label">
+        <%% if (!_.isEmpty(event_html)){ %>
+          <div class="item_user_html">
+            <%%= event_html %>
+          </div>
+        <%% } %>
         <%%= event_description %>
       </div>
-        <%% if (event_link){ %>
-          <div class="doc_img">
-            <a target="_blank" href="<%%= event_link %>"><img src="<%%= event_thumbnail %>"></a>
+        <%% if (!_.isEmpty(event_link)){ %>
             <div class="read_btn"><a target="_blank" href="<%%= event_link %>">Read More</a></div>
-          </div>
         <%% } %>
 
       <div class="item_year">
