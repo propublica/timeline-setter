@@ -42,7 +42,7 @@ end
 sheet    = File.open(options[:csv]).read
 events   = TimelineSetter::Parser.new sheet
 html     = TimelineSetter::Timeline.new(events.events).timeline
-outdir   = options[:output] ? (File.dirname(options[:output]) + '/') : '/tmp/'
+outdir   = options[:output] ? (File.dirname(options[:output]) + '/') : File.dirname(File.expand_path("../../public/timeline.html", __FILE__)) + '/'
 
 if options[:assets]
   FileUtils.cp_r(Dir.glob('public/*'), outdir)
