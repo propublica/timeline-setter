@@ -68,7 +68,6 @@
       if(!dragging) return;
       dragging = false;
       e.type = "dragend"
-      
       obj.el.trigger(e);
     };
 
@@ -103,6 +102,10 @@
     this.bySid  = {};
     this.series = [];
     this.bounds = new Bounds();
+    this.bar    = new Bar(this);
+    this.bind(this.update);
+    this.offset    = 0;
+    this.zoomLevel = 0;
   };
   
   observable(timeline);
@@ -120,18 +123,37 @@
       series.add(card, this);
       this.bounds(series.max());
       this.bounds(series.min());
+    },
+    
+    update : function(e){
+      
+      this.trigger(e);
     }
   });
   
   /*
    Views
   */
-  var Bar = function() {
+  var Bar = function(timeline) {
     this.el = $("#timeline_notchbar");
+    this.timeline = timeline;
     draggable(this);
+    _.bindAll(this, "dragging", "move")
+    el.bind("dragging", this.dragging);
+    timeline.bind(this.move);
   };
   renderable(Bar.prototype);
-  Bar.prototype = _.extend(Bar.prototype, {});
+  observable(Bar.prototype);
+  
+  Bar.prototype = _.extend(Bar.prototype, {
+    dragging : function(e){
+      this.trigger("move", e);
+    },
+    
+    move : function(e){
+      
+    }
+  });
   
   
   var color = function(){
@@ -147,35 +169,42 @@
     this.name     = series.event_name;
     this.cards    = [];
   };
-  observable(series);
+  observable(Series);
   renderable(Series.prototype);
+  
   Series.prototype = _.extend(Bar.prototype, {
     add : function(card){
       var crd = new Card(card, this);
       this.cards.splice(this.sortedIndex(crd), 0, crd);
     },
     
-    max : function(){
-      _.map(this.cards, function(card) { card.timestamp }).chain().max().value();
-    },
-    
-    min : function(){
-      _.map(this.cards, function(card) { card.timestamp }).chain().min().value();
-    },
-    
     sortedIndex : function(card){
-      return _.sortedIndex(this.cards, card, function (crd) { return crd.timestamp });
+      return _.sortedIndex(this.cards, card, this._comparator);
+    },
+    
+    _comparator : function(){
+      return crd.timestamp;
     }
+  });
+  
+  ["min", "max"].each(function(key){
+    Series.prototype[key] = function() {
+      _[key].call(_, this.cards, this._comparator);
+    };
   });
   
   
   var Card = function(card, series) {
     this.series = series;
-    
+    series.timeline.bind(_.bind(this, this.move));
   };
   renderable(Card.prototype);
+  
   Card.prototype = _.extend(Card.prototype, {
-    cacheable : true
+    cacheable : true,
+    move : function(e){
+      
+    }
   });
   
   // Controls
