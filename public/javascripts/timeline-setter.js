@@ -1,3 +1,192 @@
+(function(window, document, undefined){
+
+  // Various stateful variables;
+  var cache     = {};
+  var idCounter = 0;
+  
+  /*
+    Mixins
+  */
+  
+  var renderable = function(obj) {
+    obj.cid = function(){
+      if(this._cid) return this._cid;
+      this._cid = idCounter++;
+      return this._cid;
+    };
+    
+    obj.$ = function(query){
+      return $(query, this.el);
+    };
+    
+    obj.render = function(args){
+      if(!this.cacheable) return this.template(args);
+      var cid = this.cid();
+      if(cache[cid]) return cache[cid].children();
+      cache[cid] = $("<div/>").html(this.template(args));
+      return cache[cid].children();
+    };
+    
+    return obj;
+  };
+  
+  var observable = function(obj){
+    obj.bind = function(cb){
+      this._callbacks = this._callbacks || [];
+      this._callbacks.push(cb);
+    };
+    
+    obj.trigger = function(){
+      if(!this._callbacks) return;
+      for(var i = 0; callback = this._callbacks[i]; i++)
+        callback.apply(this, arguments)
+    };
+    
+    return obj;
+  };
+  
+  /*
+    Plugins
+  */
+  var draggable = function(obj){
+    var dragging = false;
+    
+    function mousedown(e){
+      e.preventDefault();
+      dragging = true;
+      e.type = "dragstart"
+      obj.el.trigger(e);
+    };
+
+    function mousemove(e){
+      if(!dragging) return;
+      e.type = "dragging"
+      obj.el.trigger(e);
+    };
+
+    function mouseup(e){
+      if(!dragging) return;
+      dragging = false;
+      e.type = "dragend"
+      
+      obj.el.trigger(e);
+    };
+
+    obj.el.bind("mousedown", mousedown);
+
+    $("body").bind("mousemove", mousemove);
+    $("body").bind("mouseup", mouseup);
+
+    return obj;
+  };
+  
+  /*
+    Utils
+  */
+  var Bounds = function(){
+    this.min = -Infinity;
+    this.max = Infinity;
+  };
+  
+  Bounds.prototype.extend = function(num){
+    this.min = Math.min(num, this.min);
+    this.max = Math.max(num, this.max);
+  };
+  
+  
+  /*
+    Models
+  */
+  
+  var Timeline = function(series) {
+    this.createSeries(series);
+    this.bySid  = {};
+    this.series = [];
+    this.bounds = new Bounds();
+  };
+  
+  observable(timeline);
+  Timeline.prototype = _.extend(Timeline.prototype, {
+    createSeries : function(series){
+      for(var i = 0; i < series.length; i++){
+        this.add(series[i]);
+      }
+    },
+    
+    add : function(card){
+      if(!card.event_series in this.bySid)
+        this.bySid(new Series(card));
+      var series = this.bySid[card.event_series];
+      series.add(card, this);
+      this.bounds(series.max());
+      this.bounds(series.min());
+    }
+  });
+  
+  /*
+   Views
+  */
+  var Bar = function() {
+    this.el = $("#timeline_notchbar");
+    draggable(this);
+  };
+  renderable(Bar.prototype);
+  Bar.prototype = _.extend(Bar.prototype, {});
+  
+  
+  var color = function(){
+    return "#" + _.reduce([256, 182, 230], function(memo, it){
+      var unpadded = (Math.random(it) * 256 | 0).toString(16);
+      return memo + (unpadded.length < 2 ? "0" + unpadded : unpadded);
+    }, "");
+  };
+  
+  var Series = function(series, timeline) {
+    this.color    = color();
+    this.timeline = timeline;
+    this.name     = series.event_name;
+    this.cards    = [];
+  };
+  observable(series);
+  renderable(Series.prototype);
+  Series.prototype = _.extend(Bar.prototype, {
+    add : function(card){
+      var crd = new Card(card, this);
+      this.cards.splice(this.sortedIndex(crd), 0, crd);
+    },
+    
+    max : function(){
+      _.map(this.cards, function(card) { card.timestamp }).chain().max().value();
+    },
+    
+    min : function(){
+      _.map(this.cards, function(card) { card.timestamp }).chain().min().value();
+    },
+    
+    sortedIndex : function(card){
+      return _.sortedIndex(this.cards, card, function (crd) { return crd.timestamp });
+    }
+  });
+  
+  
+  var Card = function(card, series) {
+    this.series = series;
+    
+  };
+  renderable(Card.prototype);
+  Card.prototype = _.extend(Card.prototype, {
+    cacheable : true
+  });
+  
+  // Controls
+  var Zoom = function() {};
+  var Pan = function() {};  
+  
+})(window, document);
+
+
+
+
 function TimelineSetter(timelineData) {
   this.items = timelineData;
   this.times = _(this.items).map(function(q){
@@ -8,9 +197,10 @@ function TimelineSetter(timelineData) {
   this.max      = _(this.times).max();
   this.min      = _(this.times).min();
   this.notchbar = $(".timeline_notchbar");
-  _.bindAll(this, 'showCard', 'zoom', 'scrub', 'pixelScrub', 'go', 'next', 'prev')
+  _.bindAll(this, 'showCard', 'zoom', 'scrub', 'pixelScrub', 'go', 'next', 'prev');
 };
 
+// https://gist.github.com/0d5339a14f1c4e0bd343
 TimelineSetter.TOP_COLORS = ['#7C93AF', '#74942C', '#C44846', "#444"];
 
 TimelineSetter.prototype.itemFromTimestamp = function(timestamp) {

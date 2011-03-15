@@ -17,5 +17,25 @@
 
 * Add a 'reset' button
 
+## Refactor
+
+Timeline Object
+   |     |
+   v     |
+ Cards   |
+   |     |
+   |     |
+   *     *
+State Object < -- contains information like zoom level and offset.
+
+
+
+
 ## Bugs
+
+
+
+
+
+
  
