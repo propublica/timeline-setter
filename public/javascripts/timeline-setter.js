@@ -39,35 +39,59 @@
     obj.trigger = function(){
       if(!this._callbacks) return;
       for(var i = 0; callback = this._callbacks[i]; i++)
-        callback.apply(this, arguments)
+        callback.apply(this, arguments);
     };
     
     return obj;
+  };
+
+  var transformable = function(obj){
+    obj.move = function(e){
+      if(!e.type === "move" || !e.deltaX) return;
+      //if(!this.curZoom || this.curZoom === this.initialZoom) return;
+      if(_.isUndefined(this.currOffset)) this.currOffset = 0;
+      this.currOffset += e.deltaX;
+      if(this.currOffset <= 0) {
+        this.el.css({"left" : this.currOffset = 0});
+        return;
+      }
+      this.el.css({"left" : this.currOffset});
+    };
+    
+    obj.zoom = function(e){
+      if(!e.type === "zoom") return;
+      
+    };
   };
   
   /*
     Plugins
   */
   var draggable = function(obj){
-    var dragging = false;
+    var drag;
     
     function mousedown(e){
       e.preventDefault();
-      dragging = true;
-      e.type = "dragstart"
+      drag = {x: e.pageX, y: e.pageY};
+      e.type = "dragstart";
       obj.el.trigger(e);
     };
 
-    function mousemove(e){
-      if(!dragging) return;
-      e.type = "dragging"
+    function mousemove(e){    
+      if(!drag) return;
+      e.type = "dragging";
+      e = _.extend(e, {
+        deltaX: e.pageX - drag.x, 
+        deltaY: e.pageY - drag.y 
+      });
+      drag = {x: e.pageX, y: e.pageY};
       obj.el.trigger(e);
     };
 
     function mouseup(e){
-      if(!dragging) return;
-      dragging = false;
-      e.type = "dragend"
+      if(!drag) return;
+      drag = null;
+      e.type = "dragend";
       obj.el.trigger(e);
     };
 
@@ -92,23 +116,39 @@
     this.max = Math.max(num, this.max);
   };
   
+  Bounds.prototype.project = function(num, max){
+    return ((this.max - num) / (this.max - this.min)) * max;
+  };
+  
+  
+  // Handy dandy function to make sure that events are 
+  // triggered at the same time on two objects.
+  var sync = function(origin, listener){
+    var events = Array.prototype.slice.call(arguments, 2);
+    _.each(events, function(ev){
+      origin.bind(function(e){
+        if(e.type === ev && listener[ev]) 
+          listener[ev](e); 
+      });
+    });
+  };
+  
   
   /*
     Models
   */
   
   var Timeline = function(series) {
-    this.createSeries(series);
     this.bySid  = {};
     this.series = [];
     this.bounds = new Bounds();
-    this.bar    = new Bar(this);
-    this.bind(this.update);
-    this.offset    = 0;
-    this.zoomLevel = 0;
+    this.bar      = new Bar(this);
+    this.cardCont = new CardContainer(this);
+    sync(this.bar, this.cardCont, "move", "zoom");
+    this.createSeries(series);
   };
-  
   observable(timeline);
+  
   Timeline.prototype = _.extend(Timeline.prototype, {
     createSeries : function(series){
       for(var i = 0; i < series.length; i++){
@@ -116,18 +156,17 @@
       }
     },
     
+    calculatePosition : function(timestamp) {
+      
+    },
+  
     add : function(card){
-      if(!card.event_series in this.bySid)
-        this.bySid(new Series(card));
+      if(!(card.event_series in this.bySid))
+        this.bySid[card.event_series] = new Series(card);
       var series = this.bySid[card.event_series];
       series.add(card, this);
-      this.bounds(series.max());
-      this.bounds(series.min());
-    },
-    
-    update : function(e){
-      
-      this.trigger(e);
+      this.bounds.extend(series.max());
+      this.bounds.extend(series.min());
     }
   });
   
@@ -135,25 +174,30 @@
    Views
   */
   var Bar = function(timeline) {
-    this.el = $("#timeline_notchbar");
+    this.el = $(".timeline_notchbar");
+    this.el.css({"left": 0});
     this.timeline = timeline;
     draggable(this);
-    _.bindAll(this, "dragging", "move")
-    el.bind("dragging", this.dragging);
-    timeline.bind(this.move);
+    _.bindAll(this, "dragging");
+    this.el.bind("dragging", this.dragging);
   };
-  renderable(Bar.prototype);
   observable(Bar.prototype);
+  transformable(Bar.prototype);
   
   Bar.prototype = _.extend(Bar.prototype, {
     dragging : function(e){
-      this.trigger("move", e);
-    },
-    
-    move : function(e){
-      
+      e.type = "move";
+      this.trigger(e);
+      this.move(e);
     }
   });
+  
+  var CardContainer = function(timeline){
+    this.el = $("#timeline_card_scroller_inner");
+  };
+  observable(CardContainer.prototype);
+  transformable(CardContainer.prototype);
+  CardContainer.prototype = _.extend(CardContainer.prototype, {});
   
   
   var color = function(){
@@ -169,7 +213,7 @@
     this.name     = series.event_name;
     this.cards    = [];
   };
-  observable(Series);
+  observable(Series.prototype);
   renderable(Series.prototype);
   
   Series.prototype = _.extend(Bar.prototype, {
@@ -182,12 +226,12 @@
       return _.sortedIndex(this.cards, card, this._comparator);
     },
     
-    _comparator : function(){
+    _comparator : function(crd){
       return crd.timestamp;
     }
   });
   
-  ["min", "max"].each(function(key){
+  _(["min", "max"]).each(function(key){
     Series.prototype[key] = function() {
       _[key].call(_, this.cards, this._comparator);
     };
@@ -196,369 +240,20 @@
   
   var Card = function(card, series) {
     this.series = series;
-    series.timeline.bind(_.bind(this, this.move));
   };
   renderable(Card.prototype);
   
   Card.prototype = _.extend(Card.prototype, {
-    cacheable : true,
-    move : function(e){
-      
-    }
+    cacheable : true
   });
   
   // Controls
   var Zoom = function() {};
   var Pan = function() {};  
   
+  
+  $(function(){
+    window.timeline = new Timeline([{"timestamp":1134363600,"event_link":"http://www.propublica.org/documents/item/31738-investment-review-board-minutes#document/p3/a9416","event_series":"Education Dept","event_date":"Dec. 12, 2005","event_html":"<img width=\"190\" height=\"190\" src=\"http://images.nymag.com/images/2/daily/2011/03/01_frankrich_190x190.jpg\">","event_display_date":"","event_description":"Internal meeting minutes show that education department officials criticized the performance of ACS, the contractor handling the discharge program. They kept ACS for five more years."},{"timestamp":1218686400,"event_link":"http://www.opencongress.org/bill/110-h4137/text?version=enr&nid=t0:enr:3529","event_series":"Education Dept","event_date":"Aug. 14, 2008","event_html":"","event_display_date":"","event_description":"Congress passes a law directing the department to ease the standard for disability discharge and create an expedited discharge process for veterans."},{"timestamp":1236571200,"event_link":"http://www.propublica.org/documents/item/31737-higgins-decision#document/p19/a9421","event_series":"Education Dept","event_date":"Mar. 9, 2009","event_html":"","event_display_date":"","event_description":"A federal court in Missouri rules that the programäó»s communication with borrowers was so poor it was unconstitutional, violating borrowersäó» due process rights."},{"timestamp":1012539600,"event_link":"","event_series":"","event_date":"Feb. 1, 2002","event_html":"<img src=\"http://www.propublica.org/images/gasdrill2-28-390.jpg\">","event_display_date":"","event_description":"Talked about Timelines"},{"timestamp":1254715200,"event_link":"http://www.propublica.org/documents/item/31736-gao-report-on-acs#document/p6/a9423","event_series":"Tina Brooks","event_date":"Oct. 5, 2009","event_html":"","event_display_date":"","event_description":"Documents show that ACS refunded money it had been given to improve the online tracking system for the program, after the department said the changes actually destabilized the system."},{"timestamp":981003600,"event_link":"","event_series":"","event_date":"Feb. 1, 2001","event_html":"","event_display_date":"","event_description":"Al's Timeline thing Timelines"},{"timestamp":1285905600,"event_link":"http://www.propublica.org/documents/item/32222-nelnet-disability-discharge-press-release","event_series":"Education Dept","event_date":"Oct. 1, 2010","event_html":"","event_display_date":"","event_description":"The department hires the contractor Nelnet to take over servicing disability discharge applications from ACS."},{"timestamp":1296536400,"event_link":"","event_series":"","event_date":"Feb. 1, 2011","event_html":"<iframe title=\"YouTube video player\" width=\"640\" height=\"390\" src=\"http://www.youtube.com/embed/wV1FrqwZyKw\" frameborder=\"0\" allowfullscreen></iframe>","event_display_date":"","event_description":"Talked about Timelines"},{"timestamp":1291698000,"event_link":"","event_series":"Tina Brooks","event_date":"Dec. 7, 2010","event_html":"","event_display_date":"","event_description":"Brooks applies for disability discharge yet again äóñ the fourth application she has submitted."},{"timestamp":996638400,"event_link":"","event_series":"","event_date":"Aug. 1, 2001","event_html":"","event_display_date":"","event_description":"another timeline thing"},{"timestamp":1217563200,"event_link":"http://www.propublica.org/documents/item/32253-tina-brooks-doe-ombudsman-letter#document/p5/a9543","event_series":"Al Series","event_date":"Aug. 1, 2008","event_html":"","event_display_date":"","event_description":"An education department ombudsman writes Brooks a letter saying that she cannot appeal the departmentäó»s decision."},{"timestamp":1044075600,"event_link":"","event_series":"","event_date":"Feb. 1, 2003","event_html":"","event_display_date":"","event_description":"Thought about Timelines"}]);
+  });
+  
 })(window, document);
-
-
-
-
-function TimelineSetter(timelineData) {
-  this.items = timelineData;
-  this.times = _(this.items).map(function(q){
-    return q.timestamp;
-  }).sort(function(a,b) {
-    return a - b;
-  });
-  this.max      = _(this.times).max();
-  this.min      = _(this.times).min();
-  this.notchbar = $(".timeline_notchbar");
-  _.bindAll(this, 'showCard', 'zoom', 'scrub', 'pixelScrub', 'go', 'next', 'prev');
-};
-
-// https://gist.github.com/0d5339a14f1c4e0bd343
-TimelineSetter.TOP_COLORS = ['#7C93AF', '#74942C', '#C44846', "#444"];
-
-TimelineSetter.prototype.itemFromTimestamp = function(timestamp) {
-  item = _(this.items).select(function(q) {
-    return q.timestamp === Number(timestamp);
-  })[0];
-  return item;
-}
-
-TimelineSetter.prototype.createSeries = function() {
-  var series    = _(_(this.items).map(function(q) { return q.event_series })).uniq();
-  series_colors = {};
-  for(i = 0; i < series.length; i++) { 
-    series_colors[series[i]] = TimelineSetter.TOP_COLORS[i];
-  }
-  _(this.items).each(function(q) {
-    q.topcolor = series_colors[q['event_series']]
-  })
-  window.series        = this.series        = series
-  window.series_colors = this.series_colors = series_colors;
-  $(".series_nav_container").append(TimelineSetter.domTemplate("#series_legend_tmpl", window.series))
-  $(".series_nav_container .series_legend_item").click(function() {
-    var series = $(this).attr("data-series");
-    $(this).toggleClass("series_legend_item_inactive")
-    $("div[data-notch-series= " + series + "]").toggle();
-  })
-}
-
-TimelineSetter.prototype.createNotches = function() {
-  var that = this;
-  this.createSeries();
-  _(this.items).each(function(item) {
-    var timestamp,position,tmpl,html;
-    timestamp = item.timestamp;
-    position  = that.calculatePosition(timestamp);
-    html      = TimelineSetter.domTemplate("#notch_tmpl",item);
-
-    $(".timeline_notchbar").append(html);
-    $(".notch_" + timestamp).css("right",position + "%");
-  });
-};
-
-TimelineSetter.prototype.createYearNotches = function() {
-  // find earliest year and latest year in the set,
-  // and add notches for every year in between
-  var years,earliestYear,latestYear,i;
-  var getYearFromTimestamp = function(timestamp) {
-    var d = new Date();
-    d.setTime(timestamp * 1000);
-    return d.getFullYear()
-  }
-
-  earliestYear = getYearFromTimestamp(this.min);
-  latestYear   = getYearFromTimestamp(this.max)
-
-  for (i = earliestYear; i < latestYear + 1; i++) {
-    var timestamp,year,html;
-    timestamp = Date.parse(i) / 1000;
-    year      = i;
-    html      = TimelineSetter.domTemplate("#year_notch_tmpl", {'timestamp' : timestamp, 'year' : year })
-    $(".timeline_notchbar").append(html);
-    $(".year_notch_" + timestamp).css("right",this.calculatePosition(timestamp) + "%");
-  }
-}
-
-
-TimelineSetter.prototype.calculatePosition = function(timestamp) {
-  return ((this.max - timestamp) / (this.max - this.min)) * 100;
-};
-
-TimelineSetter.prototype.template = function(timestamp) {
-  var item,tmpl,html;
-  html = TimelineSetter.domTemplate("#card_tmpl",this.itemFromTimestamp(timestamp))
-  return html;
-};
-
-TimelineSetter.prototype.showCard = function(timestamp, html) {
-  if (!timestamp) return;
-  $("#timeline_card_container").html(html) // do this first, so we can get the computed width
-                                           // important so we can calculate the offset
-  
-  
-  var eventNotchOffset        = $(".notch_" + timestamp).offset();
-  var timelineContainerWidth  = $("#timeline").width();
-  var timelineOffset          = $("#timeline").offset();
-  var cardWidth               = $(".item_active").width();
-  var cardOffsetLeft = ((timelineContainerWidth - eventNotchOffset.left) < cardWidth) ? eventNotchOffset.left - (cardWidth - 20) : eventNotchOffset.left
-
-  // if outside the bounds of #timeline, hide the card and return ...
-  if ((cardOffsetLeft < timelineOffset.left) || ((cardOffsetLeft + cardWidth) > (timelineContainerWidth + timelineOffset.left))) {
-    $("#timeline_card_container, .css_arrow").hide()
-    return;
-  }
-  // ... otherwise show the card ...
-  $("#timeline_card_container")
-    .show()
-    .offset({left : cardOffsetLeft - 15, top : eventNotchOffset.top + 41})  
-  
-  // ... and the css arrow
-  $(".css_arrow")
-    .show()
-    .css("border-bottom-color",this.itemFromTimestamp(timestamp).topcolor)
-    .offset({left : eventNotchOffset.left, top : eventNotchOffset.top + 22})
-  $(".timeline_notch").removeClass("timeline_notch_active")
-  $(".notch_" + timestamp).addClass("timeline_notch_active")
-  
-  // cache where we are for prev and next
-  this.curCardTimestamp = timestamp;
-  this.curCardHtml = html;
-}
-
-TimelineSetter.prototype.showFirstCard = function(cb) {
-  var timestamp = this.times[0];
-  var html      = this.template(timestamp);
-  this.showCard(timestamp, html);
-  if (cb) { cb(timestamp) };
-}
-
-TimelineSetter.prototype.go = function(showCardFunc, direction) {
-  var curCardTimestamp  = typeof(this.curCardTimestamp) === "undefined" ? this.times[0] : this.curCardTimestamp;
-  var curCardIdx        = _.indexOf(this.times,curCardTimestamp);
-  var numOfCards        = this.times.length - 1;
-  var that              = this;
-  var timestamp;
-  
-  
-  if (direction === "next") {
-    timestamp = (curCardIdx < numOfCards ? this.times[curCardIdx + 1] : false);
-  } else {
-    timestamp = (curCardIdx > 0 ? this.times[curCardIdx - 1] : false);
-  }
-  if (timestamp === false) return;
-  showCardFunc.apply(that, [timestamp, that.template(timestamp)])
-}
-
-TimelineSetter.prototype.next = function() {
-  return this.go(this.showCard, 'next');
-}
-
-TimelineSetter.prototype.prev = function() {
-  return this.go(this.showCard, 'prev');
-}
-
-
-
-TimelineSetter.prototype.zoom = function(direction, cb) {
-  var el            = $(".timeline_notchbar, #timeline_card_scroller_inner")
-  var barWidth      = el.width();
-  var barOffsetLeft = el.offset().left;
-  this.initialZoom  = this.initialZoom ? this.initialZoom : barWidth;
-  this.curZoom      = this.curZoom     ? this.curZoom     : barWidth;
-  this.curOffset    = this.curOffset   ? this.curOffset   : barOffsetLeft;
-  
-  if (direction === "in") {
-    this.curOffset -= this.curZoom / 2
-    this.curZoom *= 2;
-    el.animate({ 
-      width : this.curZoom, 
-      left  : this.curOffset
-    }, function() {
-      if (cb) { cb(); }
-    });
-  } else if (this.curZoom && (this.curZoom < (this.initialZoom * 2))) {
-    this.draggify();
-    return;
-  } else {
-    this.curZoom /= 2;
-    this.curOffset += this.curZoom/2
-    el.animate({ 
-      width : this.curZoom, 
-      left  : this.curOffset
-    }, function() {
-      if (cb) { cb(); }
-    });
-  }
-  this.draggify();
-}
-
-TimelineSetter.prototype.scrub = function(direction, cb) {
-  //don't allow scrubbage if we're not zoomed in
-  if (!this.curZoom || this.curZoom === this.initialZoom) return;
-  
-  //scrubbing "right" will move the notchbar "left" and vice versa
-  //      << [=====] >>
-  if (direction === "left") {
-    this.curOffset += (this.curZoom * .20);
-  }
-  
-  if (direction === "right") {
-    this.curOffset -= (this.curZoom * .20);
-  }
-
-  $(".timeline_notchbar, #timeline_card_scroller_inner").animate({ 
-    left : this.curOffset 
-  }, function() {
-    if (cb) { cb(); }
-  });  
-}
-
-TimelineSetter.prototype.pixelScrub = function(delta) {
-  this.notchbar.css("left", this.notchbar.position().left + delta)
-}
-
-// NB: de-draggifying also 'disables' the buttons you can't do when not zoomed in. 
-TimelineSetter.prototype.draggify = function() {
-  if (this.curZoom >= this.initialZoom * 2) {
-    this.notchbar
-      .addClass("timeline_notchbar_draggable")
-      .draggable({axis : 'x', disabled : false})
-    $(".timeline_controls a")
-      .removeClass("timeline_controls_disabled");
-    ;    
-  } else {
-    this.notchbar
-      .removeClass("timeline_notchbar_draggable")
-      .draggable({disabled : true});
-    $(".timeline_controls a.timeline_scrub, .timeline_controls a.timeline_zoom_out")
-      .addClass("timeline_controls_disabled");
-    ;
-  }
-}
-
-TimelineSetter.prototype.autoResize = function(width) {
-  var optimalWidth = 960;
-  var zoomIntervals = Math.floor(Math.floor(width / optimalWidth * 100) / 20)
-  if (zoomIntervals === this.curZoomIntervals) return;
-  var i;
-  
-  if (!this.curZoomIntervals || zoomIntervals < this.curZoomIntervals) {
-    for (i = 5; i > zoomIntervals; i--) {
-      this.zoom('in');
-    }
-  } else {
-    for (i = this.curZoomIntervals; i < 5; i++) {
-      this.zoom('out')
-    }
-  }
-  // cache width
-  this.curZoomIntervals = zoomIntervals;
-}
-
-/* ---- */
-
-TimelineSetter.domTemplate = function(el,data) {
-  tmpl = _.template($(el).html());
-  return html = tmpl(data);
-}
-
-/* ---- */
-
-TimelineSetter.bootStrap = function(timelineData) {
-  var timeline = new TimelineSetter(timelineData);
-  timeline.createNotches();
-  timeline.createYearNotches();
-  timeline.autoResize($("#timeline").width());
-  timeline.draggify();
-  return timeline;
-}
-
-$(document).ready(function() {
-  var page_timeline = TimelineSetter.bootStrap(timelineData);
-  _.extend(page_timeline, Backbone.Events)
-  
-    page_timeline.showFirstCard(function(timestamp) {
-      $(".notch_" + timestamp).addClass("timeline_notch_active");
-    });
-  
-  /* events */
-  
-  
-  // notch click
-  $(".timeline_notch").click(function() {
-    var timestamp = $(this).attr("data-timestamp")
-    var html      = page_timeline.template(timestamp);
-    page_timeline.showCard(timestamp, html);
-  });
-
-
-  page_timeline.notchbar.bind("drag", function() {
-    page_timeline.showCard(page_timeline.curCardTimestamp,page_timeline.curCardHtml);
-  });
-  
-  _(["pixelScrub", "mousewheel", "DOMMouseScroll", "dblclick"]).each(function(q) {
-    page_timeline.bind(q, function() {
-      page_timeline.showCard(page_timeline.curCardTimestamp, page_timeline.curCardHtml);
-    })
-  })
-
-  
-  _(["zoom", "scrub"]).each(function(q) {
-    page_timeline.bind(q, function() {
-      page_timeline.showCard(page_timeline.curCardTimestamp, page_timeline.curCardHtml);
-    })
-    
-    $(".timeline_" + q).click(function() {
-      var direction = $(this).attr("data-" + q + "-direction");
-      page_timeline[q](direction, function() {
-        page_timeline.trigger(q)
-      });
-    })
-  })
-  
-  var throttledScrub = _.throttle(page_timeline.pixelScrub, 40)
-  
-  $(".timeline_notchbar_container").bind('mousewheel DOMMouseScroll', function(e) {
-    e.preventDefault();
-    if (e.wheelDelta) {
-      throttledScrub(e.wheelDelta)
-      page_timeline.trigger('mousewheel')
-      return;
-    }
-    page_timeline.pixelScrub(-e.detail)
-    page_timeline.trigger('DOMMouseScroll')
-  });
-  
-  $(".timeline_notchbar_container").bind('dblclick', function(e) {
-    e.preventDefault();
-    page_timeline.zoom("in", function() {
-      page_timeline.trigger('dblclick')
-    });
-  });
-  
-  $(window).resize(_.throttle(function() {
-    var timelineWidth = $("#timeline").width();
-    page_timeline.autoResize(timelineWidth);
-  },200))
-  
-  /* make it global */
-  
-  window.globalTimeline = page_timeline
-});
-

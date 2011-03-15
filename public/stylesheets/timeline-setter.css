@@ -171,6 +171,7 @@
     
     
     /* */
+
     #timeline_top_matter_container {
     }
     .timeline_notchbar_container,.timeline_arrow_container {
@@ -298,4 +299,13 @@
     }
     .series_legend_item_inactive {
       opacity:.50;
+    }
+    
+    
+    .timeline_notchbar{
+      border:1px solid black;
+    }
+    
+    #timeline_card_scroller_inner{
+      border:1px solid black;
     }
