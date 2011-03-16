@@ -1,12 +1,15 @@
 (function(window, document, undefined){
 
-  // Various stateful variables;
-  var cache     = {};
-  var idCounter = 0;
+
   
   /*
     Mixins
   */
+  
+  /* Not Sure this is needed actually.
+  // Various stateful variables;
+  var cache     = {};
+  var idCounter = 0;
   
   var renderable = function(obj) {
     obj.cid = function(){
@@ -19,7 +22,7 @@
       return $(query, this.el);
     };
     
-    obj.render = function(args){
+    obj.html = function(args){
       if(!this.cacheable) return this.template(args);
       var cid = this.cid();
       if(cache[cid]) return cache[cid].children();
@@ -29,6 +32,7 @@
     
     return obj;
   };
+  */
   
   var observable = function(obj){
     obj.bind = function(cb){
@@ -48,13 +52,8 @@
   var transformable = function(obj){
     obj.move = function(e){
       if(!e.type === "move" || !e.deltaX) return;
-      //if(!this.curZoom || this.curZoom === this.initialZoom) return;
       if(_.isUndefined(this.currOffset)) this.currOffset = 0;
       this.currOffset += e.deltaX;
-      if(this.currOffset <= 0) {
-        this.el.css({"left" : this.currOffset = 0});
-        return;
-      }
       this.el.css({"left" : this.currOffset});
     };
     
@@ -69,7 +68,6 @@
   */
   var draggable = function(obj){
     var drag;
-    
     function mousedown(e){
       e.preventDefault();
       drag = {x: e.pageX, y: e.pageY};
@@ -77,7 +75,8 @@
       obj.el.trigger(e);
     };
 
-    function mousemove(e){    
+    function mousemove(e){
+      e.preventDefault();
       if(!drag) return;
       e.type = "dragging";
       e = _.extend(e, {
@@ -97,8 +96,8 @@
 
     obj.el.bind("mousedown", mousedown);
 
-    $("body").bind("mousemove", mousemove);
-    $("body").bind("mouseup", mouseup);
+    $(document).bind("mousemove", mousemove);
+    $(document).bind("mouseup", mouseup);
 
     return obj;
   };
@@ -107,8 +106,8 @@
     Utils
   */
   var Bounds = function(){
-    this.min = -Infinity;
-    this.max = Infinity;
+    this.min = +Infinity;
+    this.max = -Infinity;
   };
   
   Bounds.prototype.extend = function(num){
@@ -116,8 +115,12 @@
     this.max = Math.max(num, this.max);
   };
   
+  Bounds.prototype.width = function(){
+    return this.max - this.min;
+  };
+  
   Bounds.prototype.project = function(num, max){
-    return ((this.max - num) / (this.max - this.min)) * max;
+    return (num - this.min) / this.width() * max;
   };
   
   
@@ -133,6 +136,16 @@
     });
   };
   
+  var template = function(query) {
+    return _.template($(query).text());
+  };
+  
+  var getYearFromTimestamp = function(timestamp) {
+    var d = new Date();
+    d.setTime(timestamp * 1000);
+    return d.getFullYear();
+  };
+  
   
   /*
     Models
@@ -142,10 +155,10 @@
     this.bySid  = {};
     this.series = [];
     this.bounds = new Bounds();
+    this.createSeries(series);
     this.bar      = new Bar(this);
     this.cardCont = new CardContainer(this);
     sync(this.bar, this.cardCont, "move", "zoom");
-    this.createSeries(series);
   };
   observable(timeline);
   
@@ -156,47 +169,80 @@
       }
     },
     
-    calculatePosition : function(timestamp) {
-      
-    },
-  
     add : function(card){
-      if(!(card.event_series in this.bySid))
-        this.bySid[card.event_series] = new Series(card);
+      if(!(card.event_series in this.bySid)){
+        this.bySid[card.event_series] = new Series(card, this);
+        this.series.push(this.bySid[card.event_series]);
+      }
       var series = this.bySid[card.event_series];
-      series.add(card, this);
+      series.add(card);
       this.bounds.extend(series.max());
       this.bounds.extend(series.min());
     }
   });
+  
+  
   
   /*
    Views
   */
   var Bar = function(timeline) {
     this.el = $(".timeline_notchbar");
-    this.el.css({"left": 0});
+    this.el.css({"left": 0, "width":"200%"});
     this.timeline = timeline;
     draggable(this);
     _.bindAll(this, "dragging");
     this.el.bind("dragging", this.dragging);
+    this.el.bind("dragend", this.dragend);
+    this.template = template("#year_notch_tmpl");
+    this.render();
   };
   observable(Bar.prototype);
   transformable(Bar.prototype);
   
   Bar.prototype = _.extend(Bar.prototype, {
     dragging : function(e){
+      var parent  = this.el.parent();
+      var pOffset = parent.offset().left;
+      var offset  = this.el.offset().left;
+      if(offset + this.el.width() + e.deltaX < pOffset + parent.width())
+        e.deltaX = (pOffset + parent.width()) - (offset + this.el.width());
+      if(offset + e.deltaX > pOffset)
+        e.deltaX = pOffset - offset;
       e.type = "move";
       this.trigger(e);
       this.move(e);
+    },
+    
+    dragend : function(e){
+    },
+    
+    render : function(){
+      var timestamp, year, html, date;
+      var earliestYear = getYearFromTimestamp(this.timeline.bounds.min);
+      var latestYear   = getYearFromTimestamp(this.timeline.bounds.max);
+
+      for (i = earliestYear; i < latestYear; i++) {
+        date      = new Date();
+        date.setYear(i);
+        date.setMonth(1);
+        date.setDate(1);
+        timestamp = date.getTime() / 1000 | 0;
+        year      = i;
+        html      = this.template({'timestamp' : timestamp, 'year' : year });
+        this.el.append($(html).css("left", (this.timeline.bounds.project(timestamp, 100) | 0) + "%"));
+      }
     }
   });
+  
+  
   
   var CardContainer = function(timeline){
     this.el = $("#timeline_card_scroller_inner");
   };
   observable(CardContainer.prototype);
   transformable(CardContainer.prototype);
+  
   CardContainer.prototype = _.extend(CardContainer.prototype, {});
   
   
@@ -207,14 +253,14 @@
     }, "");
   };
   
+  
   var Series = function(series, timeline) {
     this.color    = color();
     this.timeline = timeline;
-    this.name     = series.event_name;
+    this.name     = series.event_series;
     this.cards    = [];
   };
   observable(Series.prototype);
-  renderable(Series.prototype);
   
   Series.prototype = _.extend(Bar.prototype, {
     add : function(card){
@@ -233,18 +279,23 @@
   
   _(["min", "max"]).each(function(key){
     Series.prototype[key] = function() {
-      _[key].call(_, this.cards, this._comparator);
+      return _[key].call(_, this.cards, this._comparator).timestamp;
     };
   });
   
   
   var Card = function(card, series) {
     this.series = series;
+    var card = _.clone(card);
+    this.timestamp = card.timestamp;
+    delete card.timestamp;
+    this.attributes = card;
   };
-  renderable(Card.prototype);
   
   Card.prototype = _.extend(Card.prototype, {
-    cacheable : true
+    get : function(key){
+      return this.attributes[key];
+    }
   });
   
   // Controls

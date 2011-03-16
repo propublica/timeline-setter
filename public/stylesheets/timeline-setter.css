@@ -175,7 +175,7 @@
     #timeline_top_matter_container {
     }
     .timeline_notchbar_container,.timeline_arrow_container {
-      padding:0 5px 0 10px;
+      padding:0;
       border:1px solid #cecece;
       -webkit-box-shadow: #CECECE 0px 0px 2px;
       -moz-box-shadow: #CECECE 0px 0px 2px;
@@ -187,8 +187,11 @@
       overflow:hidden;
       clear:left;
     }
+    .timeline_notchbar_container{
+      cursor: col-resize;
+    }
     #timeline_card_scroller {
-      padding:0 5px 0 10px;
+      padding:0;
       width:100%;
       position:relative;
       overflow:hidden;
