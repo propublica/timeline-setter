@@ -5,10 +5,11 @@
 
 * zoom
 * next/prev buttons
-* series
-* interval notches
+* smarter intervals on notches
 * doubleclick
 * card positioning
+* strange highlighting fixes
+* ie
 
 ## Features
 

@@ -143,11 +143,12 @@
     Models
   */
   // Stores state
-  var Timeline = function(series) {
+  var Timeline = function(data) {
+    data = data.sort(function(a, b){ return a.timestamp - b.timestamp; });
     this.bySid  = {};
     this.series = [];
     this.bounds = new Bounds();
-    this.createSeries(series);
+    this.createSeries(data);
     this.bar      = new Bar(this);
     this.cardCont = new CardContainer(this);
     sync(this.bar, this.cardCont, "move", "zoom");
@@ -309,11 +310,10 @@
     
     render : function(e){
       if(!e.type === "render") return;
-      console.log('rendering', this.template(this))
       this.el = $(this.template(this));
       $(".series_nav_container").append(this.el);
       this.el.toggle(this.hideNotches,this.showNotches);
-    },
+    }
   });
   
   _(["min", "max"]).each(function(key){
@@ -327,7 +327,6 @@
     this.series = series;
     var card = _.clone(card);
     this.timestamp = card.timestamp;
-    //delete card.timestamp;
     this.attributes = card;
     this.attributes.topcolor = series.color;
     this.template = template("#card_tmpl");
@@ -380,13 +379,14 @@
     
   });
   
-  var ctor = function(){}
+  var ctor = function(){};
   var inherits = function(child, parent){
     ctor.prototype  = parent.prototype;
     child.prototype = new ctor();
     child.prototype.constructor = child;
   };
   
+  // Controls
   var Control = function(direction){
     this.direction = direction;
     this.el = $(this.prefix + direction);
@@ -394,7 +394,6 @@
     this.el.bind('click', this.click);
   };
   
-  // Controls
   
   var curZoom = 100;
   
@@ -416,21 +415,36 @@
   });
   
   
-  var Pan = function(direction) {
+  var Chooser = function(direction) {
     Control.apply(this, arguments);
+    this.notches = $(".timeline_notch");
   };  
-  inherits(Pan, Control);
+  inherits(Chooser, Control);
   
-  Pan.prototype = _.extend(Control.prototype, {
-    prefix: ".timeline_scrub_"
+  Chooser.prototype = _.extend(Control.prototype, {
+    prefix: ".timeline_choose_",
+    click: function(e){
+      var el;
+      var curCardIdx = this.notches.index($(".timeline_notch_active"));
+      var numOfCards = this.notches.length;
+      if (this.direction === "next") {
+        el = (curCardIdx < numOfCards ? this.notches.eq(curCardIdx + 1) : false);
+      } else {
+        el = (curCardIdx > 0 ? this.notches.eq(curCardIdx - 1) : false);
+      }
+
+      if(!el) return;
+      el.trigger("click");
+    }
   });
   
   $(function(){
     window.timeline = new Timeline(timelineData);
-    window.zoom = new Zoom("in");
+    new Zoom("in");
     new Zoom("out");
-    new Pan("left");
-    new Pan("right");
+    var chooser = new Chooser("next");
+    chooser.click();
+    new Chooser("prev");
   });
   
 })(window, document);
