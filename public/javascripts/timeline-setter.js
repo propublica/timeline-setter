@@ -1,6 +1,7 @@
 (function(window, document, undefined){
 
 
+  var curZoom = 100;
   
   /*
     Mixins
@@ -192,6 +193,7 @@
     this.el.bind("doZoom", this.doZoom);
     this.template = template("#year_notch_tmpl");
     this.render();
+    this.el.bind("dblclick", function(){ $(".timeline_zoom_in").click(); });
   };
   observable(Bar.prototype);
   transformable(Bar.prototype);
@@ -223,9 +225,8 @@
       // needs fixin for offset and things, time fer thinkin'
       this.el.animate({"width": width + "%"}, {
         step: function(current) { 
-          var e   = $.Event();
+          var e   = $.Event("zoom");
           e.width = current + "%";
-          e.type  = "zoom";
           that.el.trigger("dragging");
           that.trigger(e);
         } 
@@ -396,10 +397,9 @@
   };
   
   
-  var curZoom = 100;
   
   var Zoom = function(direction) {
-    Control.apply(this, arguments); 
+    Control.apply(this, arguments);
   };
   inherits(Zoom, Control);
   

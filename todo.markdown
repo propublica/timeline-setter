@@ -3,10 +3,8 @@
 
 ## Blockers
 
-* zoom
-* next/prev buttons
+* zoom with offsets
 * smarter intervals on notches
-* doubleclick
 * card positioning
 * strange highlighting fixes
 * ie
@@ -19,6 +17,8 @@
 * iOS swiping
 * Add a 'reset' button
 * code comments
+* autoresize
+
 
 ## Refactor
 
@@ -26,10 +26,4 @@
 
 ## Bugs
 
-.timeline\_notchbar should be #timeline_notchbar
-
-
-
-
-
- 
+Refactor single classes: .timeline\_notchbar should be #timeline_notchbar
