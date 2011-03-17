@@ -272,7 +272,7 @@
     this.timeline = timeline;
     this.name     = series.event_series;
     this.cards    = [];
-    _.bindAll(this, "render");
+    _.bindAll(this, "render", "showNotches", "hideNotches");
     this.template = template("#series_legend_tmpl");
     this.timeline.bind(this.render);
   };
@@ -294,30 +294,26 @@
     
     
     hideNotches : function(){
+      this.el.addClass("series_legend_item_inactive");
       _.each(this.cards, function(card){
         card.hideNotch();
       });
     },
     
     showNotches : function(){
+      this.el.removeClass("series_legend_item_inactive");
       _.each(this.cards, function(card){
         card.showNotch();
       });
     },
     
     render : function(e){
-      //if(!e.type === "render") return;
-      /// render the little square
-      //var that = this;
-      //this.el.toggle(function(){
-      //  $(this).addClass("series_legend_item_inactive");
-      //  that.hideNotches();
-      //}, function(){
-      //  $(this).removeClass("series_legend_item_inactive");
-      //  that.showNotches();
-      //});
-    }
-    
+      if(!e.type === "render") return;
+      console.log('rendering', this.template(this))
+      this.el = $(this.template(this));
+      $(".series_nav_container").append(this.el);
+      this.el.toggle(this.hideNotches,this.showNotches);
+    },
   });
   
   _(["min", "max"]).each(function(key){
@@ -346,7 +342,8 @@
       return this.attributes[key];
     },
     
-    render : function(){
+    render : function(e){
+      if(!e.type === "render") return;
       this.offset = this.series.timeline.bounds.project(this.timestamp, 100);
       var html = this.ntemplate(this.attributes);
       this.notch = $(html).css({"left": this.offset + "%"});
