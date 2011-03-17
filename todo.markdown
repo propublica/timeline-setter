@@ -1,6 +1,8 @@
 # TimelineSetter ToDo
 
 ## Features
+* doubleclick
+
 * zoom to fit by series
 
 * Allow different types of media. Expand cards to fit.

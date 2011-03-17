@@ -106,10 +106,10 @@
     .css_arrow {
       border-style: solid;
       height: 0px;
-      margin: 0px 10px;
       width: 0px;
       position:absolute;
       border-width: 10px 10px 10px 10px;
+      margin-top: -18px;
     }
     .expand_left .css_arrow {
       margin: 0 13.5%;
@@ -247,6 +247,7 @@
     .timeline_card_container {
       top:19px;
       position:absolute;
+      margin-left:-5px;
     }
     .timeline_controls {
       margin: 0 0 10px 0;
@@ -306,10 +307,3 @@
     }
     
     
-    .timeline_notchbar{
-      /*border:1px solid black;*/
-    }
-    
-    #timeline_card_scroller_inner{
-      border:1px solid black;
-    }

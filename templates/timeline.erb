@@ -29,7 +29,6 @@
         </div>
       </div>
     </div>
-    <div class="css_arrow css_arrow_up" style="display:none;"></div>    
   </div>
 
   <script type="text/javascript">
@@ -48,7 +47,8 @@
   </script>
   <script id="card_tmpl" type="text/jst">
   <div class="timeline_card_container">
-    <div class="item item_active" data-timestamp="<%%= timestamp %>" style="border-top:1px solid <%%= topcolor %>">
+  <div class="css_arrow css_arrow_up" style="border-bottom-color:<%%= topcolor %>"></div>
+    <div class="item" data-timestamp="<%%= timestamp %>" style="border-top:1px solid <%%= topcolor %>">
       <div class="item_label">
         <%% if (!_.isEmpty(event_html)){ %>
           <div class="item_user_html">

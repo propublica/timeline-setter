@@ -1,5 +1,6 @@
 #!/usr/bin/env ruby
 
+# $ ./bin/timeline-setter -c ./test.csv -O
 # $ ./bin/timeline-setter -c ./test.csv -o /Users/ashaw/htdocs/timeline/timeline.html -a -O
 
 require 'optparse'

@@ -364,8 +364,9 @@
     this.attributes.topcolor = series.color;
     this.template = template("#card_tmpl");
     this.ntemplate = template("#notch_tmpl");
-    _.bindAll(this, "render");
+    _.bindAll(this, "render", "activate");
     this.series.timeline.bind(this.render);
+    this.series.bind(this.deactivate);
   };
   
   Card.prototype = _.extend(Card.prototype, {
@@ -374,17 +375,30 @@
     },
     
     render : function(){
-      var offset = this.series.timeline.bounds.project(this.timestamp, 100);
+      this.offset = this.series.timeline.bounds.project(this.timestamp, 100);
       var html = this.ntemplate(this.attributes);
-      $(".timeline_notchbar").append($(html).css({"left": offset + "%"}));
-      
-      //if(this.timestamp === 1134363600){ 
-        $("#timeline_card_scroller_inner").append($(this.template(this.attributes)).css({"left": offset + "%"}));
-      //}
+      this.notch = $(html).css({"left": this.offset + "%"});
+      $(".timeline_notchbar").append(this.notch);
+      this.notch.click(this.activate);
     },
     
-    activate : function(){
+    activate : function(e){
+      this.hideActiveCard();
+      
       // draw the actual card
+      if (!this.el) {
+        this.el = $(this.template(this.attributes));
+        this.el.css({"left": this.offset + "%"});
+        $("#timeline_card_scroller_inner").append(this.el);
+      }
+      this.el.show().addClass("card_active");
+      console.log(this.el);
+      this.notch.addClass("timeline_notch_active");
+    },
+    
+    hideActiveCard : function() {
+      $(".card_active").removeClass("card_active").hide();
+      $(".timeline_notch_active").removeClass("timeline_notch_active");
     },
     
     hideNotch : function(){
@@ -431,7 +445,7 @@
   });
   
   $(function(){
-    window.timeline = new Timeline([{"timestamp":1134363600,"event_link":"http://www.propublica.org/documents/item/31738-investment-review-board-minutes#document/p3/a9416","event_series":"Education Dept","event_date":"Dec. 12, 2005","event_html":"<img width=\"190\" height=\"190\" src=\"http://images.nymag.com/images/2/daily/2011/03/01_frankrich_190x190.jpg\">","event_display_date":"","event_description":"Internal meeting minutes show that education department officials criticized the performance of ACS, the contractor handling the discharge program. They kept ACS for five more years."},{"timestamp":1218686400,"event_link":"http://www.opencongress.org/bill/110-h4137/text?version=enr&nid=t0:enr:3529","event_series":"Education Dept","event_date":"Aug. 14, 2008","event_html":"","event_display_date":"","event_description":"Congress passes a law directing the department to ease the standard for disability discharge and create an expedited discharge process for veterans."},{"timestamp":1236571200,"event_link":"http://www.propublica.org/documents/item/31737-higgins-decision#document/p19/a9421","event_series":"Education Dept","event_date":"Mar. 9, 2009","event_html":"","event_display_date":"","event_description":"A federal court in Missouri rules that the programäó»s communication with borrowers was so poor it was unconstitutional, violating borrowersäó» due process rights."},{"timestamp":1012539600,"event_link":"","event_series":"","event_date":"Feb. 1, 2002","event_html":"<img src=\"http://www.propublica.org/images/gasdrill2-28-390.jpg\">","event_display_date":"","event_description":"Talked about Timelines"},{"timestamp":1254715200,"event_link":"http://www.propublica.org/documents/item/31736-gao-report-on-acs#document/p6/a9423","event_series":"Tina Brooks","event_date":"Oct. 5, 2009","event_html":"","event_display_date":"","event_description":"Documents show that ACS refunded money it had been given to improve the online tracking system for the program, after the department said the changes actually destabilized the system."},{"timestamp":981003600,"event_link":"","event_series":"","event_date":"Feb. 1, 2001","event_html":"","event_display_date":"","event_description":"Al's Timeline thing Timelines"},{"timestamp":1285905600,"event_link":"http://www.propublica.org/documents/item/32222-nelnet-disability-discharge-press-release","event_series":"Education Dept","event_date":"Oct. 1, 2010","event_html":"","event_display_date":"","event_description":"The department hires the contractor Nelnet to take over servicing disability discharge applications from ACS."},{"timestamp":1296536400,"event_link":"","event_series":"","event_date":"Feb. 1, 2011","event_html":"<iframe title=\"YouTube video player\" width=\"640\" height=\"390\" src=\"http://www.youtube.com/embed/wV1FrqwZyKw\" frameborder=\"0\" allowfullscreen></iframe>","event_display_date":"","event_description":"Talked about Timelines"},{"timestamp":1291698000,"event_link":"","event_series":"Tina Brooks","event_date":"Dec. 7, 2010","event_html":"","event_display_date":"","event_description":"Brooks applies for disability discharge yet again äóñ the fourth application she has submitted."},{"timestamp":996638400,"event_link":"","event_series":"","event_date":"Aug. 1, 2001","event_html":"","event_display_date":"","event_description":"another timeline thing"},{"timestamp":1217563200,"event_link":"http://www.propublica.org/documents/item/32253-tina-brooks-doe-ombudsman-letter#document/p5/a9543","event_series":"Al Series","event_date":"Aug. 1, 2008","event_html":"","event_display_date":"","event_description":"An education department ombudsman writes Brooks a letter saying that she cannot appeal the departmentäó»s decision."},{"timestamp":1044075600,"event_link":"","event_series":"","event_date":"Feb. 1, 2003","event_html":"","event_display_date":"","event_description":"Thought about Timelines"}]);
+    window.timeline = new Timeline(timelineData);
     new Zoom("in");
     new Zoom("out");
     new Pan("left");
