@@ -6,34 +6,6 @@
     Mixins
   */
   
-  /* Not Sure this is needed actually.
-  // Various stateful variables;
-  var cache     = {};
-  var idCounter = 0;
-  
-  var renderable = function(obj) {
-    obj.cid = function(){
-      if(this._cid) return this._cid;
-      this._cid = idCounter++;
-      return this._cid;
-    };
-    
-    obj.$ = function(query){
-      return $(query, this.el);
-    };
-    
-    obj.html = function(args){
-      if(!this.cacheable) return this.template(args);
-      var cid = this.cid();
-      if(cache[cid]) return cache[cid].children();
-      cache[cid] = $("<div/>").html(this.template(args));
-      return cache[cid].children();
-    };
-    
-    return obj;
-  };
-  */
-  
   var observable = function(obj){
     obj.bind = function(cb){
       this._callbacks = this._callbacks || [];
@@ -392,7 +364,6 @@
         $("#timeline_card_scroller_inner").append(this.el);
       }
       this.el.show().addClass("card_active");
-      console.log(this.el);
       this.notch.addClass("timeline_notch_active");
     },
     
@@ -416,22 +387,35 @@
   var inherits = function(child, parent){
     ctor.prototype  = parent.prototype;
     child.prototype = new ctor();
-    child.prototype.constructor = child; 
+    child.prototype.constructor = child;
   };
   
   var Control = function(direction){
     this.direction = direction;
     this.el = $(this.prefix + direction);
+     _.bindAll(this, 'click');
+    this.el.bind('click', this.click);
   };
   
   // Controls
+  
+  var curZoom = 100;
+  
   var Zoom = function(direction) {
-    Control.apply(this, arguments);
+    Control.apply(this, arguments); 
   };
   inherits(Zoom, Control);
   
   Zoom.prototype = _.extend(Zoom.prototype, {
-    prefix: "timeline_zoom_"
+    prefix : ".timeline_zoom_",
+    click : function() {
+      curZoom += (this.direction === "in" ? +100 : -100);
+      if (curZoom >= 100) {
+        $(".timeline_notchbar").trigger('doZoom', [curZoom]);
+      } else {
+        curZoom = 100;
+      }
+    }
   });
   
   
@@ -440,13 +424,13 @@
   };  
   inherits(Pan, Control);
   
-  Pan.prototype = _.extend(Zoom.prototype, {
-    prefix: "timeline_scrub_"
+  Pan.prototype = _.extend(Control.prototype, {
+    prefix: ".timeline_scrub_"
   });
   
   $(function(){
     window.timeline = new Timeline(timelineData);
-    new Zoom("in");
+    window.zoom = new Zoom("in");
     new Zoom("out");
     new Pan("left");
     new Pan("right");
