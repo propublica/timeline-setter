@@ -269,9 +269,9 @@
   
   
   var Series = function(series, timeline) {
-    this.color    = color();
     this.timeline = timeline;
     this.name     = series.event_series;
+    this.color    = this.name.length > 0 ? color() : "#444";
     this.cards    = [];
     _.bindAll(this, "render", "showNotches", "hideNotches");
     this.template = template("#series_legend_tmpl");
@@ -310,6 +310,7 @@
     
     render : function(e){
       if(!e.type === "render") return;
+      if(this.name.length === 0) return;
       this.el = $(this.template(this));
       $(".series_nav_container").append(this.el);
       this.el.toggle(this.hideNotches,this.showNotches);
@@ -432,7 +433,6 @@
       } else {
         el = (curCardIdx > 0 ? this.notches.eq(curCardIdx - 1) : false);
       }
-
       if(!el) return;
       el.trigger("click");
     }
