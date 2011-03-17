@@ -209,7 +209,7 @@
    Views
   */
   var Bar = function(timeline) {
-    this.el = $("#timeline_notchbar");
+    this.el = $(".timeline_notchbar");
     this.el.css({ "left": 0 });
     this.timeline = timeline;
     draggable(this);
@@ -376,7 +376,7 @@
     render : function(){
       var offset = this.series.timeline.bounds.project(this.timestamp, 100);
       var html = this.ntemplate(this.attributes);
-      $("#timeline_notchbar").append($(html).css({"left": offset + "%"}));
+      $(".timeline_notchbar").append($(html).css({"left": offset + "%"}));
       
       //if(this.timestamp === 1134363600){ 
         $("#timeline_card_scroller_inner").append($(this.template(this.attributes)).css({"left": offset + "%"}));

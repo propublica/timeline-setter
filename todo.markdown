@@ -28,11 +28,9 @@ Timeline Object
    *     *
 State Object < -- contains information like zoom level and offset.
 
-
-
-
 ## Bugs
 
+.timeline\_notchbar should be #timeline_notchbar
 
 
 
