@@ -132,6 +132,7 @@
     this.min = Math.min(num, this.min);
     this.max = Math.max(num, this.max);
   };
+ 
   
   Bounds.prototype.width = function(){
     return this.max - this.min;
@@ -143,7 +144,8 @@
   
   
   // Handy dandy function to make sure that events are 
-  // triggered at the same time on two objects.
+  // triggered at the same time on two objects.'
+  
   var sync = function(origin, listener){
     var events = Array.prototype.slice.call(arguments, 2);
     _.each(events, function(ev){
@@ -168,7 +170,7 @@
   /*
     Models
   */
-  
+  // Stores state
   var Timeline = function(series) {
     this.bySid  = {};
     this.series = [];
@@ -177,9 +179,10 @@
     this.bar      = new Bar(this);
     this.cardCont = new CardContainer(this);
     sync(this.bar, this.cardCont, "move", "zoom");
-    
+    var e = $.Event("render");
+    this.trigger(e);
   };
-  observable(timeline);
+  observable(Timeline.prototype);
   
   Timeline.prototype = _.extend(Timeline.prototype, {
     createSeries : function(series){
@@ -206,7 +209,7 @@
    Views
   */
   var Bar = function(timeline) {
-    this.el = $(".timeline_notchbar");
+    this.el = $("#timeline_notchbar");
     this.el.css({ "left": 0 });
     this.timeline = timeline;
     draggable(this);
@@ -260,7 +263,7 @@
       var timestamp, year, html, date;
       var earliestYear = getYearFromTimestamp(this.timeline.bounds.min);
       var latestYear   = getYearFromTimestamp(this.timeline.bounds.max);
-
+      // calculate divisions a bit better.
       for (i = earliestYear; i < latestYear; i++) {
         date      = new Date();
         date.setYear(i);
@@ -290,15 +293,20 @@
   };
   
   
+  
+  
   var Series = function(series, timeline) {
     this.color    = color();
     this.timeline = timeline;
     this.name     = series.event_series;
     this.cards    = [];
+    _.bindAll(this, "render");
+    this.template = template("#series_legend_tmpl");
+    this.timeline.bind(this.render);
   };
   observable(Series.prototype);
   
-  Series.prototype = _.extend(Bar.prototype, {
+  Series.prototype = _.extend(Series.prototype, {
     add : function(card){
       var crd = new Card(card, this);
       this.cards.splice(this.sortedIndex(crd), 0, crd);
@@ -310,7 +318,34 @@
     
     _comparator : function(crd){
       return crd.timestamp;
+    },
+    
+    
+    hideNotches : function(){
+      _.each(this.cards, function(card){
+        card.hideNotch();
+      });
+    },
+    
+    showNotches : function(){
+      _.each(this.cards, function(card){
+        card.showNotch();
+      });
+    },
+    
+    render : function(e){
+      //if(!e.type === "render") return;
+      /// render the little square
+      //var that = this;
+      //this.el.toggle(function(){
+      //  $(this).addClass("series_legend_item_inactive");
+      //  that.hideNotches();
+      //}, function(){
+      //  $(this).removeClass("series_legend_item_inactive");
+      //  that.showNotches();
+      //});
     }
+    
   });
   
   _(["min", "max"]).each(function(key){
@@ -324,14 +359,43 @@
     this.series = series;
     var card = _.clone(card);
     this.timestamp = card.timestamp;
-    delete card.timestamp;
+    //delete card.timestamp;
     this.attributes = card;
+    this.attributes.topcolor = series.color;
+    this.template = template("#card_tmpl");
+    this.ntemplate = template("#notch_tmpl");
+    _.bindAll(this, "render");
+    this.series.timeline.bind(this.render);
   };
   
   Card.prototype = _.extend(Card.prototype, {
     get : function(key){
       return this.attributes[key];
+    },
+    
+    render : function(){
+      var offset = this.series.timeline.bounds.project(this.timestamp, 100);
+      var html = this.ntemplate(this.attributes);
+      $("#timeline_notchbar").append($(html).css({"left": offset + "%"}));
+      
+      //if(this.timestamp === 1134363600){ 
+        $("#timeline_card_scroller_inner").append($(this.template(this.attributes)).css({"left": offset + "%"}));
+      //}
+    },
+    
+    activate : function(){
+      // draw the actual card
+    },
+    
+    hideNotch : function(){
+      this.notch.hide();
+      if(this.el) this.el.hide();
+    },
+    
+    showNotch : function(){
+      this.notch.show();
     }
+    
   });
   
   var ctor = function(){}

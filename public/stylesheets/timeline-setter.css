@@ -60,6 +60,7 @@
       padding:10px;
       background:#F7F7F7;
       color:#999;
+
     }
     .item_lower {
       -webkit-box-shadow:#D9D9D9 0px 3px 4px;
@@ -243,7 +244,7 @@
     .timeline_notch:hover {
       background:#cecece;
     }
-    #timeline_card_container {
+    .timeline_card_container {
       top:19px;
       position:absolute;
     }
