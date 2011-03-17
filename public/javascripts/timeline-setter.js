@@ -225,11 +225,17 @@
       var parent  = this.el.parent();
       var pOffset = parent.offset().left;
       var offset  = this.el.offset().left;
+      
+      // check to make sure we have a delta
       if(_.isUndefined(e.deltaX)) e.deltaX = 0;
+      
+      // check to make sure the bar isn't out of bounds
       if(offset + this.el.width() + e.deltaX < pOffset + parent.width())
         e.deltaX = (pOffset + parent.width()) - (offset + this.el.width());
       if(offset + e.deltaX > pOffset)
         e.deltaX = pOffset - offset;
+        
+      // and move both this and the card container.
       e.type = "move";
       this.trigger(e);
       this.move(e);
@@ -274,10 +280,7 @@
     this.el = $("#timeline_card_scroller_inner");
   };
   observable(CardContainer.prototype);
-  transformable(CardContainer.prototype);
-  
-  CardContainer.prototype = _.extend(CardContainer.prototype, {});
-  
+  transformable(CardContainer.prototype);  
   
   var color = function(){
     return "#" + _.reduce([256, 182, 230], function(memo, it){
@@ -340,30 +343,27 @@
   
   var Control = function(direction){
     this.direction = direction;
-    this.el = $(this.prefix);
-    
+    this.el = $(this.prefix + direction);
   };
   
   // Controls
   var Zoom = function(direction) {
-    
     Control.apply(this, arguments);
   };
   inherits(Zoom, Control);
   
   Zoom.prototype = _.extend(Zoom.prototype, {
-    query: ""
+    prefix: "timeline_zoom_"
   });
   
   
   var Pan = function(direction) {
-    
     Control.apply(this, arguments);
   };  
   inherits(Pan, Control);
   
   Pan.prototype = _.extend(Zoom.prototype, {
-    query: ""
+    prefix: "timeline_scrub_"
   });
   
   $(function(){
