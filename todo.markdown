@@ -3,7 +3,6 @@
 
 ## Blockers
 
-* strange highlighting fixes
 * ie
 
 ## Features
