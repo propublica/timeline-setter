@@ -9,6 +9,7 @@
 * strange highlighting fixes
 * ie
 * more stable colors - from coroners
+* height problems on cards
 
 ## Features
 
