@@ -3,7 +3,7 @@
 
 ## Blockers
 
-* zoom with offsets
+* zoom with offsets (~)
 * smarter intervals on notches
 * card positioning
 * strange highlighting fixes
@@ -26,4 +26,5 @@
 
 ## Bugs
 
-Refactor single classes: .timeline\_notchbar should be #timeline_notchbar
+* Refactor single classes: .timeline\_notchbar should be #timeline_notchbar
+* center zooming if no card selection (now it falls back to 0)

@@ -228,7 +228,7 @@
       var curr = getCur();
       
       // needs fixin for offset and things, time fer thinkin'
-      this.el.animate({"width": [width + "%", "linear"]}, {
+      this.el.animate({"width": width + "%"}, {
         step: function(current, fx) {
           var e = $.Event("dragging");
           var delta = curr - getCur();
@@ -361,15 +361,28 @@
       this.notch.click(this.activate);
     },
     
+    position : function(e) {
+      var item = this.el.children('.item');
+      var itemPctLeft = ((this.el.position().left + item.width()) / $(".timeline_notchbar").width() * 100)
+      console.log(itemPctLeft)
+      // flip card if i need to
+      if (itemPctLeft > 100) {
+        var toMove = (this.el.position().left - (item.width()))
+        console.log(toMove)
+        this.el.css({"left" : toMove })
+        console.log(this.el.children(".css_arrow").css("left", item.width()))
+      }
+    },
+    
     activate : function(e){
       this.hideActiveCard();
-      
       // draw the actual card
       if (!this.el) {
         this.el = $(this.template(this.attributes));
         this.el.css({"left": this.offset + "%"});
         $("#timeline_card_scroller_inner").append(this.el);
       }
+      this.position();
       this.el.show().addClass("card_active");
       this.notch.addClass("timeline_notch_active");
     },
