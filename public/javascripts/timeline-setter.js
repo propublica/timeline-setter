@@ -366,14 +366,12 @@
       if (e.type !== "move") return;
       var item = this.el.children(".item");
       var cardOffsetLeft = (this.el.offset().left + item.width()) / $("#timeline").width() * 100;
-      console.log(cardOffsetLeft)
+      console.log('cardOffsetLeft', cardOffsetLeft)
       // flip card if i need to
-      if (cardOffsetLeft > 100) {
+      if (cardOffsetLeft > 90) {
         console.log('flip');
-        // var toMove = item.width();
-        // console.log(toMove)
-        // this.el.offset({"left" : this.el.offset().left - item.width() })
-        // this.el.children(".css_arrow").css("left", item.width())
+        this.el.css({"margin-left": -item.width()})
+        this.el.children(".css_arrow").css("left", item.width())
 
       }
     },
