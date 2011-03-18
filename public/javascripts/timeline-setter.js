@@ -312,14 +312,16 @@
     },
     
     
-    hideNotches : function(){
+    hideNotches : function(e){
+      e.preventDefault();
       this.el.addClass("series_legend_item_inactive");
       _.each(this.cards, function(card){
         card.hideNotch();
       });
     },
     
-    showNotches : function(){
+    showNotches : function(e){
+      e.preventDefault();
       this.el.removeClass("series_legend_item_inactive");
       _.each(this.cards, function(card){
         card.showNotch();
