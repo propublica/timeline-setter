@@ -236,6 +236,7 @@
     .timeline_year_notch:hover {
     }
     .timeline_notch{
+      width:4px;
       cursor:pointer;
     }
     .timeline_notch:hover {

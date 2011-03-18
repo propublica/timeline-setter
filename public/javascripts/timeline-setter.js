@@ -406,9 +406,7 @@
       }
       this.el.show().addClass("card_active");
       this.position($.Event('move'));
-      
       this.notch.addClass("timeline_notch_active");
-      
     },
     
     hideActiveCard : function() {
@@ -417,12 +415,12 @@
     },
     
     hideNotch : function(){
-      this.notch.hide().removeClass("timeline_notch_active");
+      this.notch.hide().removeClass("timeline_notch_active").addClass("series_inactive");
       if(this.el) this.el.hide();
     },
     
     showNotch : function(){
-      this.notch.show();
+      this.notch.removeClass("series_inactive").show();
     }
     
   });
@@ -473,11 +471,11 @@
     click: function(e){
       var el;
       var curCardIdx = this.notches.index($(".timeline_notch_active"));
-      var numOfCards = this.notches.length;
+      var numOfCards = this.notches.not(".series_inactive").length;
       if (this.direction === "next") {
-        el = (curCardIdx < numOfCards ? this.notches.eq(curCardIdx + 1) : false);
+        el = (curCardIdx < numOfCards ? this.notches.not(".series_inactive").eq(curCardIdx + 1) : false);
       } else {
-        el = (curCardIdx > 0 ? this.notches.eq(curCardIdx - 1) : false);
+        el = (curCardIdx > 0 ? this.notches.not(".series_inactive").eq(curCardIdx - 1) : false);
       }
       if(!el) return;
       el.trigger("click");
