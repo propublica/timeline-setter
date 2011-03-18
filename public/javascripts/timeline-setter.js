@@ -473,7 +473,6 @@
     chooseNext.click();
     
     $(document).bind('keyup', function(e) {
-      console.log(e.keyCode)
       if (e.keyCode === 39) {
         chooseNext.click()
       } else if (e.keyCode === 37) {
