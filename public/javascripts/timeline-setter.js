@@ -246,8 +246,7 @@
       var timestamp, year, html, date;
       var earliestYear = getYearFromTimestamp(this.timeline.bounds.min);
       var latestYear   = getYearFromTimestamp(this.timeline.bounds.max);
-      alert(earliestYear);
-      alert(latestYear);
+
       // calculate divisions a bit better.
       for (i = earliestYear; i < latestYear; i++) {
         date      = new Date();
