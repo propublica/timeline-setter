@@ -139,6 +139,10 @@
     return d.getFullYear();
   };
   
+  var cleanNumber = function(str){
+    return parseInt(str.replace(/^[^+\-\d]?([+\-]\d+)?.*$/, "$1"), 10);
+  };
+  
   
   /*
     Models
@@ -376,15 +380,15 @@
       var item = this.el.children(".item");
       var timeline = $("#timeline");
       var cardOffsetRight = (this.el.offset().left + item.width()) - (timeline.offset().left + timeline.width());
-      var cardOffsetLeft  = (this.el.offset().left + parseInt(this.el.css("margin-left").replace("px", ""), 10)) - timeline.offset().left
+      var cardOffsetLeft  = (this.el.offset().left + cleanNumber(this.el.css("margin-left"))) - timeline.offset().left;
       // flip card if i need to
       if (cardOffsetRight > 0) {
-        this.el.css({"margin-left": -item.width()});
+        this.el.css({"margin-left": -(item.width() + 7)}); /// AGGGHHHHHHH, fix this
         this.el.children(".css_arrow").css("left", item.width());
         return;
       } 
       
-      if(cardOffsetLeft < 0) {
+      if(cardOffsetLeft < 0 && this.el.css("margin-left") != this.originalMargin) {
         this.el.css({"margin-left": this.originalMargin});
         this.el.children(".css_arrow").css("left", 0);
       }

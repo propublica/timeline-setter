@@ -6,6 +6,7 @@
       padding:10px;
       position:relative;
       height:100%;
+      background-color:white;
     }
     .timeline_inner {
       width:100%;
@@ -34,7 +35,7 @@
     .timeline_middle:hover {
 /*      border-bottom:1px solid #141414;
       border-top:1px solid #141414;
-*/      color:#141414;
+*/    color:#141414;
     }
     .dept_ed_label, .tina_brooks_label {
       color:#999;
@@ -52,7 +53,7 @@
       z-index:1;
 /*      width:300px;
       height:200px;
-*/      position:absolute;
+*/    position:absolute;
       border:1px solid #EBEBEB;
       -webkit-border-radius: 3px;
       -moz-border-radius: 3px;
@@ -107,9 +108,9 @@
       border-style: solid;
       height: 0px;
       width: 0px;
-      position:absolute;
+      position:relative;
+      top: 2px;
       border-width: 10px 10px 10px 10px;
-      margin-top: -18px;
     }
     .expand_left .css_arrow {
       margin: 0 13.5%;
@@ -124,7 +125,6 @@
     }
     .css_arrow_up {
       border-color: transparent transparent #7C93AF transparent;
-      top: -1px;
     }
     .item_active .css_arrow_up {
       border-color: transparent transparent #7C93AF transparent;
@@ -242,9 +242,9 @@
       background:#cecece;
     }
     .timeline_card_container {
-      top:19px;
       position:absolute;
       margin-left:-5px;
+      width:150px;
     }
     .timeline_controls {
       margin: 0 0 25px 0;
@@ -307,9 +307,7 @@
       margin:-3px 10px 0 10px;
       cursor:pointer;
     }
-    .series_legend_item_inactive {
-/*      opacity:.50;
-*/    }
+    .series_legend_item_inactive {}
     .series_legend_item_inactive .series_legend_swatch {
       background-image:none !important;
     }
