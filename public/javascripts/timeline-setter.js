@@ -380,10 +380,11 @@
       if (e.type !== "move" || !this.el) return;
       var item = this.el.children(".item");
       var timeline = $("#timeline");
+      var currentMargin = this.el.css("margin-left");
       var cardOffsetRight = (this.el.offset().left + item.width()) - (timeline.offset().left + timeline.width());
-      var cardOffsetLeft  = (this.el.offset().left + cleanNumber(this.el.css("margin-left"))) - timeline.offset().left;
+      var cardOffsetLeft  = (this.el.offset().left) - timeline.offset().left;
       // flip card if i need to
-      if (cardOffsetRight > 0) {
+      if (cardOffsetRight > 0 && currentMargin === this.originalMargin) {
         this.el.css({"margin-left": -(item.width() + 7)}); /// AGGGHHHHHHH, fix this
         this.el.children(".css_arrow").css("left", item.width());
         return;
@@ -436,8 +437,8 @@
   var Control = function(direction){
     this.direction = direction;
     this.el = $(this.prefix + direction);
-     _.bindAll(this, 'click');
-    this.el.bind('click', this.click);
+    var that = this;
+    this.el.bind('click', function(e) { e.preventDefault(); that.click(e);});
   };
   
   
