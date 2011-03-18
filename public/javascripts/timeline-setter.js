@@ -378,7 +378,7 @@
     },
     
     hideNotch : function(){
-      this.notch.hide();
+      this.notch.hide().removeClass("timeline_notch_active");
       if(this.el) this.el.hide();
     },
     
