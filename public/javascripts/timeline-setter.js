@@ -470,12 +470,13 @@
     prefix: ".timeline_choose_",
     click: function(e){
       var el;
-      var curCardIdx = this.notches.index($(".timeline_notch_active"));
-      var numOfCards = this.notches.not(".series_inactive").length;
+      var notches    = this.notches.not(".series_inactive");
+      var curCardIdx = notches.index($(".timeline_notch_active"));
+      var numOfCards = notches.length;
       if (this.direction === "next") {
-        el = (curCardIdx < numOfCards ? this.notches.not(".series_inactive").eq(curCardIdx + 1) : false);
+        el = (curCardIdx < numOfCards ? notches.eq(curCardIdx + 1) : false);
       } else {
-        el = (curCardIdx > 0 ? this.notches.not(".series_inactive").eq(curCardIdx - 1) : false);
+        el = (curCardIdx > 0 ? notches.eq(curCardIdx - 1) : false);
       }
       if(!el) return;
       el.trigger("click");
