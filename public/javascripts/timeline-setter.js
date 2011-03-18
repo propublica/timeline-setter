@@ -203,16 +203,16 @@
       var parent  = this.el.parent();
       var pOffset = parent.offset().left;
       var offset  = this.el.offset().left;
-      
+      var width   = this.el.width();
       // check to make sure we have a delta
       if(_.isUndefined(e.deltaX)) e.deltaX = 0;
       
       // check to make sure the bar isn't out of bounds
-      if(offset + this.el.width() + e.deltaX < pOffset + parent.width())
-        e.deltaX = (pOffset + parent.width()) - (offset + this.el.width());
+      if(offset + width + e.deltaX < pOffset + parent.width())
+        e.deltaX = (pOffset + parent.width()) - (offset + width);
       if(offset + e.deltaX > pOffset)
         e.deltaX = pOffset - offset;
-        
+      
       // and move both this and the card container.
       e.type = "move";
       this.trigger(e);
@@ -221,13 +221,20 @@
     
     doZoom : function(e, width){
       var that = this;
+      var notch = $(".timeline_notch_active");
+      var curr = notch.position().left;
+      
       
       // needs fixin for offset and things, time fer thinkin'
-      this.el.animate({"width": width + "%"}, {
-        step: function(current) { 
-          var e   = $.Event("zoom");
+      this.el.animate({"width": [width + "%", "linear"]}, {
+        step: function(current, fx) {
+          var e = $.Event("dragging");
+          var delta = curr - notch.position().left;
+          e.deltaX = delta;
+          that.moving(e);
+          curr = notch.position().left;
+          e   = $.Event("zoom");
           e.width = current + "%";
-          that.el.trigger("dragging");
           that.trigger(e);
         } 
       });
