@@ -284,9 +284,12 @@
       font-size:11px;
     }
     .series_legend_swatch {
+      background-image:url("data:image/gif;charset=utf-8;base64,R0lGODlhCgAKAJEAADMzM//M/39/f0xMTCH5BAEHAAEALAAAAAAKAAoAAAIVjI95ozbC0gNqLieoAdAinjWA1jQFADs=");
+      background-repeat:no-repeat;
+      background-position:center center;
       width: 16px;
       height: 16px;
-      display: inline-block;
+      display: block;
       float: left;
       -webkit-border-radius: 2px;
       -moz-border-radius: 2px;
@@ -303,7 +306,10 @@
       cursor:pointer;
     }
     .series_legend_item_inactive {
-      opacity:.50;
+/*      opacity:.50;
+*/    }
+    .series_legend_item_inactive .series_legend_swatch {
+      background-image:none !important;
     }
     
     
