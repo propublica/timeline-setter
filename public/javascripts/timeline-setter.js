@@ -152,6 +152,7 @@
     this.bar      = new Bar(this);
     this.cardCont = new CardContainer(this);
     this.createSeries(data);
+    this.bar.render();
     sync(this.bar, this.cardCont, "move", "zoom");
     var e = $.Event("render");
     this.trigger(e);
@@ -192,7 +193,6 @@
     this.el.bind("dragging scrolled", this.moving);
     this.el.bind("doZoom", this.doZoom);
     this.template = template("#year_notch_tmpl");
-    this.render();
     this.el.bind("dblclick", function(){ $(".timeline_zoom_in").click(); });
   };
   observable(Bar.prototype);
@@ -246,6 +246,8 @@
       var timestamp, year, html, date;
       var earliestYear = getYearFromTimestamp(this.timeline.bounds.min);
       var latestYear   = getYearFromTimestamp(this.timeline.bounds.max);
+      alert(earliestYear);
+      alert(latestYear);
       // calculate divisions a bit better.
       for (i = earliestYear; i < latestYear; i++) {
         date      = new Date();
@@ -370,11 +372,11 @@
       if (e.type !== "move") return;
       var item = this.el.children(".item");
       var cardOffsetLeft = (this.el.offset().left + item.width()) / $("#timeline").width() * 100;
-      console.log(cardOffsetLeft)
+      //console.log(cardOffsetLeft)
       // flip card if i need to
       if (cardOffsetLeft > 100) {
-        console.log('flip');
-        // var toMove = item.width();
+        //console.log('flip');
+        //var toMove = item.width();
         // console.log(toMove)
         // this.el.offset({"left" : this.el.offset().left - item.width() })
         // this.el.children(".css_arrow").css("left", item.width())
