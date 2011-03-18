@@ -224,7 +224,7 @@
       var notch = $(".timeline_notch_active");
       var getCur = function() {
         return notch.length > 0 ? notch.position().left : 0;
-      }
+      };
       var curr = getCur();
       
       // needs fixin for offset and things, time fer thinkin'
@@ -347,10 +347,10 @@
     this.attributes.topcolor = series.color;
     this.template = template("#card_tmpl");
     this.ntemplate = template("#notch_tmpl");
-    _.bindAll(this, "render", "activate");
+    _.bindAll(this, "render", "activate", "position");
     this.series.timeline.bind(this.render);
     this.series.bind(this.deactivate);
-    this.series.timeline.bar.bind(this.position)
+    this.series.timeline.bar.bind(this.position);
   };
   
   Card.prototype = _.extend(Card.prototype, {
@@ -368,13 +368,21 @@
     },
     
     position : function(e) {
-      if (e.type !== "move") return;
+      if (e.type !== "move" || !this.el) return;
       var item = this.el.children(".item");
-      var cardOffsetLeft = (this.el.offset().left + item.width()) / $("#timeline").width() * 100;
+      var timeline = $("#timeline");
+      var cardOffsetRight = (this.el.offset().left + item.width()) - (timeline.offset().left + timeline.width());
+      var cardOffsetLeft  = (this.el.offset().left + parseInt(this.el.css("margin-left").replace("px", ""), 10)) - timeline.offset().left
       // flip card if i need to
-      if (cardOffsetLeft > 90) {
-        this.el.css({"margin-left": -item.width()})
-        this.el.children(".css_arrow").css("left", item.width())
+      if (cardOffsetRight > 0) {
+        this.el.css({"margin-left": -item.width()});
+        this.el.children(".css_arrow").css("left", item.width());
+        return;
+      } 
+      
+      if(cardOffsetLeft < 0) {
+        this.el.css({"margin-left": this.originalMargin});
+        this.el.children(".css_arrow").css("left", 0);
       }
     },
     
@@ -385,10 +393,13 @@
         this.el = $(this.template(this.attributes));
         this.el.css({"left": this.offset + "%"});
         $("#timeline_card_scroller_inner").append(this.el);
+        this.originalMargin = this.el.css("margin-left");
       }
-      this.position($.Event('move'));
       this.el.show().addClass("card_active");
+      this.position($.Event('move'));
+      
       this.notch.addClass("timeline_notch_active");
+      
     },
     
     hideActiveCard : function() {
@@ -473,7 +484,6 @@
     chooseNext.click();
     
     $(document).bind('keyup', function(e) {
-      console.log(e.keyCode)
       if (e.keyCode === 39) {
         chooseNext.click()
       } else if (e.keyCode === 37) {
