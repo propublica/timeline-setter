@@ -130,7 +130,7 @@
   };
   
   var template = function(query) {
-    return _.template($(query).text());
+    return _.template($(query).html());
   };
   
   var getYearFromTimestamp = function(timestamp) {
@@ -364,13 +364,10 @@
     position : function(e) {
       var item = this.el.children('.item');
       var itemPctLeft = ((this.el.position().left + item.width()) / $(".timeline_notchbar").width() * 100)
-      console.log(itemPctLeft)
       // flip card if i need to
       if (itemPctLeft > 100) {
         var toMove = (this.el.position().left - (item.width()))
-        console.log(toMove)
         this.el.css({"left" : toMove })
-        console.log(this.el.children(".css_arrow").css("left", item.width()))
       }
     },
     
