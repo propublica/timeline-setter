@@ -130,7 +130,7 @@
   };
   
   var template = function(query) {
-    return _.template($(query).text());
+    return _.template($(query).html());
   };
   
   var getYearFromTimestamp = function(timestamp) {
@@ -152,6 +152,7 @@
     this.bar      = new Bar(this);
     this.cardCont = new CardContainer(this);
     this.createSeries(data);
+    this.bar.render();
     sync(this.bar, this.cardCont, "move", "zoom");
     var e = $.Event("render");
     this.trigger(e);
@@ -192,7 +193,6 @@
     this.el.bind("dragging scrolled", this.moving);
     this.el.bind("doZoom", this.doZoom);
     this.template = template("#year_notch_tmpl");
-    this.render();
     this.el.bind("dblclick", function(){ $(".timeline_zoom_in").click(); });
   };
   observable(Bar.prototype);
@@ -246,6 +246,7 @@
       var timestamp, year, html, date;
       var earliestYear = getYearFromTimestamp(this.timeline.bounds.min);
       var latestYear   = getYearFromTimestamp(this.timeline.bounds.max);
+
       // calculate divisions a bit better.
       for (i = earliestYear; i < latestYear; i++) {
         date      = new Date();
@@ -270,7 +271,11 @@
   
   var color = function(){
     return "#" + _.reduce([256, 182, 230], function(memo, it){
-      var unpadded = (Math.random(it) * 256 | 0).toString(16);
+      var random   = (Math.random(it) * 256 | 0);
+      while(random < 60){
+        random = (Math.random(it) * 256 | 0);
+      }
+      var unpadded = random.toString(16);
       return memo + (unpadded.length < 2 ? "0" + unpadded : unpadded);
     }, "");
   };
@@ -366,13 +371,10 @@
       if (e.type !== "move") return;
       var item = this.el.children(".item");
       var cardOffsetLeft = (this.el.offset().left + item.width()) / $("#timeline").width() * 100;
-      console.log('cardOffsetLeft', cardOffsetLeft)
       // flip card if i need to
       if (cardOffsetLeft > 90) {
-        console.log('flip');
         this.el.css({"margin-left": -item.width()})
         this.el.children(".css_arrow").css("left", item.width())
-
       }
     },
     

@@ -8,6 +8,7 @@
 * card positioning
 * strange highlighting fixes
 * ie
+* more stable colors - from coroners
 
 ## Features
 

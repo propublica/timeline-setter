@@ -223,15 +223,11 @@
     }
     .timeline_notch, .timeline_year_notch {
       height:100%;
-      width:5px;
-      background:#999;
       position:absolute;
-      cursor:pointer;
+      color:#999;
     }
     .timeline_year_notch {
-      background:#999;
-      width:1px;
-      color:#999;
+      border-left: 1px solid #999;
     }
     .timeline_year_notch_year_text {
       display:block;
@@ -240,6 +236,9 @@
       padding:2px 0 0 5px;
     }
     .timeline_year_notch:hover {
+    }
+    .timeline_notch{
+      cursor:pointer;
     }
     .timeline_notch:hover {
       background:#cecece;
@@ -250,8 +249,11 @@
       margin-left:-5px;
     }
     .timeline_controls {
-      margin: 0 0 10px 0;
+      margin: 0 0 25px 0;
       float:left;
+      height:1%;
+      overflow:visible;
+      
     }
     .timeline_controls a {
       border:1px solid #cecece;
@@ -260,6 +262,7 @@
       color:#999;
       font-family:"Helvetica Neue",Arial,sans-serif;
       font-weight:normal;
+      height: 14px;
       font-size:14px;
       border-bottom-left-radius: 2px 2px;
       border-bottom-right-radius: 2px 2px;
@@ -273,6 +276,7 @@
     }
     .timeline_controls a:hover {
       background:#fff;
+      
     }
     .timeline_notch_active {
       -webkit-box-shadow: 0px 0px 10px #333; 
