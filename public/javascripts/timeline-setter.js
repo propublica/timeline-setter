@@ -275,21 +275,20 @@
     this.el = $("#timeline_card_scroller_inner");
   };
   observable(CardContainer.prototype);
-  transformable(CardContainer.prototype);  
+  transformable(CardContainer.prototype);
   
+  var COLORS = ["#065718", "#EDC047", "#91ADD1", "#929E5E", "#9E5E23", "#C44846", "#065718", "#EDD4A5", "#CECECE"];
+    
   var color = function(){
-    return "#" + _.reduce([256, 182, 230], function(memo, it){
-      var random   = (Math.random(it) * 256 | 0);
-      while(random < 60){
-        random = (Math.random(it) * 256 | 0);
-      }
-      var unpadded = random.toString(16);
-      return memo + (unpadded.length < 2 ? "0" + unpadded : unpadded);
-    }, "");
+    var chosen;
+    if (COLORS.length > 0) {
+      chosen = COLORS[0];
+      COLORS.shift();
+    } else {
+      chosen = "#444";
+    }
+    return chosen;
   };
-  
-  
-  
   
   var Series = function(series, timeline) {
     this.timeline = timeline;
@@ -317,14 +316,16 @@
     },
     
     
-    hideNotches : function(){
+    hideNotches : function(e){
+      e.preventDefault();
       this.el.addClass("series_legend_item_inactive");
       _.each(this.cards, function(card){
         card.hideNotch();
       });
     },
     
-    showNotches : function(){
+    showNotches : function(e){
+      e.preventDefault();
       this.el.removeClass("series_legend_item_inactive");
       _.each(this.cards, function(card){
         card.showNotch();

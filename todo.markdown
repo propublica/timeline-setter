@@ -3,16 +3,11 @@
 
 ## Blockers
 
-* zoom with offsets (~)
-* smarter intervals on notches
-* card positioning
-* strange highlighting fixes
 * ie
-* more stable colors - from coroners
-* height problems on cards
 
 ## Features
 
+* smarter intervals on notches
 * scope css
 * zoom to fit by series
 * Per-card permalinks
