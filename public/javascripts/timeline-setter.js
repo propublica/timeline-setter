@@ -149,9 +149,9 @@
     this.bySid  = {};
     this.series = [];
     this.bounds = new Bounds();
-    this.createSeries(data);
     this.bar      = new Bar(this);
     this.cardCont = new CardContainer(this);
+    this.createSeries(data);
     sync(this.bar, this.cardCont, "move", "zoom");
     var e = $.Event("render");
     this.trigger(e);
@@ -270,7 +270,11 @@
   
   var color = function(){
     return "#" + _.reduce([256, 182, 230], function(memo, it){
-      var unpadded = (Math.random(it) * 256 | 0).toString(16);
+      var random   = (Math.random(it) * 256 | 0);
+      while(random < 60){
+        random = (Math.random(it) * 256 | 0);
+      }
+      var unpadded = random.toString(16);
       return memo + (unpadded.length < 2 ? "0" + unpadded : unpadded);
     }, "");
   };
@@ -345,6 +349,7 @@
     _.bindAll(this, "render", "activate");
     this.series.timeline.bind(this.render);
     this.series.bind(this.deactivate);
+    this.series.timeline.bar.bind(this.position)
   };
   
   Card.prototype = _.extend(Card.prototype, {
@@ -362,12 +367,18 @@
     },
     
     position : function(e) {
-      var item = this.el.children('.item');
-      var itemPctLeft = ((this.el.position().left + item.width()) / $(".timeline_notchbar").width() * 100)
+      if (e.type !== "move") return;
+      var item = this.el.children(".item");
+      var cardOffsetLeft = (this.el.offset().left + item.width()) / $("#timeline").width() * 100;
+      console.log(cardOffsetLeft)
       // flip card if i need to
-      if (itemPctLeft > 100) {
-        var toMove = (this.el.position().left - (item.width()))
-        this.el.css({"left" : toMove })
+      if (cardOffsetLeft > 100) {
+        console.log('flip');
+        // var toMove = item.width();
+        // console.log(toMove)
+        // this.el.offset({"left" : this.el.offset().left - item.width() })
+        // this.el.children(".css_arrow").css("left", item.width())
+
       }
     },
     
@@ -379,7 +390,7 @@
         this.el.css({"left": this.offset + "%"});
         $("#timeline_card_scroller_inner").append(this.el);
       }
-      this.position();
+      this.position($.Event('move'));
       this.el.show().addClass("card_active");
       this.notch.addClass("timeline_notch_active");
     },
