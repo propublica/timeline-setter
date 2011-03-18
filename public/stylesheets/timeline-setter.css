@@ -2,10 +2,10 @@
     
     #timeline {
       width:85%;
-      height:500px;
       margin:0 auto;
       padding:10px;
       position:relative;
+      height:100%;
     }
     .timeline_inner {
       width:100%;
@@ -196,7 +196,7 @@
       width:100%;
       position:relative;
       overflow:hidden;
-      height:400px;
+      height:100%;
     }
     #timeline_card_scroller_inner {
       width:100%;
