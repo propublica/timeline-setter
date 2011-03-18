@@ -152,6 +152,10 @@
     this.bar      = new Bar(this);
     this.cardCont = new CardContainer(this);
     this.createSeries(data);
+    // extend bounds for padding
+    this.bounds.extend(this.bounds.min - 7889231)
+    this.bounds.extend(this.bounds.max + 7889231)
+    
     this.bar.render();
     sync(this.bar, this.cardCont, "move", "zoom");
     var e = $.Event("render");
