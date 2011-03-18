@@ -222,17 +222,19 @@
     doZoom : function(e, width){
       var that = this;
       var notch = $(".timeline_notch_active");
-      var curr = notch.position().left;
-      
+      var getCur = function() {
+        return notch.length > 0 ? notch.position().left : 0;
+      }
+      var curr = getCur();
       
       // needs fixin for offset and things, time fer thinkin'
       this.el.animate({"width": [width + "%", "linear"]}, {
         step: function(current, fx) {
           var e = $.Event("dragging");
-          var delta = curr - notch.position().left;
+          var delta = curr - getCur();
           e.deltaX = delta;
           that.moving(e);
-          curr = notch.position().left;
+          curr = getCur();
           e   = $.Event("zoom");
           e.width = current + "%";
           that.trigger(e);
