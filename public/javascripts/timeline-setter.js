@@ -367,6 +367,10 @@
       return this.attributes[key];
     },
     
+    $ : function(query){
+      return $(query, this.el);
+    },
+    
     render : function(e){
       if(!e.type === "render") return;
       this.offset = this.series.timeline.bounds.project(this.timestamp, 100);
@@ -383,16 +387,16 @@
       var currentMargin = this.el.css("margin-left");
       var cardOffsetRight = (this.el.offset().left + item.width()) - (timeline.offset().left + timeline.width());
       var cardOffsetLeft  = (this.el.offset().left) - timeline.offset().left;
-      // flip card if i need to
+
       if (cardOffsetRight > 0 && currentMargin === this.originalMargin) {
         this.el.css({"margin-left": -(item.width() + 7)}); /// AGGGHHHHHHH, fix this
-        this.el.children(".css_arrow").css("left", item.width());
+        this.$(".css_arrow").css("left", item.width());
         return;
       } 
       
       if(cardOffsetLeft < 0 && this.el.css("margin-left") != this.originalMargin) {
         this.el.css({"margin-left": this.originalMargin});
-        this.el.children(".css_arrow").css("left", 0);
+        this.$(".css_arrow").css("left", 0);
       }
     },
     
@@ -406,6 +410,11 @@
         this.originalMargin = this.el.css("margin-left");
       }
       this.el.show().addClass("card_active");
+      if(this.$(".item_user_html").children().width() > 150){ /// AGGGHHHHHHH, fix this
+        this.$(".item_label").css("width", this.$(".item_user_html").children().width());
+      } else {
+        this.$(".item_label").css("width", 150);
+      }
       this.position($.Event('move'));
       this.notch.addClass("timeline_notch_active");
     },
