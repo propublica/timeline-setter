@@ -347,5 +347,13 @@
     .series_legend_item_inactive .series_legend_swatch {
       background-image:none !important;
     }
+    .timeline-img-hed {
+      font-family: 'Helvetica Neue',arial,sans-serif;
+      font-size: 18px;
+      font-weight: bold;
+      margin:0;
+      margin-bottom: 10px;
+      line-height:20px;
+    }
     
     
