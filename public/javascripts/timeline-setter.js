@@ -367,6 +367,10 @@
       return this.attributes[key];
     },
     
+    $ : function(query){
+      return $(query, this.el);
+    },
+    
     render : function(e){
       if(!e.type === "render") return;
       this.offset = this.series.timeline.bounds.project(this.timestamp, 100);
@@ -380,18 +384,19 @@
       if (e.type !== "move" || !this.el) return;
       var item = this.el.children(".item");
       var timeline = $("#timeline");
+      var currentMargin = this.el.css("margin-left");
       var cardOffsetRight = (this.el.offset().left + item.width()) - (timeline.offset().left + timeline.width());
-      var cardOffsetLeft  = (this.el.offset().left + cleanNumber(this.el.css("margin-left"))) - timeline.offset().left;
-      // flip card if i need to
-      if (cardOffsetRight > 0) {
+      var cardOffsetLeft  = (this.el.offset().left) - timeline.offset().left;
+
+      if (cardOffsetRight > 0 && currentMargin === this.originalMargin) {
         this.el.css({"margin-left": -(item.width() + 7)}); /// AGGGHHHHHHH, fix this
-        this.el.children(".css_arrow").css("left", item.width());
+        this.$(".css_arrow").css("left", item.width());
         return;
       } 
       
       if(cardOffsetLeft < 0 && this.el.css("margin-left") != this.originalMargin) {
         this.el.css({"margin-left": this.originalMargin});
-        this.el.children(".css_arrow").css("left", 0);
+        this.$(".css_arrow").css("left", 0);
       }
     },
     
@@ -405,6 +410,11 @@
         this.originalMargin = this.el.css("margin-left");
       }
       this.el.show().addClass("card_active");
+      if(this.$(".item_user_html").children().width() > 150){ /// AGGGHHHHHHH, fix this
+        this.$(".item_label").css("width", this.$(".item_user_html").children().width());
+      } else {
+        this.$(".item_label").css("width", 150);
+      }
       this.position($.Event('move'));
       this.notch.addClass("timeline_notch_active");
     },
@@ -436,8 +446,8 @@
   var Control = function(direction){
     this.direction = direction;
     this.el = $(this.prefix + direction);
-     _.bindAll(this, 'click');
-    this.el.bind('click', this.click);
+    var that = this;
+    this.el.bind('click', function(e) { e.preventDefault(); that.click(e);});
   };
   
   
@@ -470,12 +480,13 @@
     prefix: ".timeline_choose_",
     click: function(e){
       var el;
-      var curCardIdx = this.notches.index($(".timeline_notch_active"));
-      var numOfCards = this.notches.not(".series_inactive").length;
+      var notches    = this.notches.not(".series_inactive");
+      var curCardIdx = notches.index($(".timeline_notch_active"));
+      var numOfCards = notches.length;
       if (this.direction === "next") {
-        el = (curCardIdx < numOfCards ? this.notches.not(".series_inactive").eq(curCardIdx + 1) : false);
+        el = (curCardIdx < numOfCards ? notches.eq(curCardIdx + 1) : false);
       } else {
-        el = (curCardIdx > 0 ? this.notches.not(".series_inactive").eq(curCardIdx - 1) : false);
+        el = (curCardIdx > 0 ? notches.eq(curCardIdx - 1) : false);
       }
       if(!el) return;
       el.trigger("click");
