@@ -87,7 +87,7 @@
         obj.el.trigger($.Event(type));
       });
       obj.el.bind("touchmove", mousemove);
-      document.body.addEventListener("touchend", function(e){ mouseup(e); }, false);
+      obj.el.bind("touchend", mouseup);
     };
 
     return obj;
