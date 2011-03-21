@@ -455,7 +455,6 @@
     moveBarWithCard : function() {
       var e = $.Event('moving')
       var onBarEdge = this.cardOffset().onBarEdge();
-      console.log(onBarEdge);
 
       if (onBarEdge === 'right') {
          e.deltaX = -(this.cardOffset().item.width())

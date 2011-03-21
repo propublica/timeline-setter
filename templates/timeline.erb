@@ -17,8 +17,8 @@
         <a href="#" class="timeline_zoom timeline_zoom_in">+</a> 
         <a href="#" class="timeline_zoom timeline_zoom_out">-</a> 
           &nbsp;&nbsp;&nbsp;&nbsp; 
-        <a href="#" class="timeline_choose timeline_choose_prev">&laquo;</a> 
-        <a href="#" class="timeline_choose timeline_choose_next">&raquo;</a>
+        <a href="#" class="timeline_choose timeline_choose_prev">&laquo; <span class="timeline_controls_inner_text">Previous</span></a> 
+        <a href="#" class="timeline_choose timeline_choose_next"><span class="timeline_controls_inner_text">Next</span> &raquo;</a>
       </div>
       <div class="series_nav_container"></div>
     </div>
@@ -61,7 +61,7 @@
         <%% } %>
 
       <div class="item_year">
-        <%%= event_date %>
+        <%%= event_display_date.length > 0 ? event_display_date : event_date %>
       </div>
     </div>
   </div>

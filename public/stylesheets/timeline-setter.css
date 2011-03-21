@@ -259,8 +259,8 @@
       z-index: 9999;
     }
     .timeline_controls {
-      margin: 0 0 25px 0;
-      float:left;
+      margin: 0 0 0 0;
+      float:right;
       height:1%;
       overflow:visible;
     }
@@ -277,6 +277,10 @@
       border-bottom-right-radius: 2px 2px;
       border-top-left-radius: 2px 2px;
       border-top-right-radius: 2px 2px;
+    }
+    .timeline_controls_inner_text {
+      font-size:11px; 
+      text-transform:uppercase;
     }
     .timeline_controls a.timeline_controls_disabled {
       color:#cecece !important;
@@ -295,6 +299,8 @@
     .series_nav_container {
       font-family:Arial,sans-serif;
       font-size:11px;
+      height:30px;
+      margin-left:-10px;
     }
     .series_legend_swatch {
       background-image:url("data:image/gif;charset=utf-8;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAIBJREFUeNrskksKwCAMBev9byS4UfEOoh7AA4hu9JUG2kVb+8FVoYFsQmbghTAA00ix7wumRfC0nXPYz97Ca70ThBA20hhzL7DWIsZIi957AmutB7gryDkTlFLaYKUUznZPBUIIlFIIbq1BSolevG5uzjnF0Frj6j7sf+VxwSzAAG/ifZQMhRJhAAAAAElFTkSuQmCC");
