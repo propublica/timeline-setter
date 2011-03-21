@@ -280,7 +280,7 @@
       for (i = earliestYear; i < latestYear; i++) {
         date      = new Date();
         date.setYear(i);
-        date.setMonth(1);
+        date.setMonth(0);
         date.setDate(1);
         timestamp = date.getTime() / 1000 | 0;
         year      = i;
