@@ -42,6 +42,7 @@
   */
   
   var touchInit = 'ontouchstart' in document;
+  if(touchInit) jQuery.event.props.push("touches");
   
   var draggable = function(obj){
     var drag;
@@ -76,7 +77,6 @@
       $(document).bind("mousemove", mousemove);
       $(document).bind("mouseup", mouseup);
     } else {
-      jQuery.event.props.push("touches");
       var last;
       obj.el.bind("touchstart", function(e) {
         var now = Date.now();
