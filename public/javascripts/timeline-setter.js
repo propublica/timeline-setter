@@ -39,12 +39,15 @@
   /*
     Plugins
   */
+  
+  var touchInit = 'ontouchstart' in document;
+  
   var draggable = function(obj){
     var drag;
     function mousedown(e){
-      e.preventDefault();
-      drag = {x: e.pageX, y: e.pageY};
-      e.type = "dragstart";
+      //e.preventDefault();
+      drag = {x: (e.pageX || e.touches[0].pageX)};
+      e.type = "dragstart" //e.type === 'mousedown' ? "" : e.type;
       obj.el.trigger(e);
     };
 
@@ -52,11 +55,11 @@
       e.preventDefault();
       if(!drag) return;
       e.type = "dragging";
+      console.log((e.pageX || e.touches[0].pageX) - drag.x)
       e = _.extend(e, {
-        deltaX: e.pageX - drag.x, 
-        deltaY: e.pageY - drag.y 
+        deltaX: (e.pageX || e.touches[0].pageX) - drag.x
       });
-      drag = {x: e.pageX, y: e.pageY};
+      drag = { x: (e.pageX || e.touches[0].pageX) };
       obj.el.trigger(e);
     };
 
@@ -67,13 +70,28 @@
       obj.el.trigger(e);
     };
 
-    obj.el.bind("mousedown", mousedown);
+    if(!touchInit) {
+      obj.el.bind("mousedown", mousedown);
     
-    $(document).bind("mousemove", mousemove);
-    $(document).bind("mouseup", mouseup);
+      $(document).bind("mousemove", mousemove);
+      $(document).bind("mouseup", mouseup);
+    } else { 
+      var last;
+      obj.el.bind("touchstart", function(e) {
+        var now = Date.now();
+        var delta = now - (last || now);
+        e.type = delta > 0 && delta <= 250 ? "doubletap" : "tap";
+        drag = {x: e.pageX};
+        last = now;
+        obj.el.trigger(e);
+      });
+      document.body.addEventListener("touchmove", function(e){mousemove(e)}, false);
+      document.body.addEventListener("touchend", function(e){mouseup(e)}, false);
+    };
 
     return obj;
   };
+
   
   
   // safari bug for too fast scrolling, h/t polymaps
@@ -198,11 +216,13 @@
     draggable(this);
     wheel(this);
     _.bindAll(this, "moving", "doZoom");
-    this.el.bind("dragging scrolled", this.moving);
+    this.el.bind("dragging scrolled swiping", this.moving);
     this.el.bind("doZoom", this.doZoom);
     this.template = template("#year_notch_tmpl");
-    this.el.bind("dblclick", function(e){ e.preventDefault(); $(".timeline_zoom_in").click(); });
-    
+    this.el.bind("dblclick doubletap", function(e){ 
+      e.preventDefault(); 
+      $(".timeline_zoom_in").click(); 
+    });
   };
   observable(Bar.prototype);
   transformable(Bar.prototype);
@@ -501,7 +521,6 @@
     var chooseNext = new Chooser("next");
     var choosePrev = new Chooser("prev");
     chooseNext.click();
-    
     $(document).bind('keyup', function(e) {
       if (e.keyCode === 39) {
         chooseNext.click();
