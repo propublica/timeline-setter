@@ -75,7 +75,7 @@
     }
     
     .item_user_html {
-      padding-bottom:15px;
+      padding-bottom:5px;
     }
     .item_active {
     	z-index:998;
@@ -205,7 +205,7 @@
       width:100%;
       position:relative;
       overflow:hidden;
-      height:600px
+      height:800px; /* FIX THIS!!! */
     }
     #timeline_card_scroller_inner {
       width:100%;
