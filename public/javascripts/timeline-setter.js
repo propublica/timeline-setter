@@ -42,19 +42,20 @@
   */
   
   var touchInit = 'ontouchstart' in document;
+  if(touchInit) jQuery.event.props.push("touches");
   
   var draggable = function(obj){
     var drag;
     function mousedown(e){
-      //e.preventDefault();
-      drag = {x: (e.pageX || e.touches[0].pageX)};
-      e.type = "dragstart" //e.type === 'mousedown' ? "" : e.type;
+      e.preventDefault();
+      drag = {x: e.pageX};
+      e.type = "dragstart";
       obj.el.trigger(e);
     };
 
     function mousemove(e){
-      e.preventDefault();
       if(!drag) return;
+      e.preventDefault();
       e.type = "dragging";
       e = _.extend(e, {
         deltaX: (e.pageX || e.touches[0].pageX) - drag.x
@@ -75,18 +76,18 @@
     
       $(document).bind("mousemove", mousemove);
       $(document).bind("mouseup", mouseup);
-    } else { 
+    } else {
       var last;
       obj.el.bind("touchstart", function(e) {
         var now = Date.now();
         var delta = now - (last || now);
-        e.type = delta > 0 && delta <= 250 ? "doubletap" : "tap";
-        drag = {x: e.pageX};
+        var type = delta > 0 && delta <= 250 ? "doubletap" : "tap";
+        drag = {x: e.touches[0].pageX};
         last = now;
-        obj.el.trigger(e);
+        obj.el.trigger($.Event(type));
       });
-      document.body.addEventListener("touchmove", function(e){mousemove(e)}, false);
-      document.body.addEventListener("touchend", function(e){mouseup(e)}, false);
+      obj.el.bind("touchmove", mousemove);
+      obj.el.bind("touchend", mouseup);
     };
 
     return obj;
@@ -216,7 +217,7 @@
     draggable(this);
     wheel(this);
     _.bindAll(this, "moving", "doZoom");
-    this.el.bind("dragging scrolled swiping touchmove", this.moving);
+    this.el.bind("dragging scrolled", this.moving);
     this.el.bind("doZoom", this.doZoom);
     this.template = template("#year_notch_tmpl");
     this.el.bind("dblclick doubletap", function(e){ 
@@ -434,35 +435,34 @@
             return 'left';
           }
         }
-      }
+      };
     },
     
     position : function(e) {
-      if (e.type !== "move" || !this.el) return;
-      
-      if (this.cardOffset().onBarEdge() === 'right') {
-        this.el.css({"margin-left": -(this.cardOffset().item.width() + 7)}); /// AGGGHHHHHHH, fix this
-        this.$(".css_arrow").css("left", this.cardOffset().item.width());
-        return;
-      } 
-      
-      if(this.cardOffset().onBarEdge() === 'default') {
-        this.el.css({"margin-left": this.originalMargin});
-        this.$(".css_arrow").css("left", 0);
-      }
+     if (e.type !== "move" || !this.el) return;
+     
+     if (this.cardOffset().onBarEdge() === 'right') {
+       this.el.css({"margin-left": -(this.cardOffset().item.width() + 7)}); /// AGGGHHHHHHH, fix this
+       this.$(".css_arrow").css("left", this.cardOffset().item.width());
+       return;
+     } 
+     
+     if(this.cardOffset().onBarEdge() === 'default') {
+       this.el.css({"margin-left": this.originalMargin});
+       this.$(".css_arrow").css("left", 0);
+     }
     },
     
     moveBarWithCard : function() {
-      var e = $.Event('moving')
+      var e = $.Event('moving');
       var onBarEdge = this.cardOffset().onBarEdge();
-      console.log(onBarEdge);
 
       if (onBarEdge === 'right') {
-         e.deltaX = -(this.cardOffset().item.width())
+         e.deltaX = -(this.cardOffset().item.width());
          this.series.timeline.bar.moving(e);
       }
       if (onBarEdge === 'left') {
-        e.deltaX = (this.cardOffset().item.width())
+        e.deltaX = (this.cardOffset().item.width());
         this.series.timeline.bar.moving(e);
       }
       this.position($.Event('move'));
