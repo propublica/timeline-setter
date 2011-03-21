@@ -25,6 +25,7 @@
   var transformable = function(obj){
     obj.move = function(e){
       if(!e.type === "move" || !e.deltaX) return;
+      
       if(_.isUndefined(this.currOffset)) this.currOffset = 0;
       this.currOffset += e.deltaX;
       this.el.css({"left" : this.currOffset});
@@ -401,24 +402,70 @@
       this.notch.click(this.activate);
     },
     
+    cardOffset : function() {
+      if (!this.el) return {
+        onBarEdge : function() {
+          return undefined;
+        }
+      };
+      
+      var that = this;
+      var item = this.el.children(".item");
+      var currentMargin = this.el.css("margin-left");
+      var timeline = $("#timeline");
+      var right = (that.el.offset().left + item.width()) - (timeline.offset().left + timeline.width());
+      var left = (that.el.offset().left) - timeline.offset().left;
+      
+      return {
+        item : item,
+        currentMargin : currentMargin,
+        left  : left,
+        right : right,
+        
+        onBarEdge : function() {
+          if (right > 0 && currentMargin === that.originalMargin) {
+           return 'right'; 
+          }
+          
+          if (left < 0 && that.el.css("margin-left") !== that.originalMargin) { 
+            return 'default';
+          }
+          
+          if (left < 0 && that.el.css("margin-left") === that.originalMargin) {
+            return 'left';
+          }
+        }
+      }
+    },
+    
     position : function(e) {
       if (e.type !== "move" || !this.el) return;
-      var item = this.el.children(".item");
-      var timeline = $("#timeline");
-      var currentMargin = this.el.css("margin-left");
-      var cardOffsetRight = (this.el.offset().left + item.width()) - (timeline.offset().left + timeline.width());
-      var cardOffsetLeft  = (this.el.offset().left) - timeline.offset().left;
-
-      if (cardOffsetRight > 0 && currentMargin === this.originalMargin) {
-        this.el.css({"margin-left": -(item.width() + 7)}); /// AGGGHHHHHHH, fix this
-        this.$(".css_arrow").css("left", item.width());
+      
+      if (this.cardOffset().onBarEdge() === 'right') {
+        this.el.css({"margin-left": -(this.cardOffset().item.width() + 7)}); /// AGGGHHHHHHH, fix this
+        this.$(".css_arrow").css("left", this.cardOffset().item.width());
         return;
       } 
       
-      if(cardOffsetLeft < 0 && this.el.css("margin-left") != this.originalMargin) {
+      if(this.cardOffset().onBarEdge() === 'default') {
         this.el.css({"margin-left": this.originalMargin});
         this.$(".css_arrow").css("left", 0);
       }
+    },
+    
+    moveBarWithCard : function() {
+      var e = $.Event('moving')
+      var onBarEdge = this.cardOffset().onBarEdge();
+
+      if (this.cardOffset().onBarEdge() === 'right') {
+         e.deltaX = -(this.cardOffset().item.width())
+         this.series.timeline.bar.moving(e);
+      }
+      if (this.cardOffset().onBarEdge() === 'left') {
+        e.deltaX = (this.cardOffset().item.width())
+        this.series.timeline.bar.moving(e);
+      }
+      this.position($.Event('move'));
     },
     
     activate : function(e){
@@ -436,7 +483,7 @@
       } else {
         this.$(".item_label").css("width", 150);
       }
-      this.position($.Event('move'));
+      this.moveBarWithCard();
       this.notch.addClass("timeline_notch_active");
     },
     
