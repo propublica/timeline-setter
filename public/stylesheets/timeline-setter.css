@@ -264,6 +264,8 @@
       float:right;
       height:2%;
       overflow:visible;
+      text-align: right;
+        width: 220px;
     }
     .timeline_controls a {
       border:1px solid #cecece;
@@ -274,10 +276,10 @@
       font-weight:normal;
       height: 14px;
       font-size:14px;
-      border-bottom-left-radius: 2px 2px;
-      border-bottom-right-radius: 2px 2px;
-      border-top-left-radius: 2px 2px;
-      border-top-right-radius: 2px 2px;
+      -webkit-border-radius: 2px;
+      -moz-border-radius: 2px;
+      border-radius: 2px;      
+      display: inline;
     }
     .timeline_controls_inner_text {
       font-size:11px; 
