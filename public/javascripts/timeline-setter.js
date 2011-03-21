@@ -56,7 +56,6 @@
       e.preventDefault();
       if(!drag) return;
       e.type = "dragging";
-      console.log((e.pageX || e.touches[0].pageX) - drag.x)
       e = _.extend(e, {
         deltaX: (e.pageX || e.touches[0].pageX) - drag.x
       });
@@ -217,7 +216,7 @@
     draggable(this);
     wheel(this);
     _.bindAll(this, "moving", "doZoom");
-    this.el.bind("dragging scrolled swiping", this.moving);
+    this.el.bind("dragging scrolled swiping touchmove", this.moving);
     this.el.bind("doZoom", this.doZoom);
     this.template = template("#year_notch_tmpl");
     this.el.bind("dblclick doubletap", function(e){ 
