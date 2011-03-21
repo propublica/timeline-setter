@@ -402,7 +402,6 @@
         right : right,
         
         onBarEdge : function() {
-          console.log(left,that.el.css("margin-left"),that.originalMargin )
           if (right > 0 && currentMargin === that.originalMargin) {
            return 'right'; 
           }
