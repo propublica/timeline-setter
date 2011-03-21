@@ -75,6 +75,7 @@
     return obj;
   };
   
+  
   // safari bug for too fast scrolling, h/t polymaps
   var safari = /WebKit\/533/.test(navigator.userAgent);
   var wheel = function(obj){
@@ -157,9 +158,8 @@
     this.cardCont = new CardContainer(this);
     this.createSeries(data);
     // extend bounds for padding
-    this.bounds.extend(this.bounds.min - 7889231)
-    this.bounds.extend(this.bounds.max + 7889231)
-    
+    this.bounds.extend(this.bounds.min - 7889231);
+    this.bounds.extend(this.bounds.max + 7889231);
     this.bar.render();
     sync(this.bar, this.cardCont, "move", "zoom");
     var e = $.Event("render");
@@ -201,7 +201,8 @@
     this.el.bind("dragging scrolled", this.moving);
     this.el.bind("doZoom", this.doZoom);
     this.template = template("#year_notch_tmpl");
-    this.el.bind("dblclick", function(){ $(".timeline_zoom_in").click(); });
+    this.el.bind("dblclick", function(e){ e.preventDefault(); $(".timeline_zoom_in").click(); });
+    
   };
   observable(Bar.prototype);
   transformable(Bar.prototype);
@@ -503,13 +504,13 @@
     
     $(document).bind('keyup', function(e) {
       if (e.keyCode === 39) {
-        chooseNext.click()
+        chooseNext.click();
       } else if (e.keyCode === 37) {
-        choosePrev.click()
+        choosePrev.click();
       } else {
         return;
       }
-    })
+    });
   });
   
 })(window, document);
