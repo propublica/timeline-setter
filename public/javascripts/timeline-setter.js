@@ -47,7 +47,7 @@
     var drag;
     function mousedown(e){
       e.preventDefault();
-      drag = {x: (e.pageX || e.touches[0].pageX)};
+      drag = {x: e.pageX};
       e.type = "dragstart";
       obj.el.trigger(e);
     };
@@ -82,7 +82,7 @@
         var now = Date.now();
         var delta = now - (last || now);
         var type = delta > 0 && delta <= 250 ? "doubletap" : "tap";
-        drag = {x: e.pageX};
+        drag = {x: e.touches[0].pageX};
         last = now;
         obj.el.trigger($.Event(type));
       });
