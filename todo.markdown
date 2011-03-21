@@ -11,11 +11,9 @@
 * scope css
 * zoom to fit by series
 * Per-card permalinks
-* iOS swiping
 * Add a 'reset' button
 * code comments
 * autoresize
-* move card over if you select one (by key command) that is halfway off page
 
 
 ## Refactor

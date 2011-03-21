@@ -455,12 +455,13 @@
     moveBarWithCard : function() {
       var e = $.Event('moving')
       var onBarEdge = this.cardOffset().onBarEdge();
+      console.log(onBarEdge);
 
-      if (this.cardOffset().onBarEdge() === 'right') {
+      if (onBarEdge === 'right') {
          e.deltaX = -(this.cardOffset().item.width())
          this.series.timeline.bar.moving(e);
       }
-      if (this.cardOffset().onBarEdge() === 'left') {
+      if (onBarEdge === 'left') {
         e.deltaX = (this.cardOffset().item.width())
         this.series.timeline.bar.moving(e);
       }
@@ -567,7 +568,7 @@
     var chooseNext = new Chooser("next");
     var choosePrev = new Chooser("prev");
     chooseNext.click();
-    $(document).bind('keyup', function(e) {
+    $(document).bind('keydown', function(e) {
       if (e.keyCode === 39) {
         chooseNext.click();
       } else if (e.keyCode === 37) {
