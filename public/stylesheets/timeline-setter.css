@@ -346,6 +346,7 @@
     .series_legend_item_inactive {}
     .series_legend_item_inactive .series_legend_swatch {
       background-image:none !important;
+      filter:alpha(opacity=40); /* IE can't do data URLs, so this will serve as 'inactive' UI for series heds in IE */
     }
     .timeline-img-hed {
       font-family: 'Helvetica Neue',arial,sans-serif;
