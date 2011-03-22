@@ -478,8 +478,9 @@
         this.originalMargin = this.el.css("margin-left");
       }
       this.el.show().addClass("card_active");
-      if(this.$(".item_user_html").children().width() > 150){ /// AGGGHHHHHHH, fix this
-        this.$(".item_label").css("width", this.$(".item_user_html").children().width());
+      var max = _.max(_.toArray(this.$(".item_user_html").children()), function(el){ return $(el).width() });
+      if($(max).width() > 150){ /// AGGGHHHHHHH, fix this
+        this.$(".item_label").css("width", $(max).width());
       } else {
         this.$(".item_label").css("width", 150);
       }
