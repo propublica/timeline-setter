@@ -15,7 +15,8 @@
 * Add a 'reset' button
 * code comments
 * autoresize
-
+* wider touch targets
+* pinch
 
 ## Refactor
 
