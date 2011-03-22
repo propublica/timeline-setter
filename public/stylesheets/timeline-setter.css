@@ -180,6 +180,7 @@
       -moz-user-select: none;
       -o-user-select: none;
       user-select: none;
+      overflow:visible;
     }
     .timeline_notchbar_container,.timeline_arrow_container {
       border:1px solid #cecece;
@@ -259,42 +260,66 @@
       z-index: 9999;
     }
     .timeline_controls {
-      margin: 0 0 25px 0;
-      float:left;
-      height:1%;
+      margin: 0 0 0 0;
+      float:right;
+      height:2%;
       overflow:visible;
+      text-align: right;
+        width: 220px;
     }
     .timeline_controls a {
       border:1px solid #cecece;
-      background:#f0f0f0;
+      background-color:#f0f0f0;
       padding:3px 5px 3px 5px;
       color:#999;
       font-family:"Helvetica Neue",Arial,sans-serif;
       font-weight:normal;
       height: 14px;
       font-size:14px;
-      border-bottom-left-radius: 2px 2px;
-      border-bottom-right-radius: 2px 2px;
-      border-top-left-radius: 2px 2px;
-      border-top-right-radius: 2px 2px;
+      -webkit-border-radius: 2px;
+      -moz-border-radius: 2px;
+      border-radius: 2px;      
+      display: inline;
+    }
+    .timeline_controls_inner_text {
+      font-size:11px; 
+      text-transform:uppercase;
     }
     .timeline_controls a.timeline_controls_disabled {
-      color:#cecece !important;
-      background:#f7f7f7 !important;
+      color:#cecece;
+      background-color:#f7f7f7;
       cursor:default;
     }
     .timeline_controls a:hover {
-      background:#fff;
-      
+      background-color:#fff;
     }
     .timeline_notch_active {
       -webkit-box-shadow: 0px 0px 10px #333; 
+    }
+    .timeline_zoom {
+      background-repeat:no-repeat;
+      background-position:center center;
+      width:20px !important;
+      padding:3px 8px 3px 8px !important;
+      margin-right:4px;
+    }
+    .zoom_inner_text {
+      display:none;
+      *display:inline;
+    }
+    .timeline_zoom_in {
+      background-image:url("data:image/gif;charset=utf-8;base64,R0lGODlhCgAKALMAADMzM//M/5GRkdXV1fDw8GZmZk1NTf////r6+gAAAAAAAAAAAAAAAAAAAAAAAAAAACH5BAEHAAEALAAAAAAKAAoAAAQpMMhJpyiihjLIKJTQGV4mFYShEqAkHIiBHKYEHHhhVAWgY5qToFZRRQAAOw==");
+    }
+    .timeline_zoom_out {
+      background-image:url("data:image/gif;charset=utf-8;base64,R0lGODlhCgAKALMAADMzM//M/5GRkdXV1fDw8GZmZk1NTf////r6+gAAAAAAAAAAAAAAAAAAAAAAAAAAACH5BAEHAAEALAAAAAAKAAoAAAQoMMhJpyiihjLIKJTQEV4mFYShEqAkHAh8mBJw3IVRFUCOaScBraKKAAA7");
     }
     /* legend */
     
     .series_nav_container {
       font-family:Arial,sans-serif;
       font-size:11px;
+      height:30px;
+      margin-left:-10px;
     }
     .series_legend_swatch {
       background-image:url("data:image/gif;charset=utf-8;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAIBJREFUeNrskksKwCAMBev9byS4UfEOoh7AA4hu9JUG2kVb+8FVoYFsQmbghTAA00ix7wumRfC0nXPYz97Ca70ThBA20hhzL7DWIsZIi957AmutB7gryDkTlFLaYKUUznZPBUIIlFIIbq1BSolevG5uzjnF0Frj6j7sf+VxwSzAAG/ifZQMhRJhAAAAAElFTkSuQmCC");
@@ -321,6 +346,16 @@
     .series_legend_item_inactive {}
     .series_legend_item_inactive .series_legend_swatch {
       background-image:none !important;
+      filter:alpha(opacity=40); /* IE can't do data URLs, so this will serve as 'inactive' UI for series heds in IE */
+    }
+    .timeline-img-hed {
+      font-family: 'Helvetica Neue',arial,sans-serif;
+      font-size: 18px;
+      font-weight: bold;
+      display:inline-block;
+      margin:0;
+      margin-bottom: 10px;
+      line-height:20px;
     }
     
     

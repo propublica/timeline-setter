@@ -7,14 +7,16 @@
 
 ## Features
 
+* Per-card permalinks
+* Sharing links (Twitter, Facebook)
 * smarter intervals on notches
 * scope css
 * zoom to fit by series
-* Per-card permalinks
 * Add a 'reset' button
 * code comments
 * autoresize
-
+* wider touch targets
+* pinch
 
 ## Refactor
 
