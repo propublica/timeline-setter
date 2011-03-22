@@ -18,8 +18,6 @@
       for(var i = 0; callback = this._callbacks[i]; i++)
         callback.apply(this, arguments);
     };
-    
-    return obj;
   };
 
   var transformable = function(obj){
@@ -89,8 +87,6 @@
       obj.el.bind("touchmove", mousemove);
       obj.el.bind("touchend", mouseup);
     };
-
-    return obj;
   };
 
   
@@ -478,7 +474,7 @@
         this.originalMargin = this.el.css("margin-left");
       }
       this.el.show().addClass("card_active");
-      var max = _.max(_.toArray(this.$(".item_user_html").children()), function(el){ return $(el).width() });
+      var max = _.max(_.toArray(this.$(".item_user_html").children()), function(el){ return $(el).width(); });
       if($(max).width() > 150){ /// AGGGHHHHHHH, fix this
         this.$(".item_label").css("width", $(max).width());
       } else {
