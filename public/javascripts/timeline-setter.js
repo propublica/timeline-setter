@@ -166,7 +166,7 @@
         second      => 2:35:22
     */
     switch (interval) {
-      case "Year":
+      case "FullYear":
         return dYear;
       case "Month":
         return dMonth + '., ' + dYear;
@@ -183,14 +183,14 @@
 
   Intervals.prototype = _.extend(Intervals.prototype, {
     INTERVALS : {
-      Year    : 31536000,
-      Month   : 2592000,
-      Date    : 86400,
-      Hours   : 3600,
-      Minutes : 60,
-      Seconds : 1
+      FullYear : 31536000,
+      Month    : 2592000,
+      Date     : 86400,
+      Hours    : 3600,
+      Minutes  : 60,
+      Seconds  : 1
     },
-    INTERVAL_ORDER : ['Seconds','Minutes','Hours','Date','Month','Year'],
+    INTERVAL_ORDER : ['Seconds','Minutes','Hours','Date','Month','FullYear'],
 
     isAtLeastA : function(interval) {
       return ((this.max - this.min) > this.INTERVALS[interval])
@@ -210,7 +210,7 @@
         }
       }
     },
-    
+        
     floor : function(ts){
       var idx = this.idx;
       var date = new Date(ts * 1000);
@@ -223,20 +223,16 @@
     
     ceil : function(ts){
       var date = new Date(this.floor(ts) * 1000)
-      var idx = this.idx + 1;
-      while(idx--){
-        var intvl = this.INTERVAL_ORDER[idx];
-        console.log(intvl)
-        var getter = intvl === "Year" ? "FullYear" : intvl;
-        // set to the 'next' of whatever interval it is
-        date["set" + getter]((date["get" + getter]()) + 1);
-      }
+      var intvl = this.INTERVAL_ORDER[this.idx]
+      
+      // set to the 'next' of whatever interval it is
+      date["set" + intvl]((date["get" + intvl]()) + 1);
+      
       return date.getTime() / 1000;
     },
     
     span : function(ts){
-      var span = this.ceil(ts) - this.floor(ts)
-      return span;
+      return this.ceil(ts) - this.floor(ts)
     },
 
     get : function() {
@@ -244,14 +240,12 @@
       
       var intervals = this.intervals = [];
       var date;
-      // this.INTERVALS[this.maxTimestampInterval]
       for (var i = this.floor(this.min); i <= this.ceil(this.max); i += this.span(i)) {
         intervals.push({
             human     : Intervals.dateStr(i, this.maxTimestampInterval),
             timestamp : i
           });
       }
-      console.log(intervals)
       return this.intervals;
     }
   });
