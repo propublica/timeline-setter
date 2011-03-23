@@ -155,8 +155,8 @@
     var dYear             = d.getFullYear();
     var dMonth            = Intervals.HUMAN_DATES.months[d.getMonth()];
     var dDate             = dMonth + ". " + d.getDate() + ', ' + dYear;
-    var dHourMinute       = d.getHours() + ":" + d.getMinutes();
-    var dHourMinuteSecond = dHourMinute + ":" + d.getSeconds();
+    var dHourWithMinutes  = d.getHours() + ":" + padNumber(d.getMinutes());
+    var dHourMinuteSecond = dHourWithMinutes + ":" + padNumber(d.getSeconds());
     /*
       return stuff like:
         year        => 2001
@@ -173,9 +173,9 @@
       case "Date":
         return dDate;
       case "Hours":
-        return dHourMinute;
+        return dHourWithMinutes;
       case "Minutes":
-        return dHourMinute;
+        return dHourWithMinutes;
       case "Seconds":
         return dHourMinuteSecond;
     }
@@ -284,6 +284,9 @@
     return parseInt(str.replace(/^[^+\-\d]?([+\-]\d+)?.*$/, "$1"), 10);
   };
   
+  var padNumber = function(number) {
+    return (number < 10 ? '0' : '') + number; 
+  };
   
   /*
     Models
