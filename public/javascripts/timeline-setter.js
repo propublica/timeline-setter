@@ -507,14 +507,14 @@
     this.attributes.topcolor = series.color;
     this.template = template("#card_tmpl");
     this.ntemplate = template("#notch_tmpl");
-    _.bindAll(this, "render", "activate", "position");
+    _.bindAll(this, "render", "activate", "position", "setPermalink");
     this.series.timeline.bind(this.render);
     this.series.bind(this.deactivate);
     this.series.timeline.bar.bind(this.position);
     this.id = [
       this.get('timestamp'), 
       this.get('event_description').split(/ /)[0].replace(/[^a-zA-Z\-]/g,"")
-    ].join("-");    
+    ].join("-");
   };
   
   Card.prototype = _.extend(Card.prototype, {
@@ -610,6 +610,8 @@
         this.el.css({"left": this.offset + "%"});
         $("#timeline_card_scroller_inner").append(this.el);
         this.originalMargin = this.el.css("margin-left");
+        this.el.delegate(".permalink", "click", this.setPermalink);
+        
       }
       this.el.show().addClass("card_active");
       var max = _.max(_.toArray(this.$(".item_user_html").children()), function(el){ return $(el).width(); });
@@ -620,6 +622,9 @@
       }
       this.moveBarWithCard();
       this.notch.addClass("timeline_notch_active");
+    },
+    
+    setPermalink : function() {
       history.set(this.id)
     },
     
