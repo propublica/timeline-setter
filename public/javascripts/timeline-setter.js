@@ -140,10 +140,10 @@
   */
 
   var Intervals = function(bounds) {
-    this.max = bounds.max
-    this.min = bounds.min
+    this.max = bounds.max;
+    this.min = bounds.min;
     this.setMaxInterval();
-  }
+  };
 
   Intervals.HUMAN_DATES = {
     // AP-ify these..
@@ -193,7 +193,7 @@
     INTERVAL_ORDER : ['Seconds','Minutes','Hours','Date','Month','FullYear'],
 
     isAtLeastA : function(interval) {
-      return ((this.max - this.min) > (this.INTERVALS[interval]))
+      return ((this.max - this.min) > this.INTERVALS[interval]);
     },
 
     setMaxInterval : function() {
@@ -222,16 +222,16 @@
     },
     
     ceil : function(ts){
-      var date = new Date(this.floor(ts) * 1000)
-      var intvl = this.INTERVAL_ORDER[this.idx]
+      var date = new Date(this.floor(ts) * 1000);
+      var intvl = this.INTERVAL_ORDER[this.idx];
       // set to the 'next' of whatever interval it is
-      date["set" + intvl]((date["get" + intvl]()) + 1);
+      date["set" + intvl](date["get" + intvl]() + 1);
       
       return date.getTime() / 1000;
     },
     
     span : function(ts){
-      return this.ceil(ts) - this.floor(ts)
+      return this.ceil(ts) - this.floor(ts);
     },
     
     getMaxInterval : function() {
@@ -284,6 +284,18 @@
   var padNumber = function(number) {
     return (number < 10 ? '0' : '') + number; 
   };
+  
+  
+  var history = {
+    get : function(){
+      return "hash";
+    },
+    
+    set : function(url){
+      window.location.hash = url;
+    }
+  };
+  
   
   /*
     Models
@@ -393,7 +405,7 @@
     render : function(){
       var timestamp, year, html, date;
       var range = new Intervals(this.timeline.bounds)
-      var intervals = range.get()
+      var intervals = range.get();
 
       // extend bounds for padding
       this.timeline.bounds.extend(this.timeline.bounds.min - range.getMaxInterval() / 2);
@@ -498,6 +510,7 @@
     this.series.timeline.bind(this.render);
     this.series.bind(this.deactivate);
     this.series.timeline.bar.bind(this.position);
+    if(history.get() == this.id) this.activate();
   };
   
   Card.prototype = _.extend(Card.prototype, {
