@@ -309,7 +309,13 @@
     this.bar      = new Bar(this);
     this.cardCont = new CardContainer(this);
     this.createSeries(data);
+    
+    var range = new Intervals(this.bounds);
+    this.intervals = range.get();
+    this.bounds.extend(this.bounds.min - range.getMaxInterval() / 2);
+    this.bounds.extend(this.bounds.max + range.getMaxInterval() / 2);
     this.bar.render();
+    
     sync(this.bar, this.cardCont, "move", "zoom");
     var e = $.Event("render");
     this.trigger(e);
@@ -403,18 +409,12 @@
     },
     
     render : function(){
-      var timestamp, year, html, date;
-      var range = new Intervals(this.timeline.bounds)
-      var intervals = range.get();
-
-      // extend bounds for padding
-      this.timeline.bounds.extend(this.timeline.bounds.min - range.getMaxInterval() / 2);
-      this.timeline.bounds.extend(this.timeline.bounds.max + range.getMaxInterval() / 2);
-
-      // calculate divisions a bit better.
+      var intervals = this.timeline.intervals;
+      var bounds    = this.timeline.bounds;
+      
       for (var i = 0; i < intervals.length; i++) {
-        html      = this.template({'timestamp' : intervals[i].timestamp, 'human' : intervals[i].human });
-        this.el.append($(html).css("left", (this.timeline.bounds.project(intervals[i].timestamp, 100) | 0) + "%"));
+        var html = this.template({'timestamp' : intervals[i].timestamp, 'human' : intervals[i].human });
+        this.el.append($(html).css("left", (bounds.project(intervals[i].timestamp, 100) | 0) + "%"));
       }
     }
   });
