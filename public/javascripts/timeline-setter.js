@@ -132,6 +132,131 @@
   };
   
   
+  /* AUTO INTERVALS */
+  
+  /* usage:
+     var dayRange   = new Intervals(bounds)
+     var dayNotches = dayRange.get()
+  */
+
+  var Intervals = function(bounds) {
+    this.max = bounds.max
+    this.min = bounds.min
+    this.setMaxInterval();
+  }
+
+  Intervals.HUMAN_DATES = {
+    // AP-ify these..
+    months : ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+  };
+
+  Intervals.dateStr = function(timestamp, interval) {
+    var d                 = new Date(timestamp * 1000);
+    var dYear             = d.getFullYear();
+    var dMonth            = Intervals.HUMAN_DATES.months[d.getMonth()];
+    var dDate             = dMonth + ". " + d.getDate() + ', ' + dYear;
+    var dHourMinute       = d.getHours() + ":" + d.getMinutes();
+    var dHourMinuteSecond = dHourMinute + ":" + d.getSeconds();
+    /*
+      return stuff like:
+        year        => 2001
+        month       => June, 2004
+        day         => May 1, 2005
+        hour/minute => 11:59
+        second      => 2:35:22
+    */
+    switch (interval) {
+      case "Year":
+        return dYear;
+      case "Month":
+        return dMonth + '., ' + dYear;
+      case "Date":
+        return dDate;
+      case "Hours":
+        return dHourMinute;
+      case "Minutes":
+        return dHourMinute;
+      case "Seconds":
+        return dHourMinuteSecond;
+    }
+  };
+
+  Intervals.prototype = _.extend(Intervals.prototype, {
+    INTERVALS : {
+      Year    : 31536000,
+      Month   : 2592000,
+      Date    : 86400,
+      Hours   : 3600,
+      Minutes : 60,
+      Seconds : 1
+    },
+    INTERVAL_ORDER : ['Seconds','Minutes','Hours','Date','Month','Year'],
+
+    isAtLeastA : function(interval) {
+      return ((this.max - this.min) > this.INTERVALS[interval])
+    },
+
+    setMaxInterval : function() {
+      var that = this;
+      var i;
+      for (i = 0; i <= this.INTERVAL_ORDER.length; i++) {
+        var curInterval = this.INTERVAL_ORDER[i];
+        if (!that.isAtLeastA(curInterval)) {
+          // we overshot by one. back it off and return.
+          // cache our max interval
+          this.maxTimestampInterval = this.INTERVAL_ORDER[i - 1];
+          this.idx = i - 1;
+          break;
+        }
+      }
+    },
+    
+    floor : function(ts){
+      var idx = this.idx;
+      var date = new Date(ts * 1000);
+      while(idx--){
+        var intvl = this.INTERVAL_ORDER[idx];
+        date["set" + intvl](intvl === "Date" ? 1 : 0);
+      }
+      return date.getTime() / 1000;
+    },
+    
+    ceil : function(ts){
+      var date = new Date(this.floor(ts) * 1000)
+      var idx = this.idx + 1;
+      while(idx--){
+        var intvl = this.INTERVAL_ORDER[idx];
+        console.log(intvl)
+        var getter = intvl === "Year" ? "FullYear" : intvl;
+        // set to the 'next' of whatever interval it is
+        date["set" + getter]((date["get" + getter]()) + 1);
+      }
+      return date.getTime() / 1000;
+    },
+    
+    span : function(ts){
+      var span = this.ceil(ts) - this.floor(ts)
+      return span;
+    },
+
+    get : function() {
+      if (this.intervals) return this.intervals;
+      
+      var intervals = this.intervals = [];
+      var date;
+      // this.INTERVALS[this.maxTimestampInterval]
+      for (var i = this.floor(this.min); i <= this.ceil(this.max); i += this.span(i)) {
+        intervals.push({
+            human     : Intervals.dateStr(i, this.maxTimestampInterval),
+            timestamp : i
+          });
+      }
+      console.log(intervals)
+      return this.intervals;
+    }
+  });
+  
+  
   // Handy dandy function to make sure that events are 
   // triggered at the same time on two objects.'
   
@@ -270,19 +395,13 @@
     
     render : function(){
       var timestamp, year, html, date;
-      var earliestYear = getYearFromTimestamp(this.timeline.bounds.min);
-      var latestYear   = getYearFromTimestamp(this.timeline.bounds.max);
+      var range = new Intervals(this.timeline.bounds)
+      var intervals = range.get()
 
       // calculate divisions a bit better.
-      for (i = earliestYear; i < latestYear; i++) {
-        date      = new Date();
-        date.setYear(i);
-        date.setMonth(0);
-        date.setDate(1);
-        timestamp = date.getTime() / 1000 | 0;
-        year      = i;
-        html      = this.template({'timestamp' : timestamp, 'year' : year });
-        this.el.append($(html).css("left", (this.timeline.bounds.project(timestamp, 100) | 0) + "%"));
+      for (var i = 0; i < intervals.length; i++) {
+        html      = this.template({'timestamp' : intervals[i].timestamp, 'human' : intervals[i].human });
+        this.el.append($(html).css("left", (this.timeline.bounds.project(intervals[i].timestamp, 100) | 0) + "%"));
       }
     }
   });
