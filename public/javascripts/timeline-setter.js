@@ -193,7 +193,6 @@
     INTERVAL_ORDER : ['Seconds','Minutes','Hours','Date','Month','FullYear'],
 
     isAtLeastA : function(interval) {
-      console.log(this.max, this.min)
       return ((this.max - this.min) > (this.INTERVALS[interval]))
     },
 
@@ -205,7 +204,6 @@
         if (that.isAtLeastA(curInterval) === false) {
           // we overshot by one. back it off and return.
           // cache our max interval
-          console.log('here')
           break;
         }
       }
