@@ -193,22 +193,24 @@
     INTERVAL_ORDER : ['Seconds','Minutes','Hours','Date','Month','FullYear'],
 
     isAtLeastA : function(interval) {
-      return ((this.max - this.min) > this.INTERVALS[interval])
+      console.log(this.max, this.min)
+      return ((this.max - this.min) > (this.INTERVALS[interval]))
     },
 
     setMaxInterval : function() {
       var that = this;
       var i;
-      for (i = 0; i <= this.INTERVAL_ORDER.length; i++) {
+      for (i = 0; i < this.INTERVAL_ORDER.length; i++) {
         var curInterval = this.INTERVAL_ORDER[i];
-        if (!that.isAtLeastA(curInterval)) {
+        if (that.isAtLeastA(curInterval) === false) {
           // we overshot by one. back it off and return.
           // cache our max interval
-          this.maxTimestampInterval = this.INTERVAL_ORDER[i - 1];
-          this.idx = i - 1;
+          console.log('here')
           break;
         }
       }
+      this.maxTimestampInterval = this.INTERVAL_ORDER[i - 1];
+      this.idx = i -1;
     },
         
     floor : function(ts){
@@ -224,7 +226,6 @@
     ceil : function(ts){
       var date = new Date(this.floor(ts) * 1000)
       var intvl = this.INTERVAL_ORDER[this.idx]
-      
       // set to the 'next' of whatever interval it is
       date["set" + intvl]((date["get" + intvl]()) + 1);
       
@@ -233,6 +234,10 @@
     
     span : function(ts){
       return this.ceil(ts) - this.floor(ts)
+    },
+    
+    getMaxInterval : function() {
+      return this.INTERVALS[this.INTERVAL_ORDER[this.idx]];
     },
 
     get : function() {
@@ -246,6 +251,7 @@
             timestamp : i
           });
       }
+      console.log(this.intervals)
       return this.intervals;
     }
   });
@@ -291,9 +297,6 @@
     this.bar      = new Bar(this);
     this.cardCont = new CardContainer(this);
     this.createSeries(data);
-    // extend bounds for padding
-    this.bounds.extend(this.bounds.min - 7889231);
-    this.bounds.extend(this.bounds.max + 7889231);
     this.bar.render();
     sync(this.bar, this.cardCont, "move", "zoom");
     var e = $.Event("render");
@@ -391,6 +394,10 @@
       var timestamp, year, html, date;
       var range = new Intervals(this.timeline.bounds)
       var intervals = range.get()
+
+      // extend bounds for padding
+      this.timeline.bounds.extend(this.timeline.bounds.min - range.getMaxInterval() / 2);
+      this.timeline.bounds.extend(this.timeline.bounds.max + range.getMaxInterval() / 2);
 
       // calculate divisions a bit better.
       for (var i = 0; i < intervals.length; i++) {
