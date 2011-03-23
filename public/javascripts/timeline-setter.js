@@ -285,10 +285,11 @@
     return (number < 10 ? '0' : '') + number; 
   };
   
+  var hashStrip = /^#*/;
   
   var history = {
     get : function(){
-      return "hash";
+      return window.location.hash.replace(hashStrip, "");
     },
     
     set : function(url){
@@ -510,7 +511,10 @@
     this.series.timeline.bind(this.render);
     this.series.bind(this.deactivate);
     this.series.timeline.bar.bind(this.position);
-    if(history.get() == this.id) this.activate();
+    this.id = [
+      this.get('timestamp'), 
+      this.get('event_description').split(/ /)[0].replace(/[^a-zA-Z\-]/g,"")
+    ].join("-");    
   };
   
   Card.prototype = _.extend(Card.prototype, {
@@ -529,6 +533,7 @@
       this.notch = $(html).css({"left": this.offset + "%"});
       $(".timeline_notchbar").append(this.notch);
       this.notch.click(this.activate);
+      if (history.get() === this.id) this.activate();
     },
     
     cardOffset : function() {
@@ -615,6 +620,7 @@
       }
       this.moveBarWithCard();
       this.notch.addClass("timeline_notch_active");
+      history.set(this.id)
     },
     
     hideActiveCard : function() {
@@ -697,7 +703,8 @@
     new Zoom("out");
     var chooseNext = new Chooser("next");
     var choosePrev = new Chooser("prev");
-    chooseNext.click();
+    if (!$(".card_active").is("*")) chooseNext.click();
+    
     $(document).bind('keydown', function(e) {
       if (e.keyCode === 39) {
         chooseNext.click();
