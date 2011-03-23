@@ -251,7 +251,6 @@
             timestamp : i
           });
       }
-      console.log(this.intervals)
       return this.intervals;
     }
   });
