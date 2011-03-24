@@ -1,8 +1,7 @@
 (function(){
-  
-  /*
-    Mixins
-  */
+
+  // Mixins
+  // ------
 
   var observable = function(obj){
     obj.bind = function(cb){
@@ -34,9 +33,9 @@
     };
   };
 
-  /*
-    Plugins
-  */
+
+  // Plugins
+  // -------
 
   var touchInit = 'ontouchstart' in document;
   if(touchInit) jQuery.event.props.push("touches");
@@ -90,7 +89,6 @@
 
 
 
-  // safari bug for too fast scrolling, h/t polymaps
   var safari = /WebKit\/533/.test(navigator.userAgent);
   var wheel = function(obj){
     function mousewheel(e){
@@ -108,10 +106,9 @@
     obj.el.bind("mousewheel DOMMouseScroll", mousewheel);
   };
 
-  /*
-    Utils
-  */
-  
+  // Utils
+  // -----
+
   var Bounds = function(){
     this.min = +Infinity;
     this.max = -Infinity;
@@ -142,19 +139,14 @@
   Intervals.HUMAN_DATES = {
     months : ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
   };
-  
-  Intervals.getHoursAndMinutes = function(d) {
-    var hours   = d.getHours();
-    var minutes = padNumber(d.getMinutes());
-    return hours > 12 ? ((hours - 12) + ":" + minutes + ' p.m.') : (hours + ":" + minutes + ' a.m.');
-  }
-  
+
   Intervals.dateStr = function(timestamp, interval) {
     var d                 = new Date(timestamp * 1000);
     var dYear             = d.getFullYear();
     var dMonth            = Intervals.HUMAN_DATES.months[d.getMonth()];
     var dDate             = dMonth + ". " + d.getDate() + ', ' + dYear;
-    var dHourWithMinutes  = Intervals.getHoursAndMinutes(d);
+    var bigHours          = d.getHours() > 12;
+    var dHourWithMinutes  = (bigHours ? d.getHours() - 12 : d.getHours()) + ":" + padNumber(d.getMinutes()) + " " + bigHours ? 'p.m.' : 'a.m.';
     var dHourMinuteSecond = dHourWithMinutes + ":" + padNumber(d.getSeconds());
 
     switch (interval) {
@@ -173,7 +165,7 @@
     }
   };
 
-  Intervals.prototype = _.extend(Intervals.prototype, {
+  Intervals.prototype = {
     INTERVALS : {
       FullYear : 31536000,
       Month    : 2592000,
@@ -192,7 +184,6 @@
       for (var i = 0; i < this.INTERVAL_ORDER.length; i++)
         if (!this.isAtLeastA(this.INTERVAL_ORDER[i])) break;
 
-      // cache our max interval
       this.maxInterval = this.INTERVAL_ORDER[i - 1];
       this.idx = i - 1;
     },
@@ -214,7 +205,6 @@
     ceil : function(ts){
       var date = new Date(this.floor(ts) * 1000);
       var intvl = this.INTERVAL_ORDER[this.idx];
-      // set to the 'next' of whatever interval it is
       date["set" + intvl](date["get" + intvl]() + 1);
       return date.getTime() / 1000;
     },
@@ -234,11 +224,9 @@
       }
       return this.intervals;
     }
-  });
+  };
 
 
-  // Handy dandy function to make sure that events are
-  // triggered at the same time on two objects.
   var sync = function(origin, listener){
     var events = Array.prototype.slice.call(arguments, 2);
     _.each(events, function(ev){
@@ -282,7 +270,7 @@
   /*
     Models
   */
-  // Stores state
+
   var Timeline = function(data) {
     data = data.sort(function(a, b){ return a.timestamp - b.timestamp; });
     this.bySid    = {};
@@ -351,16 +339,13 @@
       var pOffset = parent.offset().left;
       var offset  = this.el.offset().left;
       var width   = this.el.width();
-      // check to make sure we have a delta
       if(_.isUndefined(e.deltaX)) e.deltaX = 0;
 
-      // check to make sure the bar isn't out of bounds
       if(offset + width + e.deltaX < pOffset + parent.width())
         e.deltaX = (pOffset + parent.width()) - (offset + width);
       if(offset + e.deltaX > pOffset)
         e.deltaX = pOffset - offset;
 
-      // and move both this and the card container.
       e.type = "move";
       this.trigger(e);
       this.move(e);
@@ -374,7 +359,6 @@
       };
       var curr = getCur();
 
-      // needs fixin for offset and things, time fer thinkin'
       this.el.animate({"width": width + "%"}, {
         step: function(current, fx) {
           var e = $.Event("dragging");
@@ -407,6 +391,8 @@
   };
   observable(CardContainer.prototype);
   transformable(CardContainer.prototype);
+
+
 
   var colors = ["#065718", "#EDC047", "#91ADD1", "#929E5E", "#9E5E23", "#C44846", "#065718", "#EDD4A5", "#CECECE"];
   var color = function(){
@@ -523,7 +509,7 @@
       };
 
       var that = this;
-      var item = this.el.children(("TS-.item"));
+      var item = this.el.children(".TS-item");
       var currentMargin = this.el.css("margin-left");
       var timeline = $("#timeline_setter");
       var right = (this.el.offset().left + item.width()) - (timeline.offset().left + timeline.width());
@@ -547,12 +533,12 @@
 
       switch(onBarEdge) {
         case 'right':
-          this.el.css({"margin-left": -(this.cardOffset().item.width() + 7)}); /// AGGGHHHHHHH, fix this
-          this.$(".css_arrow").css("left", this.cardOffset().item.width());
+          this.el.css({"margin-left": -(this.cardOffset().item.width() + 7)});
+          this.$(".TS-css_arrow").css("left", this.cardOffset().item.width());
           break;
         case 'default':
           this.el.css({"margin-left": this.originalMargin});
-          this.$(".css_arrow").css("left", 0);
+          this.$(".TS-css_arrow").css("left", 0);
       }
     },
 
@@ -574,7 +560,6 @@
 
     activate : function(e){
       this.hideActiveCard();
-      // draw the actual card
       if (!this.el) {
         this.el = $(this.template(this.attributes));
         this.el.css({"left": this.offset + "%"});
@@ -586,7 +571,7 @@
       this.el.show().addClass(("TS-card_active"));
 
       var max = _.max(_.toArray(this.$(".item_user_html").children()), function(el){ return $(el).width(); });
-      if($(max).width() > 150){ /// AGGGHHHHHHH, fix this
+      if($(max).width() > 150){
         this.$(".item_label").css("width", $(max).width());
       } else {
         this.$(".item_label").css("width", 150);
@@ -625,9 +610,9 @@
     child.prototype.constructor = child;
   };
 
-
-
   // Controls
+  // --------
+
   var Control = function(direction){
     this.direction = direction;
     this.el = $(this.prefix + direction);
