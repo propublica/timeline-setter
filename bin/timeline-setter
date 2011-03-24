@@ -4,6 +4,7 @@
 
 require 'optparse'
 require 'fileutils'
+require 'rubygems'
 require File.expand_path("../../lib/timeline_setter.rb", __FILE__)
 
 options = {}
