@@ -51,7 +51,7 @@ A string representing a series of events this particular event is a part of. Tim
 
 Any arbitrary HTML that will be inserted above the `event_description`. This field may contain nearly everything except `<script>` tags. If you choose to use JavaScript, for now you must do it within an iframe which can then be dropped into the `event_html` field. Try image tags, YouTube embeds, etc.
 
-## Folder structure and Deployment
+## Folder structure and deployment
 
 After you've generated a timeline with the `timeline-setter` command, you should see a structure much like this where you've specified your output:
 
@@ -70,7 +70,39 @@ Dropping the whole folder onto your server or an asset host like S3 will allow t
 
 ## Styling your timeline
 
+TimelineSetter timelines are fully styleable. The default ProPublica "theme" stylesheet is packaged alongside each generated asset bundle, and is available in `stylesheets/timeline-setter.css`. This is, of course, completely overrideable. Here's a guide to do that.
+
+### Overview and styling the container and top matter
+
+All TimelineSetter CSS is scoped within `TS`. The container is `#timeline_setter` and every selector has a `TS` prefix. Upon first glance, it may not seem like there is much markup at all. We make extensive use of JavaScript (ERB-style) templating via [Underscore.js](http://documentcloud.github.com/underscore/#template) and templates for each part of the timeline reside in the DOM. The controls (zoom in/out, previous/next buttons) are available within `#TS-top_matter_container .TS-controls`. 
+
+Series checkboxes are injected into `.TS-series_nav_container` and templated via `script#TS-notch_tmpl`. Currently, series colors are hard coded in the JavaScript. We support a maximum of nine series colors (assigned in this order: #065718, #EDC047, #91ADD1, #929E5E, #9E5E23, #C44846, #065718, #EDD4A5, #CECECE, check `CardContainer.colors` in timeline-setter.js to override). Technically you can create an unlimited number of series, but they will eventually fall back to the default notch color.
+
+### Styling the bar, notches and cards
+
+The timeline bar is made up of non-clickable interval notches used to denote periodic intervals of time, and event notches, which, when clicked, reveal their associated cards. Interval notches are templated within `script#TS-year_notch_tmpl` and display formatted dates based on the interval of time between events as automatically determined by the JavaScript. Here's a sampling of what you might see in interval notches:
+
+    year        => 2001
+    month       => June, 2004
+    day         => May 1, 2005
+    hour/minute => 11:59
+    second      => 11:59:22 //does this actually work yet?
+
+Event notches are templated through `#TS-card-tmpl` and contain individual classes corresponding to spreadsheet columns. `.TS-item-label` corresponds to `event_description`, `.TS-item_html` corresponds to `event_html`, `.TS-read_btn` is linked to `event_link` and `.TS-item_year` corresponds to `event_display_date` falling through to `event_date`. Finally, `TS-permalink` is a fragment link which will show the active card on page load if used.
+
 ## Roadmap
+
+For the initial open source release, we're providing TimelineSetter as purely a "bake-out" utility, for creating static files. We plan to expand to include [TableSetter](http://propublica.github.com/table-setter/)-like functionality to host timelines as Sinatra apps.
+
+On the client side, there are a whole slough of features we plan to add such as:
+
+* Smoother zooming
+* Deactivating series checkboxes if none of its events are within the zoomed viewport
+* Auto-zooming the timeline if embedded into smaller containers
+* More iOS gestures such as "pinching"
+* Zooming to fit a series when the series is activated
+* Ranges of events (e.g. Elizabeth Taylor was married to Miichael Wilding between Feb. 21, 1952 and Jan. 26, 1957, as shown [here](http://www.nytimes.com/interactive/2011/03/23/movies/20110323-ELIZABETH-TAYLOR-TIMELINE.html))
+* Embed code
 
 ## Links
 

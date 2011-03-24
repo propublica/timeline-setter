@@ -5,10 +5,11 @@
 
 * ie
 * add one-file minified option in timeline-setter binary
+* 24 hr => 12 hour time in auto intervals
 * gem-ify
 * docs & docco comments
-* scope css
 * scope events
+* Prettify cases with large numbers of series (they should stack up along the left)
 
 ## Features
 
