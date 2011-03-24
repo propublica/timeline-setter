@@ -312,9 +312,10 @@
 
 
 
-  /*
-   Views
-  */
+
+  // Views
+  // -----
+
   var Bar = function(timeline) {
     this.el = $(".TS-notchbar");
     this.el.css({ "left": 0 });
