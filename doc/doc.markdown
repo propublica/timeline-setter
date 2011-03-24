@@ -86,7 +86,7 @@ The timeline bar is made up of non-clickable interval notches used to denote per
     month       => June, 2004
     day         => May 1, 2005
     hour/minute => 11:59
-    second      => 11:59:22 //does this actually work yet?
+    second      => 11:59:22
 
 Event notches are templated through `#TS-card-tmpl` and contain individual classes corresponding to spreadsheet columns. `.TS-item-label` corresponds to `event_description`, `.TS-item_html` corresponds to `event_html`, `.TS-read_btn` is linked to `event_link` and `.TS-item_year` corresponds to `event_display_date` falling through to `event_date`. Finally, `TS-permalink` is a fragment link which will show the active card on page load if used.
 
