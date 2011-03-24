@@ -8,6 +8,7 @@ desc "build docs"
 task :docs do 
   require 'rdiscount'
   require 'erb'
+  version = TimelineSetter::VERSION
   license = File.open('LICENSE.txt','r').read
   mdown   = RDiscount.new(ERB.new(File.open('doc/doc.markdown','r').read).result(binding), :smart).to_html
   wrapper = File.open('doc/doc_wrapper.erb','r').read

@@ -1,4 +1,4 @@
-# TimelineSetter
+# TimelineSetter <%= version %>
 
 TimelineSetter is a command-line utility to create beautiful standards-compliant timelines from spreadsheets. It supports any range of time, from minutes to years, custom descriptions and arbitrary HTML in event cards. It creates fluid embeds that will look great in any sized container.
 
@@ -113,7 +113,7 @@ On the client side, there are a whole slough of features we plan to add such as:
 
 ## Change Log
 
-### 0.1
+### 0.0.1
 
 Initial release
 
