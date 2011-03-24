@@ -1,6 +1,4 @@
-(function(window, document, undefined){
-  
-  var CSS_PREFIX = 'timeline_setter';
+(function(){
   
   /*
     Mixins
@@ -113,6 +111,7 @@
   /*
     Utils
   */
+  
   var Bounds = function(){
     this.min = +Infinity;
     this.max = -Infinity;
@@ -323,7 +322,7 @@
    Views
   */
   var Bar = function(timeline) {
-    this.el = $("." + CSS_PREFIX + "_notchbar");
+    this.el = $(".TS-notchbar");
     this.el.css({ "left": 0 });
     this.timeline = timeline;
     draggable(this);
@@ -331,10 +330,10 @@
     _.bindAll(this, "moving", "doZoom");
     this.el.bind("dragging scrolled", this.moving);
     this.el.bind("doZoom", this.doZoom);
-    this.template = template("#" + CSS_PREFIX + "_year_notch_tmpl");
+    this.template = template("#TS-year_notch_tmpl");
     this.el.bind("dblclick doubletap", function(e){
       e.preventDefault();
-      $("." + CSS_PREFIX + "_zoom_in").click();
+      $(".TS-zoom_in").click();
     });
   };
   observable(Bar.prototype);
@@ -363,7 +362,7 @@
 
     doZoom : function(e, width){
       var that = this;
-      var notch = $("." + CSS_PREFIX + "_notch_active");
+      var notch = $(".TS-notch_active");
       var getCur = function() {
         return notch.length > 0 ? notch.position().left : 0;
       };
@@ -377,7 +376,7 @@
           e.deltaX = delta;
           that.moving(e);
           curr = getCur();
-          e   = $.Event("zoom");
+          e = $.Event("zoom");
           e.width = current + "%";
           that.trigger(e);
         }
@@ -398,7 +397,7 @@
 
 
   var CardContainer = function(timeline){
-    this.el = $("#" + CSS_PREFIX + "_card_scroller_inner");
+    this.el = $("TS-card_scroller_inner");
   };
   observable(CardContainer.prototype);
   transformable(CardContainer.prototype);
@@ -423,7 +422,7 @@
     this.color    = this.name.length > 0 ? color() : "#444";
     this.cards    = [];
     _.bindAll(this, "render", "showNotches", "hideNotches");
-    this.template = template("#" + CSS_PREFIX + "_series_legend_tmpl");
+    this.template = template("#TS-series_legend_tmpl");
     this.timeline.bind(this.render);
   };
   observable(Series.prototype);
@@ -444,7 +443,7 @@
 
     hideNotches : function(e){
       e.preventDefault();
-      this.el.addClass(CSS_PREFIX + "_series_legend_item_inactive");
+      this.el.addClass(("TS-series_legend_item_inactive"));
       _.each(this.cards, function(card){
         card.hideNotch();
       });
@@ -452,7 +451,7 @@
 
     showNotches : function(e){
       e.preventDefault();
-      this.el.removeClass(CSS_PREFIX + "_series_legend_item_inactive");
+      this.el.removeClass(("TS-series_legend_item_inactive"));
       _.each(this.cards, function(card){
         card.showNotch();
       });
@@ -462,7 +461,7 @@
       if(!e.type === "render") return;
       if(this.name.length === 0) return;
       this.el = $(this.template(this));
-      $("." + CSS_PREFIX + "_series_nav_container").append(this.el);
+      $(".TS-series_nav_container").append(this.el);
       this.el.toggle(this.hideNotches,this.showNotches);
     }
   });
@@ -481,8 +480,8 @@
     this.timestamp = card.timestamp;
     this.attributes = card;
     this.attributes.topcolor = series.color;
-    this.template = template("#" + CSS_PREFIX + "_card_tmpl");
-    this.ntemplate = template("#" + CSS_PREFIX + "_notch_tmpl");
+    this.template = template("#TS-card_tmpl");
+    this.ntemplate = template("#TS-notch_tmpl");
     _.bindAll(this, "render", "activate", "position", "setPermalink");
     this.series.timeline.bind(this.render);
     this.series.bind(this.deactivate);
@@ -507,7 +506,7 @@
       this.offset = this.series.timeline.bounds.project(this.timestamp, 100);
       var html = this.ntemplate(this.attributes);
       this.notch = $(html).css({"left": this.offset + "%"});
-      $("." + CSS_PREFIX + "_notchbar").append(this.notch);
+      $(".TS-notchbar").append(this.notch);
       this.notch.click(this.activate);
       if (history.get() === this.id) this.activate();
     },
@@ -518,9 +517,9 @@
       };
 
       var that = this;
-      var item = this.el.children("." + CSS_PREFIX + "_item");
+      var item = this.el.children(("TS-.item"));
       var currentMargin = this.el.css("margin-left");
-      var timeline = $("#" + CSS_PREFIX);
+      var timeline = $("#timeline_setter");
       var right = (this.el.offset().left + item.width()) - (timeline.offset().left + timeline.width());
       var left = (this.el.offset().left) - timeline.offset().left;
 
@@ -543,11 +542,11 @@
       switch(onBarEdge) {
         case 'right':
           this.el.css({"margin-left": -(this.cardOffset().item.width() + 7)}); /// AGGGHHHHHHH, fix this
-          this.$("." + CSS_PREFIX + "_css_arrow").css("left", this.cardOffset().item.width());
+          this.$(".css_arrow").css("left", this.cardOffset().item.width());
           break;
         case 'default':
           this.el.css({"margin-left": this.originalMargin});
-          this.$("." + CSS_PREFIX + "_css_arrow").css("left", 0);
+          this.$(".css_arrow").css("left", 0);
       }
     },
 
@@ -573,41 +572,40 @@
       if (!this.el) {
         this.el = $(this.template(this.attributes));
         this.el.css({"left": this.offset + "%"});
-        $("#" + CSS_PREFIX + "_card_scroller_inner").append(this.el);
+        $("#TS-card_scroller_inner").append(this.el);
         this.originalMargin = this.el.css("margin-left");
-        this.el.delegate("." + CSS_PREFIX + "_permalink", "click", this.setPermalink);
-
+        this.el.delegate(".TS-permalink", "click", this.setPermalink);
       }
 
-      this.el.show().addClass(CSS_PREFIX + "_card_active");
+      this.el.show().addClass(("TS-card_active"));
 
-      var max = _.max(_.toArray(this.$("." + CSS_PREFIX + "_item_user_html").children()), function(el){ return $(el).width(); });
+      var max = _.max(_.toArray(this.$(".item_user_html").children()), function(el){ return $(el).width(); });
       if($(max).width() > 150){ /// AGGGHHHHHHH, fix this
-        this.$("." + CSS_PREFIX + "_item_label").css("width", $(max).width());
+        this.$(".item_label").css("width", $(max).width());
       } else {
-        this.$("." + CSS_PREFIX + "_item_label").css("width", 150);
+        this.$(".item_label").css("width", 150);
       }
 
       this.moveBarWithCard();
-      this.notch.addClass(CSS_PREFIX + "_notch_active");
+      this.notch.addClass(("TS-notch_active"));
     },
 
     setPermalink : function() {
-      history.set(this.id)
+      history.set(this.id);
     },
 
     hideActiveCard : function() {
-      $("." + CSS_PREFIX + "_card_active").removeClass(CSS_PREFIX + "_card_active").hide();
-      $("." + CSS_PREFIX +"_notch_active").removeClass(CSS_PREFIX + "_notch_active");
+      $(".TS-card_active").removeClass("TS-card_active").hide();
+      $(".TS-notch_active").removeClass("TS-notch_active");
     },
 
     hideNotch : function(){
-      this.notch.hide().removeClass(CSS_PREFIX + "_notch_active").addClass(CSS_PREFIX + "_series_inactive");
+      this.notch.hide().removeClass("TS-notch_active").addClass("TS-series_inactive");
       if(this.el) this.el.hide();
     },
 
     showNotch : function(){
-      this.notch.removeClass(CSS_PREFIX + "_series_inactive").show();
+      this.notch.removeClass("TS-series_inactive").show();
     }
 
   });
@@ -639,11 +637,11 @@
   inherits(Zoom, Control);
 
   Zoom.prototype = _.extend(Zoom.prototype, {
-    prefix : "." + CSS_PREFIX + "_zoom_",
+    prefix : ".TS-zoom_",
     click : function() {
       curZoom += (this.direction === "in" ? +100 : -100);
       if (curZoom >= 100) {
-        $("." + CSS_PREFIX + "_notchbar").trigger('doZoom', [curZoom]);
+        $(".TS-notchbar").trigger('doZoom', [curZoom]);
       } else {
         curZoom = 100;
       }
@@ -654,16 +652,16 @@
 
   var Chooser = function(direction) {
     Control.apply(this, arguments);
-    this.notches = $("." + CSS_PREFIX + "_notch");
+    this.notches = $(".TS-notch");
   };
   inherits(Chooser, Control);
 
   Chooser.prototype = _.extend(Control.prototype, {
-    prefix: "." + CSS_PREFIX + "_choose_",
+    prefix: ".TS-choose_",
     click: function(e){
       var el;
-      var notches    = this.notches.not("." + CSS_PREFIX + "_series_inactive");
-      var curCardIdx = notches.index($("." + CSS_PREFIX + "_notch_active"));
+      var notches    = this.notches.not(".TS-series_inactive");
+      var curCardIdx = notches.index($(".TS-notch_active"));
       var numOfCards = notches.length;
       if (this.direction === "next") {
         el = (curCardIdx < numOfCards ? notches.eq(curCardIdx + 1) : false);
@@ -683,7 +681,7 @@
     new Zoom("out");
     var chooseNext = new Chooser("next");
     var choosePrev = new Chooser("prev");
-    if (!$("." + CSS_PREFIX + "_card_active").is("*")) chooseNext.click();
+    if (!$(".TS-card_active").is("*")) chooseNext.click();
 
     $(document).bind('keydown', function(e) {
       if (e.keyCode === 39) {
@@ -696,4 +694,4 @@
     });
   });
 
-})(window, document);
+})();

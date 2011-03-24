@@ -6,7 +6,7 @@
       height:100%;
       background-color:white;
     }
-    .timeline_setter_item {
+    .TS-item {
       z-index:1;
       position:absolute;
       border:1px solid #EBEBEB;
@@ -18,17 +18,17 @@
       color:#333;
       min-width: 150px;
     }
-    .timeline_setter_item_user_html {
+    .TS-item_user_html {
       padding-bottom:5px;
     }
-    .timeline_setter_item_label {
+    .TS-item_label {
       font-family:Georgia,"Times New Roman",Times,serif;
       font-size:12px;
       line-height:16px;
       height:85%;
       display:block;
     }
-    .timeline_setter_item_year {
+    .TS-item_year {
       font-family:"Helvetica Neue",Helvetica,arial,sans-serif;
       font-weight:bold;
       font-size:16px;
@@ -38,10 +38,10 @@
       display:block;
       width:150px;
     }
-    .timeline_setter_item_year_text {
+    .TS-item_year_text {
       float:left;
     }
-    .timeline_setter_css_arrow {
+    .TS-css_arrow {
       border-style: solid;
       height: 0px;
       width: 0px;
@@ -49,10 +49,10 @@
       top: 2px;
       border-width: 10px 10px 10px 10px;
     }
-    .timeline_setter_css_arrow_up {
+    .TS-css_arrow_up {
       border-color: transparent transparent #7C93AF transparent;
     }
-    .timeline_setter_read_btn {
+    .TS-read_btn {
       -webkit-box-shadow: #CECECE 0px 0px 2px;
       -moz-box-shadow: #CECECE 0px 0px 2px;
       box-shadow: #CECECE 0px 0px 2px;
@@ -73,7 +73,7 @@
       font-weight:normal;
       text-align:center;
     }
-    .timeline_setter_read_btn:hover {
+    .TS-read_btn:hover {
       color:black;cursor:pointer;text-decoration:none;background:#cecece;
     }
     #timeline_setter a {
@@ -81,7 +81,7 @@
       color:#333;
     }
     
-    #timeline_setter_top_matter_container {
+    #TS-top_matter_container {
       -webkit-user-select: none;
       -khtml-user-select: none;
       -moz-user-select: none;
@@ -89,7 +89,7 @@
       user-select: none;
       overflow:visible;
     }
-    .timeline_setter_notchbar_container {
+    .TS-notchbar_container {
       border:1px solid #cecece;
       -webkit-box-shadow: #CECECE 0px 0px 2px;
       -moz-box-shadow: #CECECE 0px 0px 2px;
@@ -107,34 +107,34 @@
       user-select: none;
       cursor: col-resize;
     }
-    #timeline_setter_card_scroller {
+    #TS-card_scroller {
       width:100%;
       position:relative;
       overflow:hidden;
       height:800px; /* FIX THIS!!! */
     }
-    #timeline_setter_card_scroller_inner {
+    #TS-card_scroller_inner {
       width:100%;
       position:relative;
     }
-    .timeline_setter_notchbar {
+    .TS-notchbar {
       height:20px;
       position:relative;
       width:100%;
       margin: 0 auto;
     }
-    .timeline_setter_notchbar_draggable {
+    .TS-notchbar_draggable {
       cursor: col-resize;
     }
-    .timeline_setter_notch, .timeline_setter_year_notch {
+    .TS-notch, .TS-year_notch {
       height:100%;
       position:absolute;
       color:#999;
     }
-    .timeline_setter_year_notch {
+    .TS-year_notch {
       border-left: 1px solid #999;
     }
-    .timeline_setter_year_notch_year_text {
+    .TS-year_notch_year_text {
       display:block;
       /* 
         Arial actually looks better than Helvetica at
@@ -145,21 +145,21 @@
       font-size:9px;
       padding:2px 0 0 5px;
     }
-    .timeline_setter_year_notch:hover {
+    .TS-year_notch:hover {
     }
-    .timeline_setter_notch{
+    .TS-notch{
       width:4px;
       cursor:pointer;
     }
-    .timeline_setter_notch:hover {
+    .TS-notch:hover {
       background:#cecece;
     }
-    .timeline_setter_card_container {
+    .TS-card_container {
       position:absolute;
       margin-left:-5px;
       z-index: 9999;
     }
-    .timeline_setter_controls {
+    .TS-controls {
       margin: 0 0 0 0;
       float:right;
       height:2%;
@@ -167,7 +167,7 @@
       text-align: right;
         width: 220px;
     }
-    .timeline_setter_controls a {
+    .TS-controls a {
       border:1px solid #cecece;
       background-color:#f0f0f0;
       padding:3px 5px 3px 5px;
@@ -181,19 +181,19 @@
       border-radius: 2px;      
       display: inline;
     }
-    .timeline_setter_controls_inner_text {
+    .TS-controls_inner_text {
       font-size:11px; 
       text-transform:uppercase;
     }
-    .timeline_setter_controls a.timeline_setter_controls_disabled {
+    .TS-controls a.TS-controls_disabled {
       color:#cecece;
       background-color:#f7f7f7;
       cursor:default;
     }
-    .timeline_setter_controls a:hover {
+    .TS-controls a:hover {
       background-color:#fff;
     }
-    .timeline_setter_notch_active {
+    .TS-notch_active {
       -webkit-box-shadow: 0px 0px 10px #333; 
       -moz-box-shadow: 0px 0px 10px #333; 
       box-shadow: 0px 0px 10px #333;
@@ -201,34 +201,34 @@
       /* let's throw IE7 users a bone */
       *border: 1px solid #333;
     }
-    .timeline_setter_zoom {
+    .TS-zoom {
       background-repeat:no-repeat;
       background-position:center center;
       width:20px !important;
       padding:3px 8px 3px 8px !important;
       margin-right:4px;
     }
-    .timeline_setter_zoom_inner_text {
+    .TS-zoom_inner_text {
       display:none;
       /* IE7 */
       *display:inline;
     }
-    .timeline_setter_zoom_in {
+    .TS-zoom_in {
       background-image:url("data:image/gif;charset=utf-8;base64,R0lGODlhCgAKALMAADMzM//M/5GRkdXV1fDw8GZmZk1NTf////r6+gAAAAAAAAAAAAAAAAAAAAAAAAAAACH5BAEHAAEALAAAAAAKAAoAAAQpMMhJpyiihjLIKJTQGV4mFYShEqAkHIiBHKYEHHhhVAWgY5qToFZRRQAAOw==");
     }
-    .timeline_setter_zoom_out {
+    .TS-zoom_out {
       background-image:url("data:image/gif;charset=utf-8;base64,R0lGODlhCgAKALMAADMzM//M/5GRkdXV1fDw8GZmZk1NTf////r6+gAAAAAAAAAAAAAAAAAAAAAAAAAAACH5BAEHAAEALAAAAAAKAAoAAAQoMMhJpyiihjLIKJTQEV4mFYShEqAkHAh8mBJw3IVRFUCOaScBraKKAAA7");
     }
     
     /* legend */
     
-    .timeline_setter_series_nav_container {
+    .TS-series_nav_container {
       font-family:Arial,sans-serif;
       font-size:11px;
       height:30px;
       margin-left:-10px;
     }
-    .timeline_setter_series_legend_swatch {
+    .TS-series_legend_swatch {
       background-image:url("data:image/gif;charset=utf-8;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAIBJREFUeNrskksKwCAMBev9byS4UfEOoh7AA4hu9JUG2kVb+8FVoYFsQmbghTAA00ix7wumRfC0nXPYz97Ca70ThBA20hhzL7DWIsZIi957AmutB7gryDkTlFLaYKUUznZPBUIIlFIIbq1BSolevG5uzjnF0Frj6j7sf+VxwSzAAG/ifZQMhRJhAAAAAElFTkSuQmCC");
       background-repeat:no-repeat;
       background-position:center center;
@@ -245,17 +245,17 @@
       border-bottom-left-radius: 2px 2px;
       margin-right:5px;
     }
-    .timeline_setter_series_legend_item {
+    .TS-series_legend_item {
       float:left;
       margin:-3px 10px 0 10px;
       cursor:pointer;
     }
-    .timeline_setter_series_legend_item_inactive {}
-    .timeline_setter_series_legend_item_inactive .series_legend_swatch {
+    .TS-series_legend_item_inactive {}
+    .TS-series_legend_item_inactive .TS-series_legend_swatch {
       background-image:none !important;
       filter:alpha(opacity=40); /* IE can't do data URLs, so this will serve as 'inactive' UI for series heds in IE */
     }
-    .timeline_setter_item h2, .timeline_setter-img-hed {
+    .TS-item h2, .TS-img-hed {
       font-family: 'Helvetica Neue',arial,sans-serif;
       font-size: 18px;
       font-weight: bold;
@@ -264,7 +264,7 @@
       margin-bottom: 10px;
       line-height:20px;
     }
-    .timeline_setter_permalink {
+    .TS-permalink {
       font-family:"Helvetica Neue",arial,sans-serif;
       font-size:12px;
       color:#404040;

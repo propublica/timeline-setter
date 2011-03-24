@@ -9,22 +9,22 @@
   <body style="height: 100%">
 
     <div id="timeline_setter">
-      <div id="timeline_setter_top_matter_container">
-        <div class="timeline_setter_controls">
-          <a href="#" class="timeline_setter_zoom timeline_setter_zoom_in"><span class="timeline_setter_controls_inner_text timeline_setter_zoom_inner_text">+</span></a> 
-          <a href="#" class="timeline_setter_zoom timeline_setter_zoom_out"><span class="timeline_setter_controls_inner_text timeline_setter_zoom_inner_text">-</span></a> 
+      <div id="TS-top_matter_container">
+        <div class="TS-controls">
+          <a href="#" class="TS-zoom TS-zoom_in"><span class="TS-controls_inner_text TS-zoom_inner_text">+</span></a> 
+          <a href="#" class="TS-zoom TS-zoom_out"><span class="TS-controls_inner_text TS-zoom_inner_text">-</span></a> 
             &nbsp;&nbsp;&nbsp;&nbsp; 
-          <a href="#" class="timeline_setter_choose timeline_setter_choose_prev">&laquo; <span class="timeline_setter_controls_inner_text">Previous</span></a> 
-          <a href="#" class="timeline_setter_choose timeline_setter_choose_next"><span class="timeline_setter_controls_inner_text">Next</span> &raquo;</a>
+          <a href="#" class="TS-choose TS-choose_prev">&laquo; <span class="TS-controls_inner_text">Previous</span></a> 
+          <a href="#" class="TS-choose TS-choose_next"><span class="TS-controls_inner_text">Next</span> &raquo;</a>
         </div>
-        <div class="timeline_setter_series_nav_container"></div>
+        <div class="TS-series_nav_container"></div>
       </div>
     
-      <div class="timeline_setter_notchbar_container">
-        <div class="timeline_setter_notchbar"></div>
+      <div class="TS-notchbar_container">
+        <div class="TS-notchbar"></div>
       </div>
-      <div id="timeline_setter_card_scroller">
-        <div id="timeline_setter_card_scroller_inner">
+      <div id="TS-card_scroller">
+        <div id="TS-card_scroller_inner">
         </div>
       </div>
     </div>
@@ -33,34 +33,34 @@
       var TimelineSetter = TimelineSetter || {};
       TimelineSetter.timelineData = <%= self.to_json %>;
     </script>
-    <script id="timeline_setter_year_notch_tmpl" type="text/jst">
-      <div class="timeline_setter_year_notch year_notch_<%%= timestamp %>" data-timestamp="<%%= timestamp %>"><span class="timeline_setter_year_notch_year_text"><%%= human %></span></div>
+    <script id="TS-year_notch_tmpl" type="text/jst">
+      <div class="TS-year_notch year_notch_<%%= timestamp %>" data-timestamp="<%%= timestamp %>"><span class="TS-year_notch_year_text"><%%= human %></span></div>
     </script>
-    <script id="timeline_setter_notch_tmpl" type="text/jst">
-      <div style="background:<%%= topcolor %>" data-notch-series="<%%= event_series %>" class="timeline_setter_notch timeline_setter_notch_<%%= timestamp %>" data-timestamp="<%%= timestamp %>"></div>
+    <script id="TS-notch_tmpl" type="text/jst">
+      <div style="background:<%%= topcolor %>" data-notch-series="<%%= event_series %>" class="TS-notch TS-notch_<%%= timestamp %>" data-timestamp="<%%= timestamp %>"></div>
     </script>
-    <script id="timeline_setter_series_legend_tmpl" type="text/jst">
-        <div class="timeline_setter_series_legend_item" data-series="<%%= name %>"><span class="timeline_setter_series_legend_swatch" style="background-color:<%%= color %>">&nbsp;</span> <span class="timeline_setter_series_legend_text"><%%= name %></span></div>
+    <script id="TS-series_legend_tmpl" type="text/jst">
+        <div class="TS-series_legend_item" data-series="<%%= name %>"><span class="TS-series_legend_swatch" style="background-color:<%%= color %>">&nbsp;</span> <span class="TS-series_legend_text"><%%= name %></span></div>
     </script>
-    <script id="timeline_setter_card_tmpl" type="text/jst">
-    <div class="timeline_setter_card_container">
-    <div class="timeline_setter_css_arrow timeline_setter_css_arrow_up" style="border-bottom-color:<%%= topcolor %>"></div>
-      <div class="timeline_setter_item" data-timestamp="<%%= timestamp %>" style="border-top:1px solid <%%= topcolor %>">
-        <div class="timeline_setter_item_label">
+    <script id="TS-card_tmpl" type="text/jst">
+    <div class="TS-card_container">
+    <div class="TS-css_arrow TS-css_arrow_up" style="border-bottom-color:<%%= topcolor %>"></div>
+      <div class="TS-item" data-timestamp="<%%= timestamp %>" style="border-top:1px solid <%%= topcolor %>">
+        <div class="TS-item_label">
           <%% if (!_.isEmpty(event_html)){ %>
-            <div class="timeline_setter_item_user_html">
+            <div class="TS-item_user_html">
               <%%= event_html %>
             </div>
           <%% } %>
           <%%= event_description %>
         </div>
           <%% if (!_.isEmpty(event_link)){ %>
-              <div class="timeline_setter_read_btn"><a target="_blank" href="<%%= event_link %>">Read More</a></div>
+              <div class="TS-read_btn"><a target="_blank" href="<%%= event_link %>">Read More</a></div>
           <%% } %>
 
-        <div class="timeline_setter_item_year">
-          <span class="timeline_setter_item_year_text"><%%= event_display_date.length > 0 ? event_display_date : event_date %></span>
-          <div class="timeline_setter_permalink">&#8734;</div>
+        <div class="TS-item_year">
+          <span class="TS-item_year_text"><%%= event_display_date.length > 0 ? event_display_date : event_date %></span>
+          <div class="TS-permalink">&#8734;</div>
         </div>
       </div>
     </div>
