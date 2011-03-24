@@ -19,6 +19,8 @@
         callback.apply(this, arguments);
     };
   };
+  
+  
 
   var transformable = function(obj){
     obj.move = function(e){
@@ -131,13 +133,7 @@
     return (num - this.min) / this.width() * max;
   };
   
-  
-  /* AUTO INTERVALS */
-  
-  /* usage:
-     var dayRange   = new Intervals(bounds)
-     var dayNotches = dayRange.get()
-  */
+
 
   var Intervals = function(bounds) {
     this.max = bounds.max;
@@ -194,8 +190,12 @@
         if (!this.isAtLeastA(this.INTERVAL_ORDER[i])) break;
       
       // cache our max interval
-      this.maxTimestampInterval = this.INTERVAL_ORDER[i - 1];
+      this.maxInterval = this.INTERVAL_ORDER[i - 1];
       this.idx = i - 1;
+    },
+    
+    getMaxInterval : function() {
+      return this.INTERVALS[this.INTERVAL_ORDER[this.idx]];
     },
         
     floor : function(ts){
@@ -220,16 +220,12 @@
       return this.ceil(ts) - this.floor(ts);
     },
     
-    getMaxInterval : function() {
-      return this.INTERVALS[this.INTERVAL_ORDER[this.idx]];
-    },
-
-    get : function() {
+    getRanges : function() {
       if (this.intervals) return this.intervals;
       this.intervals = [];
       for (var i = this.floor(this.min); i <= this.ceil(this.max); i += this.span(i)) {
         this.intervals.push({
-          human     : Intervals.dateStr(i, this.maxTimestampInterval),
+          human     : Intervals.dateStr(i, this.maxInterval),
           timestamp : i
         });
       }
@@ -239,8 +235,7 @@
   
   
   // Handy dandy function to make sure that events are 
-  // triggered at the same time on two objects.'
-  
+  // triggered at the same time on two objects.
   var sync = function(origin, listener){
     var events = Array.prototype.slice.call(arguments, 2);
     _.each(events, function(ev){
@@ -287,15 +282,15 @@
   // Stores state
   var Timeline = function(data) {
     data = data.sort(function(a, b){ return a.timestamp - b.timestamp; });
-    this.bySid  = {};
-    this.series = [];
-    this.bounds = new Bounds();
+    this.bySid    = {};
+    this.series   = [];
+    this.bounds   = new Bounds();
     this.bar      = new Bar(this);
     this.cardCont = new CardContainer(this);
     this.createSeries(data);
     
     var range = new Intervals(this.bounds);
-    this.intervals = range.get();
+    this.intervals = range.getRanges();
     this.bounds.extend(this.bounds.min - range.getMaxInterval() / 2);
     this.bounds.extend(this.bounds.max + range.getMaxInterval() / 2);
     this.bar.render();
@@ -448,7 +443,6 @@
     _comparator : function(crd){
       return crd.timestamp;
     },
-    
     
     hideNotches : function(e){
       e.preventDefault();
