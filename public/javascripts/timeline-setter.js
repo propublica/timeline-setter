@@ -139,14 +139,14 @@
   Intervals.HUMAN_DATES = {
     months : ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
   };
-
+  
   Intervals.dateStr = function(timestamp, interval) {
     var d                 = new Date(timestamp * 1000);
     var dYear             = d.getFullYear();
     var dMonth            = Intervals.HUMAN_DATES.months[d.getMonth()];
     var dDate             = dMonth + ". " + d.getDate() + ', ' + dYear;
     var bigHours          = d.getHours() > 12;
-    var dHourWithMinutes  = bigHours ? d.getHours() - 12 : d.getHours() + ":" + padNumber(d.getMinutes()) + " " + bigHours ? "P.M." : "A.M.";
+    var dHourWithMinutes  = (bigHours ? d.getHours() - 12 : d.getHours()) + ":" + padNumber(d.getMinutes()) + " " + bigHours ? 'p.m.' : 'a.m.';
     var dHourMinuteSecond = dHourWithMinutes + ":" + padNumber(d.getSeconds());
 
     switch (interval) {
