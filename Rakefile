@@ -18,6 +18,7 @@ end
 
 begin
   require 'jeweler'
+  
   Jeweler::Tasks.new do |gem|
     gem.name          = "timeline_setter"
     gem.summary       = %Q{TimelineSetter is a tool to create HTML timelines from spreadsheets of events.}
@@ -25,11 +26,12 @@ begin
     gem.email         = "almshaw@gmail.com"
     gem.homepage      = "http://github.com/propublica/timeline-setter"
     gem.authors       = ["Al Shaw", "Jeff Larson"]
-    gem.executables   = "timeline_setter"
+    gem.executables   = "timeline-setter"
     gem.require_paths = ['lib']
     gem.add_dependency "json"
     gem.add_dependency "table_fu"
     gem.add_development_dependency "rspec", ">= 2.0.0"
+    gem.version = TimelineSetter::VERSION
     # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
   end
   Jeweler::GemcutterTasks.new
@@ -37,7 +39,3 @@ rescue LoadError
   puts "Jeweler (or a dependency) not available. Install it with: gem install jeweler"
 end
 
-Jeweler::Tasks.new do |gem|
-  # snip
-  gem.version = TimelineSetter::VERSION
-end
