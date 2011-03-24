@@ -1,5 +1,7 @@
 (function(window, document, undefined){
-
+  
+  var CSS_PREFIX = 'timeline_setter';
+  
   /*
     Mixins
   */
@@ -321,7 +323,7 @@
    Views
   */
   var Bar = function(timeline) {
-    this.el = $(".timeline_notchbar");
+    this.el = $("." + CSS_PREFIX + "_notchbar");
     this.el.css({ "left": 0 });
     this.timeline = timeline;
     draggable(this);
@@ -329,10 +331,10 @@
     _.bindAll(this, "moving", "doZoom");
     this.el.bind("dragging scrolled", this.moving);
     this.el.bind("doZoom", this.doZoom);
-    this.template = template("#year_notch_tmpl");
+    this.template = template("#" + CSS_PREFIX + "_year_notch_tmpl");
     this.el.bind("dblclick doubletap", function(e){
       e.preventDefault();
-      $(".timeline_zoom_in").click();
+      $("." + CSS_PREFIX + "_zoom_in").click();
     });
   };
   observable(Bar.prototype);
@@ -361,7 +363,7 @@
 
     doZoom : function(e, width){
       var that = this;
-      var notch = $(".timeline_notch_active");
+      var notch = $("." + CSS_PREFIX + "_notch_active");
       var getCur = function() {
         return notch.length > 0 ? notch.position().left : 0;
       };
@@ -396,7 +398,7 @@
 
 
   var CardContainer = function(timeline){
-    this.el = $("#timeline_card_scroller_inner");
+    this.el = $("#" + CSS_PREFIX + "_card_scroller_inner");
   };
   observable(CardContainer.prototype);
   transformable(CardContainer.prototype);
@@ -421,7 +423,7 @@
     this.color    = this.name.length > 0 ? color() : "#444";
     this.cards    = [];
     _.bindAll(this, "render", "showNotches", "hideNotches");
-    this.template = template("#series_legend_tmpl");
+    this.template = template("#" + CSS_PREFIX + "_series_legend_tmpl");
     this.timeline.bind(this.render);
   };
   observable(Series.prototype);
@@ -442,7 +444,7 @@
 
     hideNotches : function(e){
       e.preventDefault();
-      this.el.addClass("series_legend_item_inactive");
+      this.el.addClass(CSS_PREFIX + "_series_legend_item_inactive");
       _.each(this.cards, function(card){
         card.hideNotch();
       });
@@ -450,7 +452,7 @@
 
     showNotches : function(e){
       e.preventDefault();
-      this.el.removeClass("series_legend_item_inactive");
+      this.el.removeClass(CSS_PREFIX + "_series_legend_item_inactive");
       _.each(this.cards, function(card){
         card.showNotch();
       });
@@ -460,7 +462,7 @@
       if(!e.type === "render") return;
       if(this.name.length === 0) return;
       this.el = $(this.template(this));
-      $(".series_nav_container").append(this.el);
+      $("." + CSS_PREFIX + "_series_nav_container").append(this.el);
       this.el.toggle(this.hideNotches,this.showNotches);
     }
   });
@@ -479,8 +481,8 @@
     this.timestamp = card.timestamp;
     this.attributes = card;
     this.attributes.topcolor = series.color;
-    this.template = template("#card_tmpl");
-    this.ntemplate = template("#notch_tmpl");
+    this.template = template("#" + CSS_PREFIX + "_card_tmpl");
+    this.ntemplate = template("#" + CSS_PREFIX + "_notch_tmpl");
     _.bindAll(this, "render", "activate", "position", "setPermalink");
     this.series.timeline.bind(this.render);
     this.series.bind(this.deactivate);
@@ -505,7 +507,7 @@
       this.offset = this.series.timeline.bounds.project(this.timestamp, 100);
       var html = this.ntemplate(this.attributes);
       this.notch = $(html).css({"left": this.offset + "%"});
-      $(".timeline_notchbar").append(this.notch);
+      $("." + CSS_PREFIX + "_notchbar").append(this.notch);
       this.notch.click(this.activate);
       if (history.get() === this.id) this.activate();
     },
@@ -516,9 +518,9 @@
       };
 
       var that = this;
-      var item = this.el.children(".item");
+      var item = this.el.children("." + CSS_PREFIX + "_item");
       var currentMargin = this.el.css("margin-left");
-      var timeline = $("#timeline");
+      var timeline = $("#" + CSS_PREFIX);
       var right = (this.el.offset().left + item.width()) - (timeline.offset().left + timeline.width());
       var left = (this.el.offset().left) - timeline.offset().left;
 
@@ -541,11 +543,11 @@
       switch(onBarEdge) {
         case 'right':
           this.el.css({"margin-left": -(this.cardOffset().item.width() + 7)}); /// AGGGHHHHHHH, fix this
-          this.$(".css_arrow").css("left", this.cardOffset().item.width());
+          this.$("." + CSS_PREFIX + "_css_arrow").css("left", this.cardOffset().item.width());
           break;
         case 'default':
           this.el.css({"margin-left": this.originalMargin});
-          this.$(".css_arrow").css("left", 0);
+          this.$("." + CSS_PREFIX + "_css_arrow").css("left", 0);
       }
     },
 
@@ -571,23 +573,23 @@
       if (!this.el) {
         this.el = $(this.template(this.attributes));
         this.el.css({"left": this.offset + "%"});
-        $("#timeline_card_scroller_inner").append(this.el);
+        $("#" + CSS_PREFIX + "_card_scroller_inner").append(this.el);
         this.originalMargin = this.el.css("margin-left");
-        this.el.delegate(".permalink", "click", this.setPermalink);
+        this.el.delegate("." + CSS_PREFIX + "_permalink", "click", this.setPermalink);
 
       }
 
-      this.el.show().addClass("card_active");
+      this.el.show().addClass(CSS_PREFIX + "_card_active");
 
-      var max = _.max(_.toArray(this.$(".item_user_html").children()), function(el){ return $(el).width(); });
+      var max = _.max(_.toArray(this.$("." + CSS_PREFIX + "_item_user_html").children()), function(el){ return $(el).width(); });
       if($(max).width() > 150){ /// AGGGHHHHHHH, fix this
-        this.$(".item_label").css("width", $(max).width());
+        this.$("." + CSS_PREFIX + "_item_label").css("width", $(max).width());
       } else {
-        this.$(".item_label").css("width", 150);
+        this.$("." + CSS_PREFIX + "_item_label").css("width", 150);
       }
 
       this.moveBarWithCard();
-      this.notch.addClass("timeline_notch_active");
+      this.notch.addClass(CSS_PREFIX + "_notch_active");
     },
 
     setPermalink : function() {
@@ -595,17 +597,17 @@
     },
 
     hideActiveCard : function() {
-      $(".card_active").removeClass("card_active").hide();
-      $(".timeline_notch_active").removeClass("timeline_notch_active");
+      $("." + CSS_PREFIX + "_card_active").removeClass(CSS_PREFIX + "_card_active").hide();
+      $("." + CSS_PREFIX +"_notch_active").removeClass(CSS_PREFIX + "_notch_active");
     },
 
     hideNotch : function(){
-      this.notch.hide().removeClass("timeline_notch_active").addClass("series_inactive");
+      this.notch.hide().removeClass(CSS_PREFIX + "_notch_active").addClass(CSS_PREFIX + "_series_inactive");
       if(this.el) this.el.hide();
     },
 
     showNotch : function(){
-      this.notch.removeClass("series_inactive").show();
+      this.notch.removeClass(CSS_PREFIX + "_series_inactive").show();
     }
 
   });
@@ -637,11 +639,11 @@
   inherits(Zoom, Control);
 
   Zoom.prototype = _.extend(Zoom.prototype, {
-    prefix : ".timeline_zoom_",
+    prefix : "." + CSS_PREFIX + "_zoom_",
     click : function() {
       curZoom += (this.direction === "in" ? +100 : -100);
       if (curZoom >= 100) {
-        $(".timeline_notchbar").trigger('doZoom', [curZoom]);
+        $("." + CSS_PREFIX + "_notchbar").trigger('doZoom', [curZoom]);
       } else {
         curZoom = 100;
       }
@@ -652,16 +654,16 @@
 
   var Chooser = function(direction) {
     Control.apply(this, arguments);
-    this.notches = $(".timeline_notch");
+    this.notches = $("." + CSS_PREFIX + "_notch");
   };
   inherits(Chooser, Control);
 
   Chooser.prototype = _.extend(Control.prototype, {
-    prefix: ".timeline_choose_",
+    prefix: "." + CSS_PREFIX + "_choose_",
     click: function(e){
       var el;
-      var notches    = this.notches.not(".series_inactive");
-      var curCardIdx = notches.index($(".timeline_notch_active"));
+      var notches    = this.notches.not("." + CSS_PREFIX + "_series_inactive");
+      var curCardIdx = notches.index($("." + CSS_PREFIX + "_notch_active"));
       var numOfCards = notches.length;
       if (this.direction === "next") {
         el = (curCardIdx < numOfCards ? notches.eq(curCardIdx + 1) : false);
@@ -676,12 +678,12 @@
 
 
   $(function(){
-    window.timeline = new Timeline(timelineData);
+    window.timeline = new Timeline(TimelineSetter.timelineData);
     new Zoom("in");
     new Zoom("out");
     var chooseNext = new Chooser("next");
     var choosePrev = new Chooser("prev");
-    if (!$(".card_active").is("*")) chooseNext.click();
+    if (!$("." + CSS_PREFIX + "_card_active").is("*")) chooseNext.click();
 
     $(document).bind('keydown', function(e) {
       if (e.keyCode === 39) {

@@ -1,70 +1,70 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
-
-<head>
-  <link href="stylesheets/timeline-setter.css" rel="stylesheet" />
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
-  <script src="javascripts/vendor/underscore-min.js"></script>
+  <head>
+    <link href="stylesheets/timeline-setter.css" rel="stylesheet" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
+    <script src="javascripts/vendor/underscore-min.js"></script>
   
-</head>
-<body style="height: 100%">
+  </head>
+  <body style="height: 100%">
 
-  <div id="timeline">
-    <div id="timeline_top_matter_container">
-      <div class="timeline_controls">
-        <a href="#" class="timeline_zoom timeline_zoom_in"><span class="timeline_controls_inner_text zoom_inner_text">+</span></a> 
-        <a href="#" class="timeline_zoom timeline_zoom_out"><span class="timeline_controls_inner_text zoom_inner_text">-</span></a> 
-          &nbsp;&nbsp;&nbsp;&nbsp; 
-        <a href="#" class="timeline_choose timeline_choose_prev">&laquo; <span class="timeline_controls_inner_text">Previous</span></a> 
-        <a href="#" class="timeline_choose timeline_choose_next"><span class="timeline_controls_inner_text">Next</span> &raquo;</a>
+    <div id="timeline_setter">
+      <div id="timeline_setter_top_matter_container">
+        <div class="timeline_setter_controls">
+          <a href="#" class="timeline_setter_zoom timeline_setter_zoom_in"><span class="timeline_setter_controls_inner_text timeline_setter_zoom_inner_text">+</span></a> 
+          <a href="#" class="timeline_setter_zoom timeline_setter_zoom_out"><span class="timeline_setter_controls_inner_text timeline_setter_zoom_inner_text">-</span></a> 
+            &nbsp;&nbsp;&nbsp;&nbsp; 
+          <a href="#" class="timeline_setter_choose timeline_setter_choose_prev">&laquo; <span class="timeline_setter_controls_inner_text">Previous</span></a> 
+          <a href="#" class="timeline_setter_choose timeline_setter_choose_next"><span class="timeline_setter_controls_inner_text">Next</span> &raquo;</a>
+        </div>
+        <div class="timeline_setter_series_nav_container"></div>
       </div>
-      <div class="series_nav_container"></div>
-    </div>
     
-    <div class="timeline_notchbar_container">
-      <div class="timeline_notchbar"></div>
-    </div>
-    <div id="timeline_card_scroller">
-      <div id="timeline_card_scroller_inner">
+      <div class="timeline_setter_notchbar_container">
+        <div class="timeline_setter_notchbar"></div>
+      </div>
+      <div id="timeline_setter_card_scroller">
+        <div id="timeline_setter_card_scroller_inner">
+        </div>
       </div>
     </div>
-  </div>
 
-  <script type="text/javascript">
-    var timelineData = <%= self.to_json %>;
-  </script>
-  <script id="year_notch_tmpl" type="text/jst">
-    <div class="timeline_year_notch year_notch_<%%= timestamp %>" data-timestamp="<%%= timestamp %>"><span class="timeline_year_notch_year_text"><%%= human %></span></div>
-  </script>
-  <script id="notch_tmpl" type="text/jst">
-    <div style="background:<%%= topcolor %>" data-notch-series="<%%= event_series %>" class="timeline_notch notch_<%%= timestamp %>" data-timestamp="<%%= timestamp %>"></div>
-  </script>
-  <script id="series_legend_tmpl" type="text/jst">
-      <div class="series_legend_item" data-series="<%%= name %>"><span class="series_legend_swatch" style="background-color:<%%= color %>">&nbsp;</span> <span class="series_legend_text"><%%= name %></span></div>
-  </script>
-  <script id="card_tmpl" type="text/jst">
-  <div class="timeline_card_container">
-  <div class="css_arrow css_arrow_up" style="border-bottom-color:<%%= topcolor %>"></div>
-    <div class="item" data-timestamp="<%%= timestamp %>" style="border-top:1px solid <%%= topcolor %>">
-      <div class="item_label">
-        <%% if (!_.isEmpty(event_html)){ %>
-          <div class="item_user_html">
-            <%%= event_html %>
-          </div>
-        <%% } %>
-        <%%= event_description %>
-      </div>
-        <%% if (!_.isEmpty(event_link)){ %>
-            <div class="read_btn"><a target="_blank" href="<%%= event_link %>">Read More</a></div>
-        <%% } %>
+    <script type="text/javascript">
+      var TimelineSetter = TimelineSetter || {};
+      TimelineSetter.timelineData = <%= self.to_json %>;
+    </script>
+    <script id="timeline_setter_year_notch_tmpl" type="text/jst">
+      <div class="timeline_setter_year_notch year_notch_<%%= timestamp %>" data-timestamp="<%%= timestamp %>"><span class="timeline_setter_year_notch_year_text"><%%= human %></span></div>
+    </script>
+    <script id="timeline_setter_notch_tmpl" type="text/jst">
+      <div style="background:<%%= topcolor %>" data-notch-series="<%%= event_series %>" class="timeline_setter_notch timeline_setter_notch_<%%= timestamp %>" data-timestamp="<%%= timestamp %>"></div>
+    </script>
+    <script id="timeline_setter_series_legend_tmpl" type="text/jst">
+        <div class="timeline_setter_series_legend_item" data-series="<%%= name %>"><span class="timeline_setter_series_legend_swatch" style="background-color:<%%= color %>">&nbsp;</span> <span class="timeline_setter_series_legend_text"><%%= name %></span></div>
+    </script>
+    <script id="timeline_setter_card_tmpl" type="text/jst">
+    <div class="timeline_setter_card_container">
+    <div class="timeline_setter_css_arrow timeline_setter_css_arrow_up" style="border-bottom-color:<%%= topcolor %>"></div>
+      <div class="timeline_setter_item" data-timestamp="<%%= timestamp %>" style="border-top:1px solid <%%= topcolor %>">
+        <div class="timeline_setter_item_label">
+          <%% if (!_.isEmpty(event_html)){ %>
+            <div class="timeline_setter_item_user_html">
+              <%%= event_html %>
+            </div>
+          <%% } %>
+          <%%= event_description %>
+        </div>
+          <%% if (!_.isEmpty(event_link)){ %>
+              <div class="timeline_setter_read_btn"><a target="_blank" href="<%%= event_link %>">Read More</a></div>
+          <%% } %>
 
-      <div class="item_year">
-        <span class="item_year_text"><%%= event_display_date.length > 0 ? event_display_date : event_date %></span>
-        <div class="permalink">&#8734;</div>
+        <div class="timeline_setter_item_year">
+          <span class="timeline_setter_item_year_text"><%%= event_display_date.length > 0 ? event_display_date : event_date %></span>
+          <div class="timeline_setter_permalink">&#8734;</div>
+        </div>
       </div>
     </div>
-  </div>
-  </script>
-  <script src="javascripts/timeline-setter.js"></script>
-</body>
+    </script>
+    <script src="javascripts/timeline-setter.js"></script>
+  </body>
 </html>
