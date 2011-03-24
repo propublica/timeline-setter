@@ -1,7 +1,7 @@
 require 'rubygems'
 require 'rake'
 require 'rake/clean'
-require './lib/timeline_setter/version.rb'
+require './lib/timeline_setter'
 
 
 desc "build docs"
@@ -14,6 +14,19 @@ task :docs do
   wrapper = File.open('doc/doc_wrapper.erb','r').read
   mdown   = File.open('index.html','w+') do |f|
     f.write ERB.new(wrapper).result(binding)
+  end
+end
+
+desc "minify js"
+task :minify_js do
+  require 'closure-compiler'
+  js = ""
+  libs = Dir.glob("#{TimelineSetter::ROOT}/public/javascripts/vendor/**")
+  libs.each do |lib| ; js << File.open(lib,'r').read ; end
+  ts_js = Closure::Compiler.new.compile(File.open("#{TimelineSetter::ROOT}/public/javascripts/timeline-setter.js", 'r'))
+  js << ts_js
+  File.open("#{TimelineSetter::ROOT}/public/javascripts/ts-all-min.js", 'w+') do |f|
+    f.write js
   end
 end
 
@@ -31,6 +44,7 @@ begin
     gem.require_paths = ['lib']
     gem.add_dependency "json"
     gem.add_dependency "table_fu"
+    gem.add_dependency "closure-compiler"
     gem.add_development_dependency "rspec", ">= 2.0.0"
     gem.version = TimelineSetter::VERSION
     # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
