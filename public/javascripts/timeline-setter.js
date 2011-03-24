@@ -1,8 +1,5 @@
 (function(window, document, undefined){
 
-
-  var curZoom = 100;
-  
   /*
     Mixins
   */
@@ -43,7 +40,6 @@
   
   var touchInit = 'ontouchstart' in document;
   if(touchInit) jQuery.event.props.push("touches");
-  
   var draggable = function(obj){
     var drag;
     function mousedown(e){
@@ -92,7 +88,7 @@
     };
   };
 
-  
+
   
   // safari bug for too fast scrolling, h/t polymaps
   var safari = /WebKit\/533/.test(navigator.userAgent);
@@ -634,7 +630,7 @@
   };
   
   
-  
+  var curZoom = 100;
   var Zoom = function(direction) {
     Control.apply(this, arguments);
   };
