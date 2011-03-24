@@ -146,7 +146,7 @@
     var dMonth            = Intervals.HUMAN_DATES.months[d.getMonth()];
     var dDate             = dMonth + ". " + d.getDate() + ', ' + dYear;
     var bigHours          = d.getHours() > 12;
-    var dHourWithMinutes  = (bigHours ? d.getHours() - 12 : d.getHours()) + ":" + padNumber(d.getMinutes()) + " " + bigHours ? 'p.m.' : 'a.m.';
+    var dHourWithMinutes  = (bigHours ? d.getHours() - 12 : d.getHours()) + ":" + padNumber(d.getMinutes()) + " " + (bigHours ? 'p.m.' : 'a.m.');
     var dHourMinuteSecond = dHourWithMinutes + ":" + padNumber(d.getSeconds());
 
     switch (interval) {
