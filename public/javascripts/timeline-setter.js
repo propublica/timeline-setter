@@ -165,7 +165,7 @@
     }
   };
 
-  Intervals.prototype = _.extend(Intervals.prototype, {
+  Intervals.prototype = {
     INTERVALS : {
       FullYear : 31536000,
       Month    : 2592000,
@@ -224,7 +224,7 @@
       }
       return this.intervals;
     }
-  });
+  };
 
 
   var sync = function(origin, listener){
