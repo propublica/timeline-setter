@@ -2,8 +2,6 @@
 
 # $ ./bin/timeline-setter -c ./test.csv -O
 
-require 'optparse'
-require 'fileutils'
 require 'rubygems'
 require File.expand_path("../../lib/timeline_setter.rb", __FILE__)
 require File.expand_path("../../lib/timeline_setter/cli.rb", __FILE__)
