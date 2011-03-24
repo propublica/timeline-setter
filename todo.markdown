@@ -4,13 +4,15 @@
 ## Blockers
 
 * ie
+* add one-file minified option in timeline-setter binary
+* gem-ify
+* docs & docco comments
+* scope css
+* scope events
 
 ## Features
 
-* Sharing links (Twitter, Facebook)
-* scope css
 * zoom to fit by series
-* code comments
 * autoresize
 * wider touch targets
 * pinch

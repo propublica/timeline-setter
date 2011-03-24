@@ -60,12 +60,12 @@ After you've generated a timeline with the `timeline-setter` command, you should
       |---javascripts
       |-----timeline-setter.js
       |-----vendor
-      |-------backbone-min.js
+      |-------underscore-min.js
       |---stylesheets
       |-----timeline-setter.css
-
-      NB: jQuery is linked to Google's CDN in timeline.html
       
+      NB: jQuery is linked to Google's CDN in timeline.html
+
 Dropping the whole folder onto your server or an asset host like S3 will allow the app to run self-contained. It requires no server-side processing at all. To drop into your CMS, simply copy the relevant bits of `timeline.html` and paste into your site's template. Then, adjust the `<link>` and `<script>` tags to point to their appropriate destinations.
 
 ## Styling your timeline
