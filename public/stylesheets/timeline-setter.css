@@ -105,6 +105,9 @@
       display:block;
       width:150px;
     }
+    .item_year_text {
+      float:left;
+    }
     .css_arrow {
       border-style: solid;
       height: 0px;
@@ -356,6 +359,17 @@
       margin:0;
       margin-bottom: 10px;
       line-height:20px;
+    }
+    .permalink {
+      font-family:"Helvetica Neue",arial,sans-serif;
+      font-size:12px;
+      color:#404040;
+      cursor:pointer;
+      padding:0 0 0 15px;
+      margin-top:-5px;
+      float:left;
+      -webkit-transform:rotate(45deg);
+      -moz-transform:rotate(45deg);
     }
     
     
