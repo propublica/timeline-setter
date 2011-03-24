@@ -71,7 +71,7 @@
 
     if(!touchInit) {
       obj.el.bind("mousedown", mousedown);
-    
+      
       $(document).bind("mousemove", mousemove);
       $(document).bind("mouseup", mouseup);
     } else {
@@ -84,6 +84,7 @@
         last = now;
         obj.el.trigger($.Event(type));
       });
+      
       obj.el.bind("touchmove", mousemove);
       obj.el.bind("touchend", mouseup);
     };
@@ -122,7 +123,6 @@
     this.max = Math.max(num, this.max);
   };
  
-  
   Bounds.prototype.width = function(){
     return this.max - this.min;
   };
@@ -144,9 +144,9 @@
     this.min = bounds.min;
     this.setMaxInterval();
   };
-
+  
+  // AP-ify these..
   Intervals.HUMAN_DATES = {
-    // AP-ify these..
     months : ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
   };
 
@@ -157,14 +157,7 @@
     var dDate             = dMonth + ". " + d.getDate() + ', ' + dYear;
     var dHourWithMinutes  = d.getHours() + ":" + padNumber(d.getMinutes());
     var dHourMinuteSecond = dHourWithMinutes + ":" + padNumber(d.getSeconds());
-    /*
-      return stuff like:
-        year        => 2001
-        month       => June, 2004
-        day         => May 1, 2005
-        hour/minute => 11:59
-        second      => 2:35:22
-    */
+
     switch (interval) {
       case "FullYear":
         return dYear;
@@ -197,18 +190,12 @@
     },
 
     setMaxInterval : function() {
-      var that = this;
-      var i;
-      for (i = 0; i < this.INTERVAL_ORDER.length; i++) {
-        var curInterval = this.INTERVAL_ORDER[i];
-        if (that.isAtLeastA(curInterval) === false) {
-          // we overshot by one. back it off and return.
-          // cache our max interval
-          break;
-        }
-      }
+      for (var i = 0; i < this.INTERVAL_ORDER.length; i++) 
+        if (!this.isAtLeastA(this.INTERVAL_ORDER[i])) break;
+      
+      // cache our max interval
       this.maxTimestampInterval = this.INTERVAL_ORDER[i - 1];
-      this.idx = i -1;
+      this.idx = i - 1;
     },
         
     floor : function(ts){
@@ -226,7 +213,6 @@
       var intvl = this.INTERVAL_ORDER[this.idx];
       // set to the 'next' of whatever interval it is
       date["set" + intvl](date["get" + intvl]() + 1);
-      
       return date.getTime() / 1000;
     },
     
@@ -240,14 +226,12 @@
 
     get : function() {
       if (this.intervals) return this.intervals;
-      
-      var intervals = this.intervals = [];
-      var date;
+      this.intervals = [];
       for (var i = this.floor(this.min); i <= this.ceil(this.max); i += this.span(i)) {
-        intervals.push({
-            human     : Intervals.dateStr(i, this.maxTimestampInterval),
-            timestamp : i
-          });
+        this.intervals.push({
+          human     : Intervals.dateStr(i, this.maxTimestampInterval),
+          timestamp : i
+        });
       }
       return this.intervals;
     }
@@ -324,9 +308,8 @@
   
   Timeline.prototype = _.extend(Timeline.prototype, {
     createSeries : function(series){
-      for(var i = 0; i < series.length; i++){
+      for(var i = 0; i < series.length; i++)
         this.add(series[i]);
-      }
     },
     
     add : function(card){
@@ -427,18 +410,19 @@
   observable(CardContainer.prototype);
   transformable(CardContainer.prototype);
   
-  var COLORS = ["#065718", "#EDC047", "#91ADD1", "#929E5E", "#9E5E23", "#C44846", "#065718", "#EDD4A5", "#CECECE"];
-    
+  var colors = ["#065718", "#EDC047", "#91ADD1", "#929E5E", "#9E5E23", "#C44846", "#065718", "#EDD4A5", "#CECECE"];
   var color = function(){
     var chosen;
-    if (COLORS.length > 0) {
-      chosen = COLORS[0];
-      COLORS.shift();
+    if (colors.length > 0) {
+      chosen = colors[0];
+      colors.shift();
     } else {
       chosen = "#444";
     }
     return chosen;
   };
+  
+  
   
   var Series = function(series, timeline) {
     this.timeline = timeline;
@@ -493,9 +477,10 @@
   
   _(["min", "max"]).each(function(key){
     Series.prototype[key] = function() {
-      return _[key].call(_, this.cards, this._comparator).timestamp;
+      return _[key].call(_, this.cards, this._comparator).get("timestamp");
     };
   });
+  
   
   
   var Card = function(card, series) {
@@ -510,7 +495,7 @@
     this.series.timeline.bind(this.render);
     this.series.bind(this.deactivate);
     this.series.timeline.bar.bind(this.position);
-    if(history.get() == this.id) this.activate();
+    if(history.get() === this.id) this.activate();
   };
   
   Card.prototype = _.extend(Card.prototype, {
@@ -533,66 +518,55 @@
     
     cardOffset : function() {
       if (!this.el) return {
-        onBarEdge : function() {
-          return undefined;
-        }
+        onBarEdge : false
       };
       
       var that = this;
       var item = this.el.children(".item");
       var currentMargin = this.el.css("margin-left");
       var timeline = $("#timeline");
-      var right = (that.el.offset().left + item.width()) - (timeline.offset().left + timeline.width());
-      var left = (that.el.offset().left) - timeline.offset().left;
+      var right = (this.el.offset().left + item.width()) - (timeline.offset().left + timeline.width());
+      var left = (this.el.offset().left) - timeline.offset().left;
       
       return {
         item : item,
-        currentMargin : currentMargin,
-        left  : left,
-        right : right,
-        
-        onBarEdge : function() {
-          if (right > 0 && currentMargin === that.originalMargin) {
-           return 'right'; 
-          }
-          
-          if (left < 0 && that.el.css("margin-left") !== that.originalMargin) { 
-            return 'default';
-          }
-          
-          if (left < 0 && that.el.css("margin-left") === that.originalMargin) {
-            return 'left';
-          }
-        }
+        onBarEdge : (right > 0 && currentMargin === that.originalMargin) ?
+                      'right' : 
+                    (left < 0 && that.el.css("margin-left") !== that.originalMargin) ?
+                      'default' :
+                    (left < 0 && that.el.css("margin-left") === that.originalMargin) ?
+                      'left' :
+                      false
       };
     },
     
     position : function(e) {
-     if (e.type !== "move" || !this.el) return;
-     
-     if (this.cardOffset().onBarEdge() === 'right') {
-       this.el.css({"margin-left": -(this.cardOffset().item.width() + 7)}); /// AGGGHHHHHHH, fix this
-       this.$(".css_arrow").css("left", this.cardOffset().item.width());
-       return;
-     } 
-     
-     if(this.cardOffset().onBarEdge() === 'default') {
-       this.el.css({"margin-left": this.originalMargin});
-       this.$(".css_arrow").css("left", 0);
-     }
+      if (e.type !== "move" || !this.el) return;
+      var onBarEdge = this.cardOffset().onBarEdge;
+      
+      switch(onBarEdge) { 
+        case 'right':
+          this.el.css({"margin-left": -(this.cardOffset().item.width() + 7)}); /// AGGGHHHHHHH, fix this
+          this.$(".css_arrow").css("left", this.cardOffset().item.width());
+          break;
+        case 'default':
+          this.el.css({"margin-left": this.originalMargin});
+          this.$(".css_arrow").css("left", 0);
+      }
     },
     
     moveBarWithCard : function() {
       var e = $.Event('moving');
-      var onBarEdge = this.cardOffset().onBarEdge();
-
-      if (onBarEdge === 'right') {
-         e.deltaX = -(this.cardOffset().item.width());
-         this.series.timeline.bar.moving(e);
-      }
-      if (onBarEdge === 'left') {
-        e.deltaX = (this.cardOffset().item.width());
-        this.series.timeline.bar.moving(e);
+      var onBarEdge = this.cardOffset().onBarEdge;
+      
+      switch(onBarEdge) { 
+        case 'right':
+          e.deltaX = -(this.cardOffset().item.width());
+          this.series.timeline.bar.moving(e);
+          break;
+        case 'left':
+          e.deltaX = (this.cardOffset().item.width());
+          this.series.timeline.bar.moving(e);
       }
       this.position($.Event('move'));
     },
@@ -606,13 +580,16 @@
         $("#timeline_card_scroller_inner").append(this.el);
         this.originalMargin = this.el.css("margin-left");
       }
+      
       this.el.show().addClass("card_active");
+      
       var max = _.max(_.toArray(this.$(".item_user_html").children()), function(el){ return $(el).width(); });
       if($(max).width() > 150){ /// AGGGHHHHHHH, fix this
         this.$(".item_label").css("width", $(max).width());
       } else {
         this.$(".item_label").css("width", 150);
       }
+      
       this.moveBarWithCard();
       this.notch.addClass("timeline_notch_active");
     },
@@ -633,12 +610,16 @@
     
   });
   
+  
+  
   var ctor = function(){};
   var inherits = function(child, parent){
     ctor.prototype  = parent.prototype;
     child.prototype = new ctor();
     child.prototype.constructor = child;
   };
+  
+  
   
   // Controls
   var Control = function(direction){
@@ -668,6 +649,7 @@
   });
   
   
+  
   var Chooser = function(direction) {
     Control.apply(this, arguments);
     this.notches = $(".timeline_notch");
@@ -690,6 +672,8 @@
       el.trigger("click");
     }
   });
+  
+  
   
   $(function(){
     window.timeline = new Timeline(timelineData);
