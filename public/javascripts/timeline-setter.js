@@ -1,5 +1,5 @@
 (function(){
-  
+
   // Mixins
   // ------
 
@@ -33,7 +33,7 @@
     };
   };
 
-  
+
   // Plugins
   // -------
 
@@ -108,7 +108,7 @@
 
   // Utils
   // -----
-  
+
   var Bounds = function(){
     this.min = +Infinity;
     this.max = -Infinity;
@@ -139,7 +139,7 @@
   Intervals.HUMAN_DATES = {
     months : ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
   };
-  
+
   Intervals.dateStr = function(timestamp, interval) {
     var d                 = new Date(timestamp * 1000);
     var dYear             = d.getFullYear();
@@ -392,6 +392,8 @@
   observable(CardContainer.prototype);
   transformable(CardContainer.prototype);
 
+
+
   var colors = ["#065718", "#EDC047", "#91ADD1", "#929E5E", "#9E5E23", "#C44846", "#065718", "#EDD4A5", "#CECECE"];
   var color = function(){
     var chosen;
@@ -569,7 +571,7 @@
       this.el.show().addClass(("TS-card_active"));
 
       var max = _.max(_.toArray(this.$(".item_user_html").children()), function(el){ return $(el).width(); });
-      if($(max).width() > 150){ 
+      if($(max).width() > 150){
         this.$(".item_label").css("width", $(max).width());
       } else {
         this.$(".item_label").css("width", 150);
@@ -610,7 +612,7 @@
 
   // Controls
   // --------
-  
+
   var Control = function(direction){
     this.direction = direction;
     this.el = $(this.prefix + direction);
