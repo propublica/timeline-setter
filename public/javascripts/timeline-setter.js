@@ -388,7 +388,7 @@
 
 
   var CardContainer = function(timeline){
-    this.el = $("TS-card_scroller_inner");
+    this.el = $("#TS-card_scroller_inner");
   };
   observable(CardContainer.prototype);
   transformable(CardContainer.prototype);
@@ -571,11 +571,11 @@
 
       this.el.show().addClass(("TS-card_active"));
 
-      var max = _.max(_.toArray(this.$(".item_user_html").children()), function(el){ return $(el).width(); });
+      var max = _.max(_.toArray(this.$(".TS-item_user_html").children()), function(el){ return $(el).width(); });
       if($(max).width() > 150){
-        this.$(".item_label").css("width", $(max).width());
+        this.$(".TS-item_label").css("width", $(max).width());
       } else {
-        this.$(".item_label").css("width", 150);
+        this.$(".TS-item_label").css("width", 150);
       }
 
       this.moveBarWithCard();
