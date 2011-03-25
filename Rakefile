@@ -19,7 +19,6 @@ end
 
 desc "minify js"
 task :minify_js do
-  require 'closure-compiler'
   js = ""
   libs = Dir.glob("#{TimelineSetter::ROOT}/public/javascripts/vendor/**")
   libs.each do |lib| ; js << File.open(lib,'r').read ; end

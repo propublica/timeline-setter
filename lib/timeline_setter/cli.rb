@@ -28,6 +28,10 @@ module TimelineSetter
         opts.on('-O', '--open', 'Open generated timeline in a browser') do |o|
           @options[:open] = o
         end
+        opts.on('-m', '--min', 'Create a minified one-page version of the timeline') do |m|
+          @options[:min] = m
+        end
+        
 
         opts.on_tail("-h", "--help", "Show this message") do
           puts opts
@@ -53,7 +57,7 @@ module TimelineSetter
     end
     
     def html
-      TimelineSetter::Timeline.new(events.events).timeline
+      TimelineSetter::Timeline.new(events.events).send(@options[:min] ? :timeline_min : :timeline)
     end
     
     def outdir

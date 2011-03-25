@@ -181,6 +181,9 @@
       border-radius: 2px;      
       display: inline;
     }
+    .TS-choose_next {
+      margin-left:4px;
+    }
     .TS-controls_inner_text {
       font-size:11px; 
       text-transform:uppercase;
