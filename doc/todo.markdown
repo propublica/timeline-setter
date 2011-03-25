@@ -5,7 +5,6 @@
 
 * ie
 * add one-file minified option in timeline-setter binary
-* gem-ify
 * docs & docco comments
 * scope events
 * Prettify cases with large numbers of series (they should stack up along the left)
@@ -16,6 +15,7 @@
 * autoresize
 * wider touch targets
 * pinch
+* generate from google spreadsheets key instead of local csv
 
 ## Refactor
 
