@@ -21,7 +21,14 @@ After TimelineSetter is installed, you should have the `timeline-setter` command
 
     timeline-setter -c /path/to/data.csv -o /path/to/output/directory
 
-Add the `-a` flag if you'd like TimelineSetter to add the default supporting assets to the output directory. And, for fun, add the `-O` flag to open a browser to your new timeline after it is generated. 
+Full list of options:
+
+* `-c CSV` Path to your CSV files.
+* `-o OUTPUT_PATH` Path to output timeline and assets.
+* `-a` Add the default supporting assets to the output directory, along with the timeline itself.
+* `-m` Create a minified one-page version of your timeline with all supporting assets inline.
+* `-O` Open a browser to your new timeline after it is generated (currently Mac OS only).
+* `-h` Print help to standard output.
 
 ## Setting up your spreadsheet
 
@@ -110,6 +117,8 @@ On the client side, there are a whole slough of features we plan to add such as:
 * In the Wild: [ProPublica: How One Blast Affected Five Soldiers](http://www.propublica.org/special/tbi-psycho-platoon-timeline)
 
 ## Credits
+
+[Al Shaw](http://twitter.com/a_l), [Jeff Larson](http://twitter.com/thejefflarson)
 
 ## Change Log
 
