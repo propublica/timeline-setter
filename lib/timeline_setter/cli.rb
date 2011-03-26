@@ -6,7 +6,7 @@ module TimelineSetter
     def initialize
       parse_options!
     end
-    
+
     def parse_options!
       @options = {}
       option_parser = OptionParser.new do |opts|
@@ -31,7 +31,7 @@ module TimelineSetter
         opts.on('-m', '--min', 'Create a minified one-page version of the timeline') do |m|
           @options[:min] = m
         end
-        
+
 
         opts.on_tail("-h", "--help", "Show this message") do
           puts opts
@@ -44,27 +44,27 @@ module TimelineSetter
         puts option_parser.on_tail
         exit
       else
-        do_stuff
+        compile!
       end
     end
-    
+
     def sheet
       File.open(@options[:csv]).read
     end
-    
+
     def events
       TimelineSetter::Parser.new sheet
     end
-    
+
     def html
       TimelineSetter::Timeline.new(events.events).send(@options[:min] ? :timeline_min : :timeline)
     end
-    
+
     def outdir
       @options[:output] ? (File.dirname(@options[:output]) + '/') : File.dirname("#{TimelineSetter::ROOT}/public/timeline.html") + '/'
     end
-    
-    def do_stuff
+
+    def compile!
       if @options[:assets]
         FileUtils.cp_r(Dir.glob('public/*'), outdir)
       end
@@ -80,6 +80,6 @@ module TimelineSetter
         %x{ open #{outdir}timeline.html }
       end
     end
-    
+
   end
 end
