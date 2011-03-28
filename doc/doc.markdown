@@ -31,7 +31,7 @@ well as the JavaScript libraries
 [Underscore](http://documentcloud.github.com/underscore/) and
 [jQuery](http://jquery.com/). All of these are either installed along with
 TableSetter, or packaged with the source. JQuery is loaded via Google's CDN.
-It has been tested with jQuery 1.4.4 and Underscore 1.1.4.
+It has been tested with jQuery 1.5.1 and Underscore 1.1.5.
 
 ## Installation
 
