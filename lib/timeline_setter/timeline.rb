@@ -12,7 +12,7 @@ module TimelineSetter
     
     def timeline_min
       js = ""
-      css = File.open("#{TimelineSetter::ROOT}/public/stylesheets/timeline-setter.css").read #.gsub(/\s+/,'')
+      css = File.open("#{TimelineSetter::ROOT}/public/stylesheets/timeline-setter.css").read
       libs = Dir.glob("#{TimelineSetter::ROOT}/public/javascripts/vendor/**")
       libs.each do |lib| ; js << File.open(lib,'r').read ; end
       js  << Closure::Compiler.new.compile(File.open("#{TimelineSetter::ROOT}/public/javascripts/timeline-setter.js", 'r'))

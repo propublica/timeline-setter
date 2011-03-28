@@ -2,13 +2,20 @@
 
   // Mixins
   // ------
+  // Each mixin operates on an object's `prototype`.
 
+  // The `observable` mixin adds simple event notifications to the passed in 
+  // object. Unlike other notification systems, when an event is triggered all
+  // callbacks bound to the object are invoked.
   var observable = function(obj){
+    
+    // Registers a callback function for notification at a later time.
     obj.bind = function(cb){
       this._callbacks = this._callbacks || [];
       this._callbacks.push(cb);
     };
 
+    // Invoke all callbacks registered to the object with `bind`.
     obj.trigger = function(){
       if(!this._callbacks) return;
       for(var i = 0; callback = this._callbacks[i]; i++)
@@ -17,8 +24,14 @@
   };
 
 
-
+  // Each `transformable` contains two event listeners that handle moving associated
+  // DOM elements around the page.
   var transformable = function(obj){
+    
+    // Move the associated element a specified delta. Of note: because events
+    // aren't scoped by key, TimelineSetter uses plain old jQuery events for 
+    // message passing. So each registered callback first checks to see if the
+    // event fired matches the event it is listening for.
     obj.move = function(e){
       if(!e.type === "move" || !e.deltaX) return;
 
@@ -27,6 +40,9 @@
       this.el.css({"left" : this.currOffset});
     };
 
+    // The width for the Bar and CardContainer objects is set in percentages,
+    // in order to zoom the TimeLine all that's needed is to increase or decrease
+    // the percentage width.
     obj.zoom = function(e){
       if(!e.type === "zoom") return;
       this.el.css({ "width": e.width });
@@ -36,7 +52,9 @@
 
   // Plugins
   // -------
+  // Each plugin operates on an instance of an object.
 
+  // 
   var touchInit = 'ontouchstart' in document;
   if(touchInit) jQuery.event.props.push("touches");
   var draggable = function(obj){
@@ -436,7 +454,7 @@
 
     hideNotches : function(e){
       e.preventDefault();
-      this.el.addClass(("TS-series_legend_item_inactive"));
+      this.el.addClass("TS-series_legend_item_inactive");
       _.each(this.cards, function(card){
         card.hideNotch();
       });
@@ -444,7 +462,7 @@
 
     showNotches : function(e){
       e.preventDefault();
-      this.el.removeClass(("TS-series_legend_item_inactive"));
+      this.el.removeClass("TS-series_legend_item_inactive");
       _.each(this.cards, function(card){
         card.showNotch();
       });
