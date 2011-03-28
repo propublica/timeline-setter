@@ -91,24 +91,32 @@
     <a href="http://www.propublica.org" class="propublica">&nbsp;</a>
     <h1>TimelineSetter 0.0.1</h1>
 
-<p>TimelineSetter is a command-line utility to create beautiful standards-compliant timelines from spreadsheets. It supports any range of time, from minutes to years, custom descriptions and arbitrary HTML in event cards. It creates fluid embeds that will look great in any sized container.</p>
+<p>TimelineSetter creates beautiful timelines.</p>
 
-<p>The project is broken into two parts: a Ruby package (along with a binary) for generating the assets, and the Timeline HTML, CSS and JavaScript itself which are nearly identical for every timeline created. TimelineSetter will create a unique HTML page that embeds a JSON object with your data and package the stock CSS and JavaScript along with it to drop into pages. You can customize the CSS to match the look and feel of your site.</p>
+<p>It is a command-line utility that takes a <a href="#csv">specially-structured CSV file</a> as input and outputs standards-compliant HTML/CSS/JavaScript. It supports any span of time from minutes to years, and supports multiple parallel event series in a single timeline. It can handle custom descriptions and even arbitrary HTML in each event &ldquo;card.&rdquo; It creates fluid embeds that will look great at any width.</p>
+
+<p>TimelineSetter &ldquo;bakes out&rdquo; timelines, ready for uploading directly into your CMS, Amazon S3, or however you typically serve static files. It requires no server-side processing at all once you&rsquo;ve generated a timeline.</p>
+
+<h2>How it Works</h2>
+
+<p>The project is broken into two parts: a Ruby package (along with a binary) for generating the assets, and the HTML, CSS and JavaScript for the timeline itself. TimelineSetter will create a unique HTML page that embeds a JSON object with your data.The CSS and JavaScript are identical for every timeline created, so you can host those centrally and simply point to them when you deploy a timeline, or you can package them up with your HTML and paste it into your CMS all at once. You can <a href="#styling">customize the CSS</a> to match the look and feel of your site.</p>
 
 <h2>Dependencies</h2>
 
-<p>TimelineSetter relies on ProPublica&rsquo;s Ruby gem <a href="http://propublica.github.com/table-fu/">TableFu</a>, as well as the JavaScript libraries Underscore and jQuery, all of which are either installed alongside, or packaged with the source. It has been tested with jQuery 1.4.4 and Underscore 1.1.4.</p>
+<p>TimelineSetter relies on <a href="http://propublica.github.com/table-fu/">TableFu</a>, as well as the JavaScript libraries <a href="http://documentcloud.github.com/underscore/">Underscore</a> and <a href="http://jquery.com/">jQuery</a>. All of these are either installed along with TableSetter, or packaged with the source. JQuery is loaded via Google&rsquo;s CDN. It has been tested with jQuery 1.4.4 and Underscore 1.1.4.</p>
 
 <h2>Installation</h2>
 
-<p>Install TimelineSetter through RubyGems:</p>
+<p>Install TimelineSetter through RubyGems on Unix-like OSes:</p>
 
 <pre><code>gem install timeline_setter
 </code></pre>
 
+<p>(Note: We haven&rsquo;t tested using the TimelineSetter tools on Windows even once, though the timelines themselves have been tested in modern browsers on Windows, Mac and Linux.)</p>
+
 <h2>The `timeline-setter` command</h2>
 
-<p>After TimelineSetter is installed, you should have the <code>timeline-setter</code> command available. The command looks for a CSV file to parse and outputs static assets. At any point, find help by running <code>timeline-setter</code> without any arguments, or by adding the <code>-h</code> flag. Run the command like so:</p>
+<p>After TimelineSetter is installed, the <code>timeline-setter</code> command should be available in your shell. The command looks for a CSV file to parse and outputs static assets. At any point, you can find help by running <code>timeline-setter</code> without any arguments, or by adding the <code>-h</code> flag. Run the command like so:</p>
 
 <pre><code>timeline-setter -c /path/to/data.csv -o /path/to/output/directory
 </code></pre>
@@ -125,9 +133,11 @@
 </ul>
 
 
-<h2>Setting up your spreadsheet</h2>
+<p><a name="csv"></a></p>
 
-<p>TimelineSetter looks for certain column names in your spreadsheet in order to generate a timeline. Here&rsquo;s a summary of each column and its significance:</p>
+<h2>Setting Up Your CSV File</h2>
+
+<p>TimelineSetter looks for certain column names in your CSV file in order to generate a timeline. All columns are required, though as you&rsquo;ll see, some of them can be left blank. Here&rsquo;s a summary of each column and its significance:</p>
 
 <h3>event_date</h3>
 
@@ -139,7 +149,7 @@
 
 <h3>event_description</h3>
 
-<p>A textual description of the event.</p>
+<p>A description of the event.</p>
 
 <h3>event_link</h3>
 
@@ -147,11 +157,11 @@
 
 <h3>event_series</h3>
 
-<p>A string representing a series of events this particular event is a part of. TimelineSetter will find all the unique series among events in the spreadsheet and assign both colors and checkboxes for them at the top of the spreadsheet. Events not assigned a series will have their timeline notches colored charcoal, and will have no associated checkbox.</p>
+<p>A string representing the name of the series of events this particular event is a part of. TimelineSetter will find all the unique series among events in the spreadsheet and assign both colors and checkboxes for them at the top of the spreadsheet. Events not assigned to a series will be part of the &ldquo;default&rdquo; series, which have their timeline notches colored charcoal, and have no associated checkbox.</p>
 
 <h3>event_html</h3>
 
-<p>Any arbitrary HTML that will be inserted above the <code>event_description</code>. This field may contain nearly everything except <code>&lt;script&gt;</code> tags. If you choose to use JavaScript, for now you must do it within an iframe which can then be dropped into the <code>event_html</code> field. Try image tags, YouTube embeds, etc.</p>
+<p>Any arbitrary HTML that will be inserted above the <code>event_description</code>. This field may contain image tags, YouTube tags, etc. &mdash; nearly everything except <code>&lt;script&gt;</code> tags. If you choose to use JavaScript, you must do it inside an iframe and call that iframe inside this field.</p>
 
 <h2>Folder structure and deployment</h2>
 
@@ -165,25 +175,31 @@
   |-------underscore-min.js
   |---stylesheets
   |-----timeline-setter.css
-
-  NB: jQuery is linked to Google's CDN in timeline.html
 </code></pre>
 
 <p>Dropping the whole folder onto your server or an asset host like S3 will allow the app to run self-contained. It requires no server-side processing at all. To drop into your CMS, simply copy the relevant bits of <code>timeline.html</code> and paste into your site&rsquo;s template. Then, adjust the <code>&lt;link&gt;</code> and <code>&lt;script&gt;</code> tags to point to their appropriate destinations.</p>
 
-<h2>Styling your timeline</h2>
+<h3>Definitions</h3>
 
-<p>TimelineSetter timelines are fully styleable. The default &ldquo;ProPublica theme&rdquo; stylesheet is packaged alongside each generated asset bundle, and is available in <code>stylesheets/timeline-setter.css</code>. This is, of course, completely overrideable. Here&rsquo;s a guide to do that.</p>
+<p>The timeline is made up of non-clickable <em>interval notches</em> used to denote periods of time, and <em>event notches</em>, which, when clicked, reveal their associated <em>event cards</em>.</p>
 
-<h3>Overview and styling the container and top matter</h3>
+<p><a name="styling"></a></p>
 
-<p>All TimelineSetter CSS is scoped within <code>TS</code>. The container is <code>#timeline_setter</code> and every selector has a <code>TS</code> prefix. Upon first glance, it may not seem like there is much markup at all. We make extensive use of JavaScript (ERB-style) templating via <a href="http://documentcloud.github.com/underscore/#template">Underscore.js</a> and templates for each part of the timeline reside in the DOM. The controls (zoom in/out, previous/next buttons) are available within <code>#TS-top_matter_container .TS-controls</code>.</p>
+<h2>Styling Your Timeline</h2>
 
-<p>Series checkboxes are injected into <code>.TS-series_nav_container</code> and templated via <code>script#TS-notch_tmpl</code>. Currently, series colors are hard coded in the JavaScript. We support a maximum of nine series colors (assigned in this order: <code>#065718, #EDC047, #91ADD1, #929E5E, #9E5E23, #C44846, #065718, #EDD4A5, #CECECE</code>, check <code>CardContainer.colors</code> in timeline-setter.js to override). Technically you can create an unlimited number of series, but they will eventually fall back to the default notch color.</p>
+<p>TimelineSetter timelines are fully style-able. The default &ldquo;ProPublica theme&rdquo; stylesheet is packaged alongside each generated asset bundle, and is available in <code>stylesheets/timeline-setter.css</code>. You can alter this stylesheet, or replace it completely. Here&rsquo;s a guide to do that.</p>
+
+<h3>Overview and Styling the Container and Top Matter</h3>
+
+<p>All TimelineSetter CSS is scoped within a namespace starting with <code>TS.</code> The outermost container is <code>#timeline_setter.</code></p>
+
+<p>Upon first glance, it may not seem like there is much markup at all. That&rsquo;s because we make extensive use of JavaScript (ERB-style) templating via <a href="http://documentcloud.github.com/underscore/#template">Underscore.js</a> &mdash; so templates for each part of the timeline reside in the DOM. The controls (zoom in/out, previous/next buttons) are available within <code>#TS-top_matter_container .TS-controls</code>.</p>
+
+<p>Series checkboxes are injected into <code>.TS-series_nav_container</code> and templated via <code>script#TS-notch_tmpl</code>. Currently, series colors are hard coded in the JavaScript. We support a maximum of nine series colors (assigned in this order: <code>#065718, #EDC047, #91ADD1, #929E5E, #9E5E23, #C44846, #065718, #EDD4A5, #CECECE</code>, check <code>CardContainer.colors</code> in timeline-setter.js to override). Technically you can create an unlimited number of series, but they will eventually fall back to the default charcoal notch color.</p>
 
 <h3>Styling the bar, notches and cards</h3>
 
-<p>The timeline bar is made up of non-clickable interval notches used to denote periodic intervals of time, and event notches, which, when clicked, reveal their associated cards. Interval notches are templated within <code>script#TS-year_notch_tmpl</code> and display formatted dates based on the interval of time between events as automatically determined by the JavaScript. Here&rsquo;s a sampling of what you might see in interval notches:</p>
+<p>Interval notches are templated within <code>script#TS-year_notch_tmpl</code>. Their position is based on the interval of time between events as automatically determined by the JavaScript. Here&rsquo;s a sampling of what you might see in interval notches:</p>
 
 <pre><code>year        =&gt; 2001
 month       =&gt; June, 2004
@@ -196,9 +212,7 @@ second      =&gt; 11:59:22
 
 <h2>Roadmap</h2>
 
-<p>For the initial open source release, we&rsquo;re providing TimelineSetter as purely a &ldquo;bake-out&rdquo; utility, for creating static files. We plan to expand to include <a href="http://propublica.github.com/table-setter/">TableSetter</a>-like functionality to host timelines as Sinatra apps.</p>
-
-<p>On the client side, there are a whole slough of features we plan to add such as:</p>
+<p>On the client side, there are a number of features we plan to add, including:</p>
 
 <ul>
 <li>Smoother zooming</li>
@@ -221,7 +235,11 @@ second      =&gt; 11:59:22
 
 <h2>Credits</h2>
 
-<p><a href="http://twitter.com/a_l">Al Shaw</a>, <a href="http://twitter.com/thejefflarson">Jeff Larson</a></p>
+<p><a href="http://twitter.com/a_l">Al Shaw</a>, <a href="http://twitter.com/thejefflarson">Jeff Larson</a>, ProPublica</p>
+
+<h2>Contact</h2>
+
+<p>For issues with TimelineSetter, use our Github Issues TK. Pull requests go to TK, and general questions should go to opensource@propublica.org.</p>
 
 <h2>Change Log</h2>
 
