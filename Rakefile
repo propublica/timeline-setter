@@ -31,9 +31,15 @@ task :gh_pages do
   `git checkout #{current_branch}`
 end
 
+desc "generate docco"
+task :docco do
+  `docco ./public/javascripts/*.js`
+  `cp -R ./docs/* ./doc`
+  `rm -R docs`
+end
+
 begin
   require 'jeweler'
-  
   Jeweler::Tasks.new do |gem|
     gem.name          = "timeline_setter"
     gem.summary       = %Q{TimelineSetter is a tool to create HTML timelines from spreadsheets of events.}
@@ -48,10 +54,12 @@ begin
     gem.add_dependency "closure-compiler"
     gem.add_development_dependency "rspec", ">= 2.0.0"
     gem.version = TimelineSetter::VERSION
-    # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
   end
   Jeweler::GemcutterTasks.new
 rescue LoadError
   puts "Jeweler (or a dependency) not available. Install it with: gem install jeweler"
 end
+
+
+
 

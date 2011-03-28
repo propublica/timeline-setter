@@ -11,7 +11,7 @@ module TimelineSetter
     #  * event_series
     #  * event_media_type
     #  * event_html
-    def initialize sheet
+    def initialize(sheet)
       @events = []
       spreadsheet = TableFu.new(sheet) do |s|
         s.columns = %w[date display_date description link series html]

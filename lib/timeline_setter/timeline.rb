@@ -30,8 +30,8 @@ module TimelineSetter
       js = ""
       css = Timeline.minify_css(File.open("#{TimelineSetter::ROOT}/public/stylesheets/timeline-setter.css").read)
       libs = Dir.glob("#{TimelineSetter::ROOT}/public/javascripts/vendor/**")
-      libs.each do |lib| ; js << File.open(lib,'r').read ; end
-      js  << Closure::Compiler.new.compile(File.open("#{TimelineSetter::ROOT}/public/javascripts/timeline-setter.js", 'r'))
+      libs.each { |lib| js << File.open(lib,'r').read }
+      js << Closure::Compiler.new.compile(File.open("#{TimelineSetter::ROOT}/public/javascripts/timeline-setter.js", 'r'))
       @timeline = ERB.new(File.open("#{TimelineSetter::ROOT}/templates/timeline-min.erb").read).result(binding)
     end
       

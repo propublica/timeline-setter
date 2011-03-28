@@ -5,8 +5,8 @@
   // Each mixin operates on an object's `prototype`.
 
   // The `observable` mixin adds simple event notifications to the passed in 
-  // object. Unlike other notification systems, when an event is triggered all
-  // callbacks bound to the object are invoked.
+  // object. Unlike other notification systems, when an event is triggered every
+  // callback bound to the object is invoked.
   var observable = function(obj){
     
     // Registers a callback function for notification at a later time.
@@ -40,8 +40,8 @@
       this.el.css({"left" : this.currOffset});
     };
 
-    // The width for the Bar and CardContainer objects is set in percentages,
-    // in order to zoom the TimeLine all that's needed is to increase or decrease
+    // The width for the `Bar` and `CardContainer` objects is set in percentages,
+    // in order to zoom the Timeline all that's needed is to increase or decrease
     // the percentage width.
     obj.zoom = function(e){
       if(!e.type === "zoom") return;
@@ -54,11 +54,17 @@
   // -------
   // Each plugin operates on an instance of an object.
 
-  // 
+  // Check to see if we're on a mobile device.
   var touchInit = 'ontouchstart' in document;
   if(touchInit) jQuery.event.props.push("touches");
+  
+  // The `draggable` plugin tracks changes in X offsets due to mouse movement
+  // or finger gestures and proxies associated events on a particular element.
+  // Most of this is inspired by polymaps.
   var draggable = function(obj){
     var drag;
+    
+    // Start tracking deltas due to a tap or single click.
     function mousedown(e){
       e.preventDefault();
       drag = {x: e.pageX};
@@ -66,6 +72,7 @@
       obj.el.trigger(e);
     };
 
+    // The user is interacting; capture the offset and trigger a `dragging` event.
     function mousemove(e){
       if(!drag) return;
       e.preventDefault();
@@ -77,6 +84,7 @@
       obj.el.trigger(e);
     };
 
+    // We're done tracking the movement set drag back to null for the next event.
     function mouseup(e){
       if(!drag) return;
       drag = null;
@@ -85,11 +93,13 @@
     };
 
     if(!touchInit) {
+      // Bind on mouse events if we have a mouse;
       obj.el.bind("mousedown", mousedown);
 
       $(document).bind("mousemove", mousemove);
       $(document).bind("mouseup", mouseup);
     } else {
+      // Otherwise capture `touchstart` events in order to simulate `doubletap` events.
       var last;
       obj.el.bind("touchstart", function(e) {
         var now = Date.now();
@@ -106,8 +116,12 @@
   };
 
 
-
+  // Older versions of safari fire incredibly huge mousewheel deltas. We'll need
+  // to dampen the effects.
   var safari = /WebKit\/533/.test(navigator.userAgent);
+  
+  // The `wheel` plugin captures events triggered by mousewheel, and dampen the 
+  // delta if running in Safari.
   var wheel = function(obj){
     function mousewheel(e){
       e.preventDefault();
@@ -124,9 +138,10 @@
     obj.el.bind("mousewheel DOMMouseScroll", mousewheel);
   };
 
-  // Utils
+  // Utilities
   // -----
 
+  // A utility class for storing the extent of the timeline.
   var Bounds = function(){
     this.min = +Infinity;
     this.max = -Infinity;
@@ -141,23 +156,26 @@
     return this.max - this.min;
   };
 
+  // Translate a particular number from the current bounds to a given range.
   Bounds.prototype.project = function(num, max){
     return (num - this.min) / this.width() * max;
   };
 
 
-
+  // `Intervals` is a particularly focused class to calculate even breaks based
+  // on the passed in `Bounds`.
   var Intervals = function(bounds) {
     this.max = bounds.max;
     this.min = bounds.min;
     this.setMaxInterval();
   };
 
-  // AP-ify these..
+  // An object containing human translations for date indexes.
   Intervals.HUMAN_DATES = {
-    months : ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+    months : ['Jan.', 'Feb.', 'March', 'April', 'May', 'June', 'July', 'Aug.', 'Sept.', 'Oct.', 'Nov.', 'Dec.']
   };
 
+  // A utility function to format dates in AP Style.
   Intervals.dateStr = function(timestamp, interval) {
     var d                 = new Date(timestamp * 1000);
     var dYear             = d.getFullYear();
@@ -171,7 +189,7 @@
       case "FullYear":
         return dYear;
       case "Month":
-        return dMonth + '., ' + dYear;
+        return dMonth + ', ' + dYear;
       case "Date":
         return dDate;
       case "Hours":
@@ -184,6 +202,7 @@
   };
 
   Intervals.prototype = {
+    // Sane estimates of date ranges for the `isAtLeastA` test.
     INTERVALS : {
       FullYear : 31536000,
       Month    : 2592000,
@@ -192,12 +211,17 @@
       Minutes  : 60,
       Seconds  : 1
     },
+    
+    // The order used when testing where exactly a timespan falls.
     INTERVAL_ORDER : ['Seconds','Minutes','Hours','Date','Month','FullYear'],
-
+    
+    // A test to find the appropriate range of intervals, for example if a range of 
+    // timestamps only spans hours this will return true when called with `"Hours"`.
     isAtLeastA : function(interval) {
       return ((this.max - this.min) > this.INTERVALS[interval]);
     },
 
+    // Find the maximum interval we should use based on the estimates in `INTERVALS`.
     setMaxInterval : function() {
       for (var i = 0; i < this.INTERVAL_ORDER.length; i++)
         if (!this.isAtLeastA(this.INTERVAL_ORDER[i])) break;
@@ -206,10 +230,12 @@
       this.idx = i - 1;
     },
 
+    // Return the calculated `maxInterval`.
     getMaxInterval : function() {
       return this.INTERVALS[this.INTERVAL_ORDER[this.idx]];
     },
 
+    // Zero out a date from the current interval down to seconds.
     floor : function(ts){
       var idx = this.idx;
       var date = new Date(ts * 1000);
@@ -220,17 +246,21 @@
       return date.getTime() / 1000;
     },
 
+    // Find the next date based on the past in timestamp.
     ceil : function(ts){
       var date = new Date(this.floor(ts) * 1000);
       var intvl = this.INTERVAL_ORDER[this.idx];
       date["set" + intvl](date["get" + intvl]() + 1);
       return date.getTime() / 1000;
     },
-
+    
+    // The actual difference in timespans accounting for time oddities like 
+    // different length months and leap years.
     span : function(ts){
       return this.ceil(ts) - this.floor(ts);
     },
-
+    
+    // Calculate and return a list of human formatted strings and raw timestamps.
     getRanges : function() {
       if (this.intervals) return this.intervals;
       this.intervals = [];
@@ -244,7 +274,11 @@
     }
   };
 
-
+  // Handy dandy function to bind a listener on multiple events. For example,
+  // `Bar` and `CardContainer` are bound like so on "move" and "zoom":
+  //
+  //      sync(this.bar, this.cardCont, "move", "zoom");
+  //
   var sync = function(origin, listener){
     var events = Array.prototype.slice.call(arguments, 2);
     _.each(events, function(ev){
@@ -255,24 +289,24 @@
     });
   };
 
+  // Get a template from the DOM and return a compiled function.
   var template = function(query) {
     return _.template($(query).html());
   };
 
-  var getYearFromTimestamp = function(timestamp) {
-    var d = new Date();
-    d.setTime(timestamp * 1000);
-    return d.getFullYear();
-  };
-
+  // Simple function to strip suffixes like `"px"` and return a clean integer for
+  // use.
   var cleanNumber = function(str){
     return parseInt(str.replace(/^[^+\-\d]?([+\-]\d+)?.*$/, "$1"), 10);
   };
 
+  // Zero pad a number less than 10 and return a 2 digit value.
   var padNumber = function(number) {
     return (number < 10 ? '0' : '') + number;
   };
 
+  // A quick and dirty hash manager for setting and getting values from 
+  // `window.location.hash`
   var hashStrip = /^#*/;
   var history = {
     get : function(){
@@ -285,10 +319,11 @@
   };
 
 
-  /*
-    Models
-  */
+  
+  // Models
+  // ------
 
+  
   var Timeline = function(data) {
     data = data.sort(function(a, b){ return a.timestamp - b.timestamp; });
     this.bySid    = {};
