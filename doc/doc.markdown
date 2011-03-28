@@ -187,7 +187,9 @@ On the client side, there are a number of features we plan to add, including:
 * Auto-zooming the timeline if embedded into smaller containers
 * More iOS gestures such as "pinching"
 * Zooming to fit a series when the series is activated
-* Ranges of events (e.g. Elizabeth Taylor was married to Miichael Wilding between Feb. 21, 1952 and Jan. 26, 1957, as shown [here](http://www.nytimes.com/interactive/2011/03/23/movies/20110323-ELIZABETH-TAYLOR-TIMELINE.html))
+* Ranges of events (e.g. Elizabeth Taylor was married to Michael Wilding between
+  Feb. 21, 1952 and Jan. 26, 1957, as shown 
+  [here](http://www.nytimes.com/interactive/2011/03/23/movies/20110323-ELIZABETH-TAYLOR-TIMELINE.html))
 * Embed code
 * JavaScript tests
 
