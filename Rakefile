@@ -17,18 +17,6 @@ task :docs do
   end
 end
 
-desc "minify js"
-task :minify_js do
-  js = ""
-  libs = Dir.glob("#{TimelineSetter::ROOT}/public/javascripts/vendor/**")
-  libs.each do |lib| ; js << File.open(lib,'r').read ; end
-  ts_js = Closure::Compiler.new.compile(File.open("#{TimelineSetter::ROOT}/public/javascripts/timeline-setter.js", 'r'))
-  js << ts_js
-  File.open("#{TimelineSetter::ROOT}/public/javascripts/ts-all-min.js", 'w+') do |f|
-    f.write js
-  end
-end
-
 begin
   require 'jeweler'
   
