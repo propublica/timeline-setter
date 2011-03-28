@@ -81,7 +81,7 @@ After you've generated a timeline with the `timeline-setter` command, you should
       
 Dropping the whole folder onto your server or an asset host like S3 will allow the app to run self-contained. It requires no server-side processing at all. To drop into your CMS, simply copy the relevant bits of `timeline.html` and paste into your site's template. Then, adjust the `<link>` and `<script>` tags to point to their appropriate destinations.
 
-### Definitions
+## Definitions
 
 The timeline is made up of non-clickable *interval notches* used to denote periods of time, and *event notches*, which, when clicked, reveal their associated *event cards*. 
 
