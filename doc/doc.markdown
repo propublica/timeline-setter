@@ -8,7 +8,7 @@ TimelineSetter "bakes out" timelines, ready for uploading directly into your CMS
 
 ## How it Works
 
-The project is broken into two parts: a Ruby package (along with a binary) for generating the assets, and the HTML, CSS and JavaScript for the timeline itself, which are nearly identical for every timeline created. TimelineSetter will create a unique HTML page that embeds a JSON object with your data and packages the stock CSS and JavaScript along with it to drop into pages. You can [customize the CSS](#styling) to match the look and feel of your site. 
+The project is broken into two parts: a Ruby package (along with a binary) for generating the assets, and the HTML, CSS and JavaScript for the timeline itself. TimelineSetter will create a unique HTML page that embeds a JSON object with your data.The CSS and JavaScript are identical for every timeline created, so you can host those centrally and simply point to them when you deploy a timeline, or you can package them up with your HTML and paste it into your CMS all at once. You can [customize the CSS](#styling) to match the look and feel of your site. 
 
 ## Dependencies
 
@@ -83,7 +83,7 @@ Dropping the whole folder onto your server or an asset host like S3 will allow t
 
 ### Definitions
 
-The timeline is made up of non-clickable **interval notches** used to denote periods of time, and **event notches**, which, when clicked, reveal their associated **event cards**. 
+The timeline is made up of non-clickable *interval notches* used to denote periods of time, and *event notches*, which, when clicked, reveal their associated *event cards*. 
 
 <a name="styling"></a>
 ## Styling Your Timeline
