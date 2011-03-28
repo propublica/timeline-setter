@@ -61,7 +61,7 @@ Full list of options:
 * `-O` Open a browser to your new timeline after it is generated (currently Mac OS only).
 * `-h` Print help to standard output.
 
-<a name="csv"></a>
+<a id="csv"></a>
 ## Setting Up Your CSV File
 
 TimelineSetter looks for certain column names in your CSV file in order to
