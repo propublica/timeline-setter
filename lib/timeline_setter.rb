@@ -19,4 +19,3 @@ end
 require "#{TimelineSetter::ROOT}/lib/timeline_setter/version"
 require "#{TimelineSetter::ROOT}/lib/timeline_setter/parser"
 require "#{TimelineSetter::ROOT}/lib/timeline_setter/timeline"
-

@@ -93,15 +93,15 @@
 
 <p>TimelineSetter is a command-line utility to create beautiful standards-compliant timelines from spreadsheets. It supports any range of time, from minutes to years, custom descriptions and arbitrary HTML in event cards. It creates fluid embeds that will look great in any sized container.</p>
 
-<p>The project is broken into two parts: a Ruby backend (along with a binary) for generating the assets, and the Timeline HTML, CSS and JavaScript itself which are nearly identical for every timeline created. TimelineSetter will create a unique HTML page that embeds a JSON object with your data and package the stock CSS and JavaScript along with it to drop into pages. You can customize the CSS to match the look and feel of your site.</p>
+<p>The project is broken into two parts: a Ruby package (along with a binary) for generating the assets, and the Timeline HTML, CSS and JavaScript itself which are nearly identical for every timeline created. TimelineSetter will create a unique HTML page that embeds a JSON object with your data and package the stock CSS and JavaScript along with it to drop into pages. You can customize the CSS to match the look and feel of your site.</p>
 
 <h2>Dependencies</h2>
 
-<p>TimelineSetter relies on ProPublica&rsquo;s Ruby gem TableFu, as well as the JavaScript libraries Underscore and jQuery, all of which are either installed alongside, or packaged with the source. It has been tested with jQuery 1.4.4 and Underscore 1.1.4.</p>
+<p>TimelineSetter relies on ProPublica&rsquo;s Ruby gem <a href="http://propublica.github.com/table-fu/">TableFu</a>, as well as the JavaScript libraries Underscore and jQuery, all of which are either installed alongside, or packaged with the source. It has been tested with jQuery 1.4.4 and Underscore 1.1.4.</p>
 
 <h2>Installation</h2>
 
-<p>Install TimelineSetter through Rubygems:</p>
+<p>Install TimelineSetter through RubyGems:</p>
 
 <pre><code>gem install timeline_setter
 </code></pre>
@@ -116,7 +116,7 @@
 <p>Full list of options:</p>
 
 <ul>
-<li><code>-c CSV</code> Path to your CSV files.</li>
+<li><code>-c CSV</code> Path to your CSV file.</li>
 <li><code>-o OUTPUT_PATH</code> Path to output timeline and assets.</li>
 <li><code>-a</code> Add the default supporting assets to the output directory, along with the timeline itself.</li>
 <li><code>-m</code> Create a minified one-page version of your timeline with all supporting assets inline.</li>
@@ -173,13 +173,13 @@
 
 <h2>Styling your timeline</h2>
 
-<p>TimelineSetter timelines are fully styleable. The default ProPublica &ldquo;theme&rdquo; stylesheet is packaged alongside each generated asset bundle, and is available in <code>stylesheets/timeline-setter.css</code>. This is, of course, completely overrideable. Here&rsquo;s a guide to do that.</p>
+<p>TimelineSetter timelines are fully styleable. The default &ldquo;ProPublica theme&rdquo; stylesheet is packaged alongside each generated asset bundle, and is available in <code>stylesheets/timeline-setter.css</code>. This is, of course, completely overrideable. Here&rsquo;s a guide to do that.</p>
 
 <h3>Overview and styling the container and top matter</h3>
 
 <p>All TimelineSetter CSS is scoped within <code>TS</code>. The container is <code>#timeline_setter</code> and every selector has a <code>TS</code> prefix. Upon first glance, it may not seem like there is much markup at all. We make extensive use of JavaScript (ERB-style) templating via <a href="http://documentcloud.github.com/underscore/#template">Underscore.js</a> and templates for each part of the timeline reside in the DOM. The controls (zoom in/out, previous/next buttons) are available within <code>#TS-top_matter_container .TS-controls</code>.</p>
 
-<p>Series checkboxes are injected into <code>.TS-series_nav_container</code> and templated via <code>script#TS-notch_tmpl</code>. Currently, series colors are hard coded in the JavaScript. We support a maximum of nine series colors (assigned in this order: #065718, #EDC047, #91ADD1, #929E5E, #9E5E23, #C44846, #065718, #EDD4A5, #CECECE, check <code>CardContainer.colors</code> in timeline-setter.js to override). Technically you can create an unlimited number of series, but they will eventually fall back to the default notch color.</p>
+<p>Series checkboxes are injected into <code>.TS-series_nav_container</code> and templated via <code>script#TS-notch_tmpl</code>. Currently, series colors are hard coded in the JavaScript. We support a maximum of nine series colors (assigned in this order: <code>#065718, #EDC047, #91ADD1, #929E5E, #9E5E23, #C44846, #065718, #EDD4A5, #CECECE</code>, check <code>CardContainer.colors</code> in timeline-setter.js to override). Technically you can create an unlimited number of series, but they will eventually fall back to the default notch color.</p>
 
 <h3>Styling the bar, notches and cards</h3>
 
