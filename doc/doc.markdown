@@ -1,23 +1,30 @@
 # TimelineSetter <%= version %>
 
-TimelineSetter is a command-line utility to create beautiful standards-compliant timelines from spreadsheets. It supports any range of time, from minutes to years, custom descriptions and arbitrary HTML in event cards. It creates fluid embeds that will look great in any sized container.
+TimelineSetter creates beautiful timelines.
 
-The project is broken into two parts: a Ruby package (along with a binary) for generating the assets, and the Timeline HTML, CSS and JavaScript itself which are nearly identical for every timeline created. TimelineSetter will create a unique HTML page that embeds a JSON object with your data and package the stock CSS and JavaScript along with it to drop into pages. You can customize the CSS to match the look and feel of your site.
+It is a command-line utility that takes a [specially-structured CSV file](#csv) as input and outputs standards-compliant HTML/CSS/JavaScript. It supports any span of time from minutes to years, and supports multiple parallel event series in a single timeline. It can handle custom descriptions and even arbitrary HTML in each event "card." It creates fluid embeds that will look great at any width.
+
+TimelineSetter "bakes out" timelines, ready for uploading directly into your CMS, Amazon S3, or however you typically serve static files. It requires no server-side processing at all once you've generated a timeline.
+
+## How it Works
+
+The project is broken into two parts: a Ruby package (along with a binary) for generating the assets, and the HTML, CSS and JavaScript for the timeline itself, which are nearly identical for every timeline created. TimelineSetter will create a unique HTML page that embeds a JSON object with your data and packages the stock CSS and JavaScript along with it to drop into pages. You can [customize the CSS](#styling) to match the look and feel of your site. 
 
 ## Dependencies
 
-TimelineSetter relies on ProPublica's Ruby gem [TableFu](http://propublica.github.com/table-fu/), as well as the JavaScript libraries Underscore and jQuery, all of which are either installed alongside, or packaged with the source. It has been tested with jQuery 1.4.4 and Underscore 1.1.4.
+TimelineSetter relies on [TableFu](http://propublica.github.com/table-fu/), as well as the JavaScript libraries [Underscore](http://documentcloud.github.com/underscore/) and [jQuery](http://jquery.com/). All of these are either installed along with TableSetter, or packaged with the source. JQuery is loaded via Google's CDN. It has been tested with jQuery 1.4.4 and Underscore 1.1.4.
 
 ## Installation
 
-Install TimelineSetter through RubyGems:
+Install TimelineSetter through RubyGems on Unix-like OSes:
 
     gem install timeline_setter
-
+    
+(Note: We haven't tested using the TimelineSetter tools on Windows even once, though the timelines themselves have been tested in modern browsers on Windows, Mac and Linux.)
 
 ## The \`timeline-setter\` command
 
-After TimelineSetter is installed, you should have the `timeline-setter` command available. The command looks for a CSV file to parse and outputs static assets. At any point, find help by running `timeline-setter` without any arguments, or by adding the `-h` flag. Run the command like so:
+After TimelineSetter is installed, the `timeline-setter` command should be available in your shell. The command looks for a CSV file to parse and outputs static assets. At any point, you can find help by running `timeline-setter` without any arguments, or by adding the `-h` flag. Run the command like so:
 
     timeline-setter -c /path/to/data.csv -o /path/to/output/directory
 
@@ -30,9 +37,10 @@ Full list of options:
 * `-O` Open a browser to your new timeline after it is generated (currently Mac OS only).
 * `-h` Print help to standard output.
 
-## Setting up your spreadsheet
+<a name="csv"></a>
+## Setting Up Your CSV File
 
-TimelineSetter looks for certain column names in your spreadsheet in order to generate a timeline. Here's a summary of each column and its significance:
+TimelineSetter looks for certain column names in your CSV file in order to generate a timeline. All columns are required, though as you'll see, some of them can be left blank. Here's a summary of each column and its significance:
 
 ### event\_date
 
@@ -44,7 +52,7 @@ The date *displayed* on the event's card in the timeline. If this is blank, it w
 
 ### event\_description
 
-A textual description of the event.
+A description of the event.
 
 ### event\_link
 
@@ -52,11 +60,11 @@ A URL to send users to more details about an event. This will generate a "read m
 
 ### event\_series
 
-A string representing a series of events this particular event is a part of. TimelineSetter will find all the unique series among events in the spreadsheet and assign both colors and checkboxes for them at the top of the spreadsheet. Events not assigned a series will have their timeline notches colored charcoal, and will have no associated checkbox.
+A string representing the name of the series of events this particular event is a part of. TimelineSetter will find all the unique series among events in the spreadsheet and assign both colors and checkboxes for them at the top of the spreadsheet. Events not assigned to a series will be part of the "default" series, which have their timeline notches colored charcoal, and have no associated checkbox.
 
 ### event\_html
 
-Any arbitrary HTML that will be inserted above the `event_description`. This field may contain nearly everything except `<script>` tags. If you choose to use JavaScript, for now you must do it within an iframe which can then be dropped into the `event_html` field. Try image tags, YouTube embeds, etc.
+Any arbitrary HTML that will be inserted above the `event_description`. This field may contain image tags, YouTube tags, etc. -- nearly everything except `<script>` tags. If you choose to use JavaScript, you must do it inside an iframe and call that iframe inside this field.
 
 ## Folder structure and deployment
 
@@ -71,23 +79,28 @@ After you've generated a timeline with the `timeline-setter` command, you should
       |---stylesheets
       |-----timeline-setter.css
       
-      NB: jQuery is linked to Google's CDN in timeline.html
-
 Dropping the whole folder onto your server or an asset host like S3 will allow the app to run self-contained. It requires no server-side processing at all. To drop into your CMS, simply copy the relevant bits of `timeline.html` and paste into your site's template. Then, adjust the `<link>` and `<script>` tags to point to their appropriate destinations.
 
-## Styling your timeline
+### Definitions
 
-TimelineSetter timelines are fully styleable. The default "ProPublica theme" stylesheet is packaged alongside each generated asset bundle, and is available in `stylesheets/timeline-setter.css`. This is, of course, completely overrideable. Here's a guide to do that.
+The timeline is made up of non-clickable **interval notches** used to denote periods of time, and **event notches**, which, when clicked, reveal their associated **event cards**. 
 
-### Overview and styling the container and top matter
+<a name="styling"></a>
+## Styling Your Timeline
 
-All TimelineSetter CSS is scoped within `TS`. The container is `#timeline_setter` and every selector has a `TS` prefix. Upon first glance, it may not seem like there is much markup at all. We make extensive use of JavaScript (ERB-style) templating via [Underscore.js](http://documentcloud.github.com/underscore/#template) and templates for each part of the timeline reside in the DOM. The controls (zoom in/out, previous/next buttons) are available within `#TS-top_matter_container .TS-controls`. 
+TimelineSetter timelines are fully style-able. The default "ProPublica theme" stylesheet is packaged alongside each generated asset bundle, and is available in `stylesheets/timeline-setter.css`. You can alter this stylesheet, or replace it completely. Here's a guide to do that.
 
-Series checkboxes are injected into `.TS-series_nav_container` and templated via `script#TS-notch_tmpl`. Currently, series colors are hard coded in the JavaScript. We support a maximum of nine series colors (assigned in this order: ``#065718, #EDC047, #91ADD1, #929E5E, #9E5E23, #C44846, #065718, #EDD4A5, #CECECE``, check `CardContainer.colors` in timeline-setter.js to override). Technically you can create an unlimited number of series, but they will eventually fall back to the default notch color.
+### Overview and Styling the Container and Top Matter
+
+All TimelineSetter CSS is scoped within a namespace starting with `TS.` The outermost container is `#timeline_setter.` 
+
+Upon first glance, it may not seem like there is much markup at all. That's because we make extensive use of JavaScript (ERB-style) templating via [Underscore.js](http://documentcloud.github.com/underscore/#template) -- so templates for each part of the timeline reside in the DOM. The controls (zoom in/out, previous/next buttons) are available within `#TS-top_matter_container .TS-controls`. 
+
+Series checkboxes are injected into `.TS-series_nav_container` and templated via `script#TS-notch_tmpl`. Currently, series colors are hard coded in the JavaScript. We support a maximum of nine series colors (assigned in this order: ``#065718, #EDC047, #91ADD1, #929E5E, #9E5E23, #C44846, #065718, #EDD4A5, #CECECE``, check `CardContainer.colors` in timeline-setter.js to override). Technically you can create an unlimited number of series, but they will eventually fall back to the default charcoal notch color.
 
 ### Styling the bar, notches and cards
 
-The timeline bar is made up of non-clickable interval notches used to denote periodic intervals of time, and event notches, which, when clicked, reveal their associated cards. Interval notches are templated within `script#TS-year_notch_tmpl` and display formatted dates based on the interval of time between events as automatically determined by the JavaScript. Here's a sampling of what you might see in interval notches:
+Interval notches are templated within `script#TS-year_notch_tmpl`. Their position is based on the interval of time between events as automatically determined by the JavaScript. Here's a sampling of what you might see in interval notches:
 
     year        => 2001
     month       => June, 2004
@@ -99,9 +112,7 @@ Event notches are templated through `#TS-card-tmpl` and contain individual class
 
 ## Roadmap
 
-For the initial open source release, we're providing TimelineSetter as purely a "bake-out" utility, for creating static files. We plan to expand to include [TableSetter](http://propublica.github.com/table-setter/)-like functionality to host timelines as Sinatra apps.
-
-On the client side, there are a whole slough of features we plan to add such as:
+On the client side, there are a number of features we plan to add, including:
 
 * Smoother zooming
 * Deactivating series checkboxes if none of its events are within the zoomed viewport
@@ -118,7 +129,11 @@ On the client side, there are a whole slough of features we plan to add such as:
 
 ## Credits
 
-[Al Shaw](http://twitter.com/a_l), [Jeff Larson](http://twitter.com/thejefflarson)
+[Al Shaw](http://twitter.com/a_l), [Jeff Larson](http://twitter.com/thejefflarson), ProPublica
+
+## Contact
+
+For issues with TimelineSetter, use our Github Issues TK. Pull requests go to TK, and general questions should go to opensource@propublica.org.
 
 ## Change Log
 
