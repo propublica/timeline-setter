@@ -14,7 +14,7 @@ module TimelineSetter
     def initialize sheet
       @events = []
       spreadsheet = TableFu.new(sheet) do |s|
-        s.columns = %w[event_date event_display_date event_description event_link event_series event_html]
+        s.columns = %w[date display_date description link series html]
       end
     
       spreadsheet.rows.each do |row|
