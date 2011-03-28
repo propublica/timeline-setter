@@ -6,7 +6,7 @@ module TimelineSetter
     end
     
     def to_json
-      @events.collect {|r| r[:timestamp] = Time.parse(r[:event_date]).to_i }.sort{|a,b| b[:timestamp] <=> a[:timestamp]}
+      @events.collect {|r| r[:timestamp] = Time.parse(r[:date]).to_i }.sort{|a,b| b[:timestamp] <=> a[:timestamp]}
       @events.to_json
     end
     

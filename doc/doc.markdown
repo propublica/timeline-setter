@@ -42,27 +42,27 @@ Full list of options:
 
 TimelineSetter looks for certain column names in your CSV file in order to generate a timeline. All columns are required, though as you'll see, some of them can be left blank. Here's a summary of each column and its significance:
 
-### event\_date
+### date
 
 The date the event happened. Right now, TimelineSetter only supports single-date events, but this can be specific down to the second. The generator will try its best to parse out human dates. Try "March 20, 2010," "3/20/2010," "Mar. 20, 2010 11:59 PM" etc.
 
-### event\_display\_date
+### display\_date
 
 The date *displayed* on the event's card in the timeline. If this is blank, it will fall back to `event_date`
 
-### event\_description
+### description
 
 A description of the event.
 
-### event\_link
+### link
 
 A URL to send users to more details about an event. This will generate a "read more" button at the bottom of the card pointing to the URL.
 
-### event\_series
+### series
 
 A string representing the name of the series of events this particular event is a part of. TimelineSetter will find all the unique series among events in the spreadsheet and assign both colors and checkboxes for them at the top of the spreadsheet. Events not assigned to a series will be part of the "default" series, which have their timeline notches colored charcoal, and have no associated checkbox.
 
-### event\_html
+### html
 
 Any arbitrary HTML that will be inserted above the `event_description`. This field may contain image tags, YouTube tags, etc. -- nearly everything except `<script>` tags. If you choose to use JavaScript, you must do it inside an iframe and call that iframe inside this field.
 

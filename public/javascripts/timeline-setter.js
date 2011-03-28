@@ -317,11 +317,11 @@
     },
 
     add : function(card){
-      if(!(card.event_series in this.bySid)){
-        this.bySid[card.event_series] = new Series(card, this);
-        this.series.push(this.bySid[card.event_series]);
+      if(!(card.series in this.bySid)){
+        this.bySid[card.series] = new Series(card, this);
+        this.series.push(this.bySid[card.series]);
       }
-      var series = this.bySid[card.event_series];
+      var series = this.bySid[card.series];
       series.add(card);
       this.bounds.extend(series.max());
       this.bounds.extend(series.min());
@@ -429,7 +429,7 @@
 
   var Series = function(series, timeline) {
     this.timeline = timeline;
-    this.name     = series.event_series;
+    this.name     = series.series;
     this.color    = this.name.length > 0 ? color() : "#444";
     this.cards    = [];
     _.bindAll(this, "render", "showNotches", "hideNotches");
@@ -499,7 +499,7 @@
     this.series.timeline.bar.bind(this.position);
     this.id = [
       this.get('timestamp'),
-      this.get('event_description').split(/ /)[0].replace(/[^a-zA-Z\-]/g,"")
+      this.get('description').split(/ /)[0].replace(/[^a-zA-Z\-]/g,"")
     ].join("-");
   };
 
