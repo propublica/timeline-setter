@@ -133,7 +133,7 @@ On the client side, there are a number of features we plan to add, including:
 
 ## Contact
 
-For issues with TimelineSetter, use our Github Issues TK. Pull requests go to TK, and general questions should go to opensource@propublica.org.
+For issues with TimelineSetter, use our [Github Issues](https://github.com/propublica/timeline-setter/issues). General questions should go to opensource@propublica.org.
 
 ## Change Log
 
