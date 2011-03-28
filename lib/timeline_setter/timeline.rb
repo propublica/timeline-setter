@@ -20,8 +20,11 @@ module TimelineSetter
       # take out spaces between rule block endings and selectors
       css.gsub!(/\}\s*([\.a-zA-Z_\-\#]+?)/,'}\1')
 
-      # #take out spaces between rules
+      # take out spaces between rules
       css.gsub!(/(:|;)(\s+)?([\.a-zA-Z_0-9]+)?/,'\1\3')
+
+      # take out comments
+      css.gsub!(/(\/\*.*?\*\/)/,' ')
 
       css
     end
