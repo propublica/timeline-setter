@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 
-# $ ./bin/timeline-setter -c ./test.csv -O
+# $ ./bin/timeline-setter -c ./test.csv -o ./public/ -O
 
 require 'rubygems'
 require File.expand_path("../../lib/timeline_setter.rb", __FILE__)

@@ -157,11 +157,13 @@ without any arguments, or by adding the <code>-h</code> flag. Run the command li
 <pre><code>timeline-setter -c /path/to/data.csv -o /path/to/output/directory
 </code></pre>
 
+<p>Running <code>timeline-setter</code> with no <code>-o</code> option will generate the timeline (and supporting assets if applicable) within the current directory.</p>
+
 <p>Full list of options:</p>
 
 <ul>
 <li><code>-c CSV</code> Path to your CSV file.</li>
-<li><code>-o OUTPUT_PATH</code> Path to output timeline and assets.</li>
+<li><code>-o OUTPUT_PATH</code> Path to output timeline and assets. If absent, timeline will be created in current directory.</li>
 <li><code>-a</code> Add the default supporting assets to the output directory, along with the timeline itself.</li>
 <li><code>-m</code> Create a minified one-page version of your timeline with all supporting assets inline.</li>
 <li><code>-O</code> Open a browser to your new timeline after it is generated (currently Mac OS only).</li>

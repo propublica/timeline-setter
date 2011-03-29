@@ -60,10 +60,12 @@ without any arguments, or by adding the `-h` flag. Run the command like so:
 
     timeline-setter -c /path/to/data.csv -o /path/to/output/directory
 
+Running `timeline-setter` with no `-o` option will generate the timeline (and supporting assets if applicable) within the current directory.
+
 Full list of options:
 
 * `-c CSV` Path to your CSV file.
-* `-o OUTPUT_PATH` Path to output timeline and assets.
+* `-o OUTPUT_PATH` Path to output timeline and assets. If absent, timeline will be created in current directory.
 * `-a` Add the default supporting assets to the output directory, along with the timeline itself.
 * `-m` Create a minified one-page version of your timeline with all supporting assets inline.
 * `-O` Open a browser to your new timeline after it is generated (currently Mac OS only).
