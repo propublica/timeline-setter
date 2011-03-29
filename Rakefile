@@ -1,6 +1,7 @@
 require 'rubygems'
 require 'rake'
 require 'rake/clean'
+require 'rspec/core/rake_task'
 require './lib/timeline_setter'
 
 
@@ -60,6 +61,11 @@ rescue LoadError
   puts "Jeweler (or a dependency) not available. Install it with: gem install jeweler"
 end
 
+# run tests with rake core
+RSpec::Core::RakeTask.new(:core) do |spec|
+  spec.pattern = 'spec/*_spec.rb'
+  spec.rspec_opts = ['--color', '--format nested']
+end
 
 
 
