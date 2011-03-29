@@ -5,3 +5,5 @@ pkg
 test.csv
 public/timeline.html
 tbi.csv
+.yardoc
+.DS_Store

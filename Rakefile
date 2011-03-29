@@ -22,6 +22,8 @@ end
 desc "generate gh-pages"
 task :gh_pages do
   `rake docs`
+  `rake yard`
+  `rake docco`
   
   `git branch` =~ /^\* (.+)?\n/
   current_branch = $1
@@ -78,7 +80,7 @@ end
 
 desc "generate yard docs"
 task :yard do
-  `yard -o ./rdoc`
+  `yard -o ./documentation`
 end
 
 
