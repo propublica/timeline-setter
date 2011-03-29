@@ -86,7 +86,7 @@ end
 
 desc "generate sample timeline"
 task :sample do
-  `./bin/timeline-setter -c ./tbi.csv -O -m`
+  `./bin/timeline-setter -c ./tbi.csv -m`
   `cp ./public/timeline.html ./doc/timeline-sample.html`
 end
 
