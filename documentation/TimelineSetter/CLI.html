@@ -330,7 +330,7 @@ A new instance of CLI
 
 <span class='def def kw'>def</span> <span class='compile! fid id'>compile!</span>
   <span class='if if kw'>if</span> <span class='@options ivar id'>@options</span><span class='lbrack token'>[</span><span class='symbol val'>:assets</span><span class='rbrack token'>]</span>
-    <span class='FileUtils constant id'>FileUtils</span><span class='dot token'>.</span><span class='cp_r identifier id'>cp_r</span><span class='lparen token'>(</span><span class='Dir constant id'>Dir</span><span class='dot token'>.</span><span class='glob identifier id'>glob</span><span class='lparen token'>(</span><span class='string val'>'public/*'</span><span class='rparen token'>)</span><span class='comma token'>,</span> <span class='outdir identifier id'>outdir</span><span class='rparen token'>)</span>
+    <span class='FileUtils constant id'>FileUtils</span><span class='dot token'>.</span><span class='cp_r identifier id'>cp_r</span><span class='lparen token'>(</span><span class='Dir constant id'>Dir</span><span class='dot token'>.</span><span class='glob identifier id'>glob</span><span class='lparen token'>(</span><span class='dstring node'>&quot;#{TimelineSetter::ROOT}/public/*&quot;</span><span class='rparen token'>)</span><span class='comma token'>,</span> <span class='outdir identifier id'>outdir</span><span class='rparen token'>)</span>
   <span class='end end kw'>end</span>
 
   <span class='File constant id'>File</span><span class='dot token'>.</span><span class='open identifier id'>open</span><span class='lparen token'>(</span><span class='outdir identifier id'>outdir</span> <span class='plus op'>+</span> <span class='string val'>'timeline.html'</span><span class='comma token'>,</span> <span class='string val'>'w+'</span><span class='rparen token'>)</span> <span class='do do kw'>do</span> <span class='bitor op'>|</span><span class='doc identifier id'>doc</span><span class='bitor op'>|</span>
@@ -429,7 +429,7 @@ A new instance of CLI
       <pre class="code"><span class="info file"># File 'lib/timeline_setter/cli.rb', line 64</span>
 
 <span class='def def kw'>def</span> <span class='outdir identifier id'>outdir</span>
-  <span class='@options ivar id'>@options</span><span class='lbrack token'>[</span><span class='symbol val'>:output</span><span class='rbrack token'>]</span> <span class='question op'>?</span> <span class='lparen token'>(</span><span class='File constant id'>File</span><span class='dot token'>.</span><span class='dirname identifier id'>dirname</span><span class='lparen token'>(</span><span class='@options ivar id'>@options</span><span class='lbrack token'>[</span><span class='symbol val'>:output</span><span class='rbrack token'>]</span><span class='rparen token'>)</span> <span class='plus op'>+</span> <span class='string val'>'/'</span><span class='rparen token'>)</span> <span class='colon op'>:</span> <span class='File constant id'>File</span><span class='dot token'>.</span><span class='dirname identifier id'>dirname</span><span class='lparen token'>(</span><span class='dstring node'>&quot;#{TimelineSetter::ROOT}/public/timeline.html&quot;</span><span class='rparen token'>)</span> <span class='plus op'>+</span> <span class='string val'>'/'</span>
+  <span class='@options ivar id'>@options</span><span class='lbrack token'>[</span><span class='symbol val'>:output</span><span class='rbrack token'>]</span> <span class='question op'>?</span> <span class='@options ivar id'>@options</span><span class='lbrack token'>[</span><span class='symbol val'>:output</span><span class='rbrack token'>]</span> <span class='colon op'>:</span> <span class='dstring node'>&quot;#{`pwd`.strip}/&quot;</span>
 <span class='end end kw'>end</span>
 </pre>
     </td>
@@ -566,7 +566,7 @@ A new instance of CLI
 </div>
     
     <div id="footer">
-  Generated on Tue Mar 29 15:10:48 2011 by 
+  Generated on Tue Mar 29 17:13:29 2011 by 
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.6.5 (ruby-1.8.7).
 </div>
