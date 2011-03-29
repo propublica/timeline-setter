@@ -1,71 +1,73 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
+  <head>
+    <link href="stylesheets/timeline-setter.css" rel="stylesheet" />
+  </head>
+  <body style="height: 100%">
 
-<head>
-  <link href="stylesheets/timeline-setter.css" rel="stylesheet" />
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
-  <script src="javascripts/vendor/jquery-ui-1.8.9.custom.min.js"></script>
-  <script src="javascripts/vendor/underscore-min.js"></script>
-  <script src="javascripts/vendor/backbone-min.js"></script>
-  
-</head>
-<body style="height: 100%">
-
-  <div id="timeline">
-    <div id="timeline_top_matter_container">
-      <div class="timeline_controls">
-        <a href="#" class="timeline_zoom timeline_zoom_in"><span class="timeline_controls_inner_text zoom_inner_text">+</span></a> 
-        <a href="#" class="timeline_zoom timeline_zoom_out"><span class="timeline_controls_inner_text zoom_inner_text">-</span></a> 
-          &nbsp;&nbsp;&nbsp;&nbsp; 
-        <a href="#" class="timeline_choose timeline_choose_prev">&laquo; <span class="timeline_controls_inner_text">Previous</span></a> 
-        <a href="#" class="timeline_choose timeline_choose_next"><span class="timeline_controls_inner_text">Next</span> &raquo;</a>
+    <div id="timeline_setter">
+      <div id="TS-top_matter_container">
+        <div class="TS-controls">
+          <a href="#" class="TS-zoom TS-zoom_in"><span class="TS-controls_inner_text TS-zoom_inner_text">+</span></a> 
+          <a href="#" class="TS-zoom TS-zoom_out"><span class="TS-controls_inner_text TS-zoom_inner_text">-</span></a> 
+            &nbsp;&nbsp;&nbsp;&nbsp; 
+          <a href="#" class="TS-choose TS-choose_prev">&laquo; <span class="TS-controls_inner_text">Previous</span></a> 
+          <a href="#" class="TS-choose TS-choose_next"><span class="TS-controls_inner_text">Next</span> &raquo;</a>
+        </div>
+        <div class="TS-series_nav_container"></div>
       </div>
-      <div class="series_nav_container"></div>
-    </div>
     
-    <div class="timeline_notchbar_container">
-      <div class="timeline_notchbar"></div>
-    </div>
-    <div id="timeline_card_scroller">
-      <div id="timeline_card_scroller_inner">
+      <div class="TS-notchbar_container">
+        <div class="TS-notchbar"></div>
+      </div>
+      <div id="TS-card_scroller">
+        <div id="TS-card_scroller_inner">
+        </div>
       </div>
     </div>
-  </div>
 
-  <script type="text/javascript">
-    var timelineData = <%= self.to_json %>;
-  </script>
-  <script id="year_notch_tmpl" type="text/jst">
-    <div class="timeline_year_notch year_notch_<%%= timestamp %>" data-timestamp="<%%= timestamp %>"><span class="timeline_year_notch_year_text"><%%= year %></span></div>
-  </script>
-  <script id="notch_tmpl" type="text/jst">
-    <div style="background:<%%= topcolor %>" data-notch-series="<%%= event_series %>" class="timeline_notch notch_<%%= timestamp %>" data-timestamp="<%%= timestamp %>"></div>
-  </script>
-  <script id="series_legend_tmpl" type="text/jst">
-      <div class="series_legend_item" data-series="<%%= name %>"><span class="series_legend_swatch" style="background-color:<%%= color %>">&nbsp;</span> <span class="series_legend_text"><%%= name %></span></div>
-  </script>
-  <script id="card_tmpl" type="text/jst">
-  <div class="timeline_card_container">
-  <div class="css_arrow css_arrow_up" style="border-bottom-color:<%%= topcolor %>"></div>
-    <div class="item" data-timestamp="<%%= timestamp %>" style="border-top:1px solid <%%= topcolor %>">
-      <div class="item_label">
-        <%% if (!_.isEmpty(event_html)){ %>
-          <div class="item_user_html">
-            <%%= event_html %>
-          </div>
-        <%% } %>
-        <%%= event_description %>
+    <script type="text/javascript">
+      var TimelineSetter = TimelineSetter || {};
+      TimelineSetter.timelineData = <%= self.to_json %>;
+    </script>
+    <script id="TS-year_notch_tmpl" type="text/jst">
+      <div class="TS-year_notch TS-year_notch_<%%= timestamp %>">
+        <span class="TS-year_notch_year_text"><%%= human %></span>
       </div>
-        <%% if (!_.isEmpty(event_link)){ %>
-            <div class="read_btn"><a target="_blank" href="<%%= event_link %>">Read More</a></div>
-        <%% } %>
+    </script>
+    <script id="TS-notch_tmpl" type="text/jst">
+      <div style="background:<%%= topcolor %>" class="TS-notch TS-notch_<%%= timestamp %> TS-notch_<%%= series.replace(/\W/, "") %>"></div>
+    </script>
+    <script id="TS-series_legend_tmpl" type="text/jst">
+        <div class="TS-series_legend_item TS-series_legend_item<%%= name.replace(/\W/, "") %>">
+          <span class="TS-series_legend_swatch" style="background-color:<%%= color %>">&nbsp;</span> <span class="TS-series_legend_text"><%%= name %></span>
+        </div>
+    </script>
+    <script id="TS-card_tmpl" type="text/jst">
+    <div class="TS-card_container TS-card_container_<%%= series.replace(/\W/, "") %>">
+    <div class="TS-css_arrow TS-css_arrow_up" style="border-bottom-color:<%%= topcolor %>"></div>
+      <div class="TS-item" data-timestamp="<%%= timestamp %>" style="border-top:1px solid <%%= topcolor %>">
+        <div class="TS-item_label">
+          <%% if (!_.isEmpty(html)){ %>
+            <div class="TS-item_user_html">
+              <%%= html %>
+            </div>
+          <%% } %>
+          <%%= description %>
+        </div>
+          <%% if (!_.isEmpty(link)){ %>
+              <div class="TS-read_btn"><a target="_blank" href="<%%= link %>">Read More</a></div>
+          <%% } %>
 
-      <div class="item_year">
-        <%%= event_display_date.length > 0 ? event_display_date : event_date %>
+        <div class="TS-item_year">
+          <span class="TS-item_year_text"><%%= display_date.length > 0 ? display_date : date %></span>
+          <div class="TS-permalink">&#8734;</div>
+        </div>
       </div>
     </div>
-  </div>
-  </script>
-  <script src="javascripts/timeline-setter.js"></script>
-</body>
+    </script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
+    <script src="javascripts/vendor/underscore-min.js"></script>
+    <script src="javascripts/timeline-setter.js"></script>
+  </body>
 </html>

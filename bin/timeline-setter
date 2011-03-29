@@ -2,59 +2,8 @@
 
 # $ ./bin/timeline-setter -c ./test.csv -O
 
-require 'optparse'
-require 'fileutils'
+require 'rubygems'
 require File.expand_path("../../lib/timeline_setter.rb", __FILE__)
+require File.expand_path("../../lib/timeline_setter/cli.rb", __FILE__)
 
-options = {}
-option_parser = OptionParser.new do |opts|
-  opts.banner = <<-BANNER
-    TimelineSetter: A tool to generate HTML timelines from CSVs.
-    
-    Usage:
-  BANNER
-  
-  opts.on('-c', '--csv CSV', 'CSV input file') do |c|
-    options[:csv] = c
-  end
-  opts.on('-o', '--output OUTPUT', 'Output directory to install timeline into.') do |o|
-    options[:output] = o
-  end
-  opts.on('-a', '--with-assets', 'Output timeline supporting assets as well') do |a|
-    options[:assets] = a
-  end
-  opts.on('-O', '--open', 'Open generated timeline in a browser') do |o|
-    options[:open] = o
-  end
-  
-  opts.on_tail("-h", "--help", "Show this message") do
-    puts opts
-    exit
-  end
-end
-option_parser.parse!
-
-if options.empty?
-  puts option_parser.on_tail
-  exit
-end
-
-sheet    = File.open(options[:csv]).read
-events   = TimelineSetter::Parser.new sheet
-html     = TimelineSetter::Timeline.new(events.events).timeline
-outdir   = options[:output] ? (File.dirname(options[:output]) + '/') : File.dirname(File.expand_path("../../public/timeline.html", __FILE__)) + '/'
-
-if options[:assets]
-  FileUtils.cp_r(Dir.glob('public/*'), outdir)
-end
-
-File.open(outdir + 'timeline.html', 'w+') do |doc|
-  doc.write html
-end
-
-puts "== Files copied to #{outdir}"
-
-if options[:open]
-  puts "== Opening ..."
-  %x{ open #{outdir}timeline.html }
-end
+TimelineSetter::CLI.new

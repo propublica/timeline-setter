@@ -4,19 +4,18 @@
 ## Blockers
 
 * ie
+* add one-file minified option in timeline-setter binary
+* docs & docco comments
+* scope events
+* Prettify cases with large numbers of series (they should stack up along the left)
 
 ## Features
 
-* Per-card permalinks
-* Sharing links (Twitter, Facebook)
-* smarter intervals on notches
-* scope css
 * zoom to fit by series
-* Add a 'reset' button
-* code comments
 * autoresize
 * wider touch targets
 * pinch
+* generate from google spreadsheets key instead of local csv
 
 ## Refactor
 

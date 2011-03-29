@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/> 
+    <link href="http://cloud.webtype.com/css/50942e7d-aebe-4c83-9824-ead7e49ec5af.css" rel="stylesheet" type="text/css" />
+    <style>
+    html {
+      background: #f7f7f7;
+    }
+    body {
+      font-family: Georgia, serif;
+      font-size: 16px;
+      line-height:24px;
+      width: 600px;
+      margin-left:auto;
+      margin-right:auto;
+      margin-top:10px;
+      background: #fff;
+      padding:10px 10px;
+      color:#444;
+      border-top:1px solid #cecece;
+      border-bottom:1px solid #cecece;
+    }
+    h1,h2,h3,h4,h5 {
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      color:#444;
+    }
+    h1 {
+      padding-top:0;
+      margin-top:0;
+    }
+    h2,h3 {
+    }
+    a.propublica{
+      position:absolute;
+      background: transparent url(http://propublica.github.com/table-fu/documentation/images/proplogo.png) no-repeat -40px -20px;
+      top: 0;
+      left: 0;
+      width: 160px;
+      height: 141px;
+    }
+
+    pre,code {
+      font-family: Monaco, Courier, monospace;
+      font-size:12px;
+    }
+    pre {
+      line-height: 16px;
+      padding:0.5em 1em;
+      overflow: auto;
+      border-left: 1px solid #cecece;
+      margin-left: 0;
+      background:#f7f7f7;
+    }
+    code {
+      padding: 2px;
+      background-color: #f7f7f7;
+    }
+    pre > code {
+      padding:0;
+    }
+    a {
+      color: #4369AF;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    a:hover {
+      text-decoration:underline;
+    }
+    ul {
+      margin:0 1em;
+      padding:0;
+      list-style: disc;
+    }
+    li {
+      margin:0;
+      padding:0;
+    }
+    strong {
+      font-family: Monaco, Courier, monospace;
+      font-weight: normal;
+      background: #dadee5;
+      border: 1px solid #aaa;
+      padding: 1px 2px;
+      font-size: 12px;
+
+    }
+    </style>
+    <title>TimelineSetter</title>
+  </head>
+  <body>
+    <a href="http://www.propublica.org" class="propublica">&nbsp;</a>
+    <h1>TimelineSetter 0.0.1</h1>
+
+<p>TimelineSetter creates beautiful timelines.</p>
+
+<p>It is a command-line utility that takes a <a href="#csv">specially-structured CSV file</a>
+as input and outputs standards-compliant HTML/CSS/JavaScript. It supports any
+span of time from minutes to years, and supports multiple parallel event
+series in a single timeline. It can handle custom descriptions and even
+arbitrary HTML in each event &ldquo;card.&rdquo; It creates fluid embeds that will look
+great at any width.</p>
+
+<p>TimelineSetter &ldquo;bakes out&rdquo; timelines, ready for uploading directly into your
+CMS, Amazon S3, or however you typically serve static files. It requires no
+server-side processing at all once you&rsquo;ve generated a timeline.</p>
+
+<h2>How it Works</h2>
+
+<p>The project is broken into two parts: a Ruby package (along with a binary) for
+generating the assets, and the HTML, CSS and JavaScript for the timeline
+itself. TimelineSetter will create a unique HTML page that embeds a JSON
+object with your data.The CSS and JavaScript are identical for every timeline
+created, so you can host those centrally and simply point to them when you
+deploy a timeline, or you can package them up with your HTML and paste it into
+your CMS all at once. You can <a href="#styling">customize the CSS</a> to match the look
+and feel of your site.</p>
+
+<h2>Dependencies</h2>
+
+<p>TimelineSetter relies on <a href="http://propublica.github.com/table-fu/">TableFu</a>, as
+well as the JavaScript libraries
+<a href="http://documentcloud.github.com/underscore/">Underscore</a> and
+<a href="http://jquery.com/">jQuery</a>. All of these are either installed along with
+TableSetter, or packaged with the source. JQuery is loaded via Google&rsquo;s CDN.
+It has been tested with jQuery 1.5.1 and Underscore 1.1.5.</p>
+
+<h2>Installation</h2>
+
+<p>Install TimelineSetter through RubyGems on Unix-like OSes:</p>
+
+<pre><code>gem install timeline_setter
+</code></pre>
+
+<p>(Note: We haven&rsquo;t tested using the TimelineSetter tools on Windows even once,
+though the timelines themselves have been tested in modern browsers on
+Windows, Mac and Linux.)</p>
+
+<h2>The `timeline-setter` command</h2>
+
+<p>After TimelineSetter is installed, the <code>timeline-setter</code> command should be
+available in your shell. The command looks for a CSV file to parse and outputs
+static assets. At any point, you can find help by running <code>timeline-setter</code>
+without any arguments, or by adding the <code>-h</code> flag. Run the command like so:</p>
+
+<pre><code>timeline-setter -c /path/to/data.csv -o /path/to/output/directory
+</code></pre>
+
+<p>Full list of options:</p>
+
+<ul>
+<li><code>-c CSV</code> Path to your CSV file.</li>
+<li><code>-o OUTPUT_PATH</code> Path to output timeline and assets.</li>
+<li><code>-a</code> Add the default supporting assets to the output directory, along with the timeline itself.</li>
+<li><code>-m</code> Create a minified one-page version of your timeline with all supporting assets inline.</li>
+<li><code>-O</code> Open a browser to your new timeline after it is generated (currently Mac OS only).</li>
+<li><code>-h</code> Print help to standard output.</li>
+</ul>
+
+
+<p><a id="csv"></a></p>
+
+<h2>Setting Up Your CSV File</h2>
+
+<p>TimelineSetter looks for certain column names in your CSV file in order to
+generate a timeline. All columns are required, though as you&rsquo;ll see, some of
+them can be left blank. Here&rsquo;s a summary of each column and its significance:</p>
+
+<h3>date</h3>
+
+<p>The date the event happened. Right now, TimelineSetter only supports
+single-date events, but this can be specific down to the second. The generator
+will try its best to parse out human dates. Try &ldquo;March 20, 2010,&rdquo; &ldquo;3/20/2010,&rdquo;
+&ldquo;Mar. 20, 2010 11:59 PM&rdquo; etc.</p>
+
+<h3>display_date</h3>
+
+<p>The date <em>displayed</em> on the event&rsquo;s card in the timeline. If this is blank, it
+will fall back to <code>event_date</code></p>
+
+<h3>description</h3>
+
+<p>A description of the event.</p>
+
+<h3>link</h3>
+
+<p>A URL to send users to more details about an event. This will generate a &ldquo;read
+more&rdquo; button at the bottom of the card pointing to the URL.</p>
+
+<h3>series</h3>
+
+<p>A string representing the name of the series of events this particular event
+is a part of. TimelineSetter will find all the unique series among events in
+the spreadsheet and assign both colors and checkboxes for them at the top of
+the spreadsheet. Events not assigned to a series will be part of the &ldquo;default&rdquo;
+series, which have their timeline notches colored charcoal, and have no
+associated checkbox.</p>
+
+<h3>html</h3>
+
+<p>Any arbitrary HTML that will be inserted above the <code>event_description</code>. This
+field may contain image tags, YouTube tags, etc. &mdash; nearly everything except
+<code>&lt;script&gt;</code> tags. If you choose to use JavaScript, you must do it inside an
+iframe and call that iframe inside this field.</p>
+
+<h2>Folder structure and deployment</h2>
+
+<p>After you&rsquo;ve generated a timeline with the <code>timeline-setter</code> command, you
+should see a structure much like this where you&rsquo;ve specified your output:</p>
+
+<pre><code>  |-output
+  |---timeline.html
+  |---javascripts
+  |-----timeline-setter.js
+  |-----vendor
+  |-------underscore-min.js
+  |---stylesheets
+  |-----timeline-setter.css
+</code></pre>
+
+<p>Dropping the whole folder onto your server or an asset host like S3 will allow
+the app to run self-contained. It requires no server-side processing at all.
+To drop into your CMS, simply copy the relevant bits of <code>timeline.html</code> and
+paste into your site&rsquo;s template. Then, adjust the <code>&lt;link&gt;</code> and <code>&lt;script&gt;</code> tags
+to point to their appropriate destinations.</p>
+
+<h2>Definitions</h2>
+
+<p>The timeline is made up of non-clickable <em>interval notches</em> used to denote
+periods of time, and <em>event notches</em>, which, when clicked, reveal their
+associated <em>event cards</em>.</p>
+
+<p><a name="styling"></a></p>
+
+<h2>Styling Your Timeline</h2>
+
+<p>TimelineSetter timelines are fully style-able. The default &ldquo;ProPublica theme&rdquo;
+stylesheet is packaged alongside each generated asset bundle, and is available
+in <code>stylesheets/timeline-setter.css</code>. You can alter this stylesheet, or
+replace it completely. Here&rsquo;s a guide to do that.</p>
+
+<h3>Overview and Styling the Container and Top Matter</h3>
+
+<p>All TimelineSetter CSS is scoped within a namespace starting with <code>TS.</code> The
+outermost container is <code>#timeline_setter.</code></p>
+
+<p>Upon first glance, it may not seem like there is much markup at all. That&rsquo;s
+because we make extensive use of JavaScript (ERB-style) templating via
+<a href="http://documentcloud.github.com/underscore/#template">Underscore.js</a> &mdash; so
+templates for each part of the timeline reside in the DOM. The controls (zoom
+in/out, previous/next buttons) are available within <code>#TS-top_matter_container .TS-controls</code>.</p>
+
+<p>Series checkboxes are injected into <code>.TS-series_nav_container</code> and templated
+via <code>script#TS-notch_tmpl</code>. Currently, series colors are hard coded in the
+JavaScript. We support a maximum of nine series colors (assigned in this order:
+<code>#065718, #EDC047, #91ADD1, #929E5E, #9E5E23, #C44846, #065718, #EDD4A5, #CECECE</code>,
+check <code>CardContainer.colors</code> in timeline-setter.js to override). Technically
+you can create an unlimited number of series, but they will eventually fall back
+to the default charcoal notch color.</p>
+
+<h3>Styling the bar, notches and cards</h3>
+
+<p>Interval notches are templated within <code>script#TS-year_notch_tmpl</code>. Their
+position is based on the interval of time between events as automatically
+determined by the JavaScript. Here&rsquo;s a sampling of what you might see in
+interval notches:</p>
+
+<pre><code>year        =&gt; 2001
+month       =&gt; June, 2004
+day         =&gt; May 1, 2005
+hour/minute =&gt; 11:59
+second      =&gt; 11:59:22
+</code></pre>
+
+<p>Event notches are templated through <code>#TS-card-tmpl</code> and contain individual
+classes corresponding to spreadsheet columns. <code>.TS-item-label</code> corresponds to
+<code>description</code>, <code>.TS-item_html</code> corresponds to <code>event_html</code>,
+<code>.TS-read_btn</code> is linked to <code>link</code> and <code>.TS-item_year</code> corresponds to
+<code>display_date</code> falling through to <code>date</code>. Finally, <code>TS-permalink</code>
+is a fragment link which will show the active card on page load if used.</p>
+
+<h2>Roadmap</h2>
+
+<p>On the client side, there are a number of features we plan to add, including:</p>
+
+<ul>
+<li>Smoother zooming</li>
+<li>Deactivating series checkboxes if none of its events are within the zoomed viewport</li>
+<li>Auto-zooming the timeline if embedded into smaller containers</li>
+<li>More iOS gestures such as &ldquo;pinching&rdquo;</li>
+<li>Zooming to fit a series when the series is activated</li>
+<li>Ranges of events (e.g. Elizabeth Taylor was married to Michael Wilding between
+Feb. 21, 1952 and Jan. 26, 1957, as shown
+<a href="http://www.nytimes.com/interactive/2011/03/23/movies/20110323-ELIZABETH-TAYLOR-TIMELINE.html">here</a>)</li>
+<li>Embed code</li>
+<li>JavaScript tests</li>
+</ul>
+
+
+<h2>Links</h2>
+
+<ul>
+<li>In the Wild: <a href="http://www.propublica.org/special/tbi-psycho-platoon-timeline">ProPublica: How One Blast Affected Five Soldiers</a></li>
+</ul>
+
+
+<h2>Credits</h2>
+
+<p><a href="http://twitter.com/a_l">Al Shaw</a>, <a href="http://github.com/thejefflarson">Jeff Larson</a>, ProPublica</p>
+
+<h2>Contact</h2>
+
+<p>For issues with TimelineSetter, use the
+<a href="https://github.com/propublica/timeline-setter/issues">Issue Tracker</a>. General
+questions should go to <a href="mailto:opensource@propublica.org">opensource@propublica.org</a>.</p>
+
+<h2>Change Log</h2>
+
+<h3>0.0.1</h3>
+
+<p>Initial release</p>
+
+<h2>License</h2>
+
+<p>Copyright © 2011 ProPublica</p>
+
+<p>Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the “Software”), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+of the Software, and to permit persons to whom the Software is furnished to
+do so, subject to the following conditions:</p>
+
+<p>The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.</p>
+
+<p>THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</p>
+
+  </body>
+</html>
