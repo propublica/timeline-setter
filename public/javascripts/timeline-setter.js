@@ -744,7 +744,8 @@
   Chooser.prototype = _.extend(Control.prototype, {
     prefix: ".TS-choose_",
     
-    // Figure out which notch to activate and do so.
+    // Figure out which notch to activate and do so by triggering a click on
+    // that notch.
     click: function(e){
       var el;
       var notches    = this.notches.not(".TS-series_inactive");
