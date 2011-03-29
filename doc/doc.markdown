@@ -13,6 +13,8 @@ TimelineSetter "bakes out" timelines, ready for uploading directly into your
 CMS, Amazon S3, or however you typically serve static files. It requires no
 server-side processing at all once you've generated a timeline.
 
+TimelineSetter [source on Github](https://github.com/propublica/timeline-setter/).
+
 ## Assorted Docs and Samples
 
 * TimelineSetter Ruby source [documentation](documentation/index.html)
