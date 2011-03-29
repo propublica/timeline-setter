@@ -124,6 +124,7 @@ should see a structure much like this where you've specified your output:
       |-----timeline-setter.js
       |-----vendor
       |-------underscore-min.js
+      |-------jquery-min.js      
       |---stylesheets
       |-----timeline-setter.css
       
