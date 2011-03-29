@@ -61,8 +61,8 @@ rescue LoadError
   puts "Jeweler (or a dependency) not available. Install it with: gem install jeweler"
 end
 
-# run tests with rake core
-RSpec::Core::RakeTask.new(:core) do |spec|
+# run tests with `rake spec`
+RSpec::Core::RakeTask.new(:spec) do |spec|
   spec.pattern = 'spec/*_spec.rb'
   spec.rspec_opts = ['--color', '--format nested']
 end
