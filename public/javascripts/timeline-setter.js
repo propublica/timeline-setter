@@ -84,7 +84,7 @@
       obj.el.trigger(e);
     };
 
-    // We're done tracking the movement set drag back to null for the next event.
+    // We're done tracking the movement set drag back to `null` for the next event.
     function mouseup(e){
       if(!drag) return;
       drag = null;
@@ -93,13 +93,13 @@
     };
 
     if(!touchInit) {
-      // Bind on mouse events if we have a mouse;
+      // Bind on mouse events if we have a mouse...
       obj.el.bind("mousedown", mousedown);
 
       $(document).bind("mousemove", mousemove);
       $(document).bind("mouseup", mouseup);
     } else {
-      // Otherwise capture `touchstart` events in order to simulate `doubletap` events.
+      // otherwise capture `touchstart` events in order to simulate `doubletap` events.
       var last;
       obj.el.bind("touchstart", function(e) {
         var now = Date.now();
@@ -121,7 +121,7 @@
   var safari = /WebKit\/533/.test(navigator.userAgent);
 
   // The `wheel` plugin captures events triggered by mousewheel, and dampen the
-  // delta if running in Safari.
+  // `delta` if running in Safari.
   var wheel = function(obj){
     function mousewheel(e){
       e.preventDefault();
