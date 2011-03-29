@@ -13,6 +13,12 @@ TimelineSetter "bakes out" timelines, ready for uploading directly into your
 CMS, Amazon S3, or however you typically serve static files. It requires no
 server-side processing at all once you've generated a timeline.
 
+## Assorted Docs and Samples
+
+* TimelineSetter Ruby source [documentation](documentation/index.html)
+* timeline-setter.js [annotated source](doc/timeline-setter.html)
+* A [sample TimelineSetter timeline](doc/timeline-sample.html)
+
 ## How it Works
 
 The project is broken into two parts: a Ruby package (along with a binary) for
