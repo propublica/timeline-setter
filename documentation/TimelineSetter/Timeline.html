@@ -2,7 +2,7 @@
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="Content-Type" content="text/html; charset=utf-8" />
 <title>Class: TimelineSetter::Timeline</title>
 <link rel="stylesheet" href="../css/style.css" type="text/css" media="screen" charset="utf-8" />
 <link rel="stylesheet" href="../css/common.css" type="text/css" media="screen" charset="utf-8" />
@@ -406,7 +406,7 @@ the events hash to JSON to stick into our HTML.
       <pre class="code"><span class="info file"># File 'lib/timeline_setter/timeline.rb', line 14</span>
 
 <span class='def def kw'>def</span> <span class='to_json identifier id'>to_json</span>
-  <span class='@events ivar id'>@events</span><span class='dot token'>.</span><span class='collect identifier id'>collect</span> <span class='lbrace token'>{</span><span class='bitor op'>|</span><span class='r identifier id'>r</span><span class='bitor op'>|</span> <span class='r identifier id'>r</span><span class='lbrack token'>[</span><span class='symbol val'>:timestamp</span><span class='rbrack token'>]</span> <span class='assign token'>=</span> <span class='Time constant id'>Time</span><span class='dot token'>.</span><span class='parse identifier id'>parse</span><span class='lparen token'>(</span><span class='r identifier id'>r</span><span class='lbrack token'>[</span><span class='symbol val'>:date</span><span class='rbrack token'>]</span><span class='rparen token'>)</span><span class='dot token'>.</span><span class='to_i identifier id'>to_i</span> <span class='rbrace token'>}</span><span class='dot token'>.</span><span class='sort identifier id'>sort</span><span class='lbrace token'>{</span><span class='bitor op'>|</span><span class='a identifier id'>a</span><span class='comma token'>,</span><span class='b identifier id'>b</span><span class='bitor op'>|</span> <span class='b identifier id'>b</span><span class='lbrack token'>[</span><span class='symbol val'>:timestamp</span><span class='rbrack token'>]</span> <span class='cmp op'>&lt;=&gt;</span> <span class='a identifier id'>a</span><span class='lbrack token'>[</span><span class='symbol val'>:timestamp</span><span class='rbrack token'>]</span><span class='rbrace token'>}</span>
+  <span class='@events ivar id'>@events</span><span class='dot token'>.</span><span class='collect identifier id'>collect</span> <span class='lbrace token'>{</span><span class='bitor op'>|</span><span class='r identifier id'>r</span><span class='bitor op'>|</span> <span class='r identifier id'>r</span><span class='lbrack token'>[</span><span class='symbol val'>:timestamp</span><span class='rbrack token'>]</span> <span class='assign token'>=</span> <span class='Time constant id'>Time</span><span class='dot token'>.</span><span class='parse identifier id'>parse</span><span class='lparen token'>(</span><span class='r identifier id'>r</span><span class='lbrack token'>[</span><span class='symbol val'>:date</span><span class='rbrack token'>]</span><span class='rparen token'>)</span><span class='dot token'>.</span><span class='to_i identifier id'>to_i</span> <span class='mult op'>*</span> <span class='integer val'>1000</span> <span class='rbrace token'>}</span><span class='dot token'>.</span><span class='sort identifier id'>sort</span><span class='lbrace token'>{</span><span class='bitor op'>|</span><span class='a identifier id'>a</span><span class='comma token'>,</span><span class='b identifier id'>b</span><span class='bitor op'>|</span> <span class='b identifier id'>b</span><span class='lbrack token'>[</span><span class='symbol val'>:timestamp</span><span class='rbrack token'>]</span> <span class='cmp op'>&lt;=&gt;</span> <span class='a identifier id'>a</span><span class='lbrack token'>[</span><span class='symbol val'>:timestamp</span><span class='rbrack token'>]</span><span class='rbrace token'>}</span>
   <span class='@events ivar id'>@events</span><span class='dot token'>.</span><span class='to_json identifier id'>to_json</span>
 <span class='end end kw'>end</span>
 </pre>
@@ -420,9 +420,9 @@ the events hash to JSON to stick into our HTML.
 </div>
     
     <div id="footer">
-  Generated on Tue Mar 29 11:05:48 2011 by 
+  Generated on Tue Mar 29 12:03:59 2011 by 
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.6.5 (ruby-1.8.7).
+  0.6.1 (ruby-1.8.7).
 </div>
 
   </body>
