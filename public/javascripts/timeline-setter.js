@@ -734,7 +734,7 @@
   });
 
 
-  // Each chooser activates the next or previous notch.
+  // Each `Chooser` activates the next or previous notch.
   var Chooser = function(direction) {
     Control.apply(this, arguments);
     this.notches = $(".TS-notch");
