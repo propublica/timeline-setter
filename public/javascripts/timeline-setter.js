@@ -4,11 +4,11 @@
   // ------
   // Each mixin operates on an object's `prototype`.
 
-  // The `observable` mixin adds simple event notifications to the passed in 
+  // The `observable` mixin adds simple event notifications to the passed in
   // object. Unlike other notification systems, when an event is triggered every
   // callback bound to the object is invoked.
   var observable = function(obj){
-    
+
     // Registers a callback function for notification at a later time.
     obj.bind = function(cb){
       this._callbacks = this._callbacks || [];
@@ -27,9 +27,9 @@
   // Each `transformable` contains two event listeners that handle moving associated
   // DOM elements around the page.
   var transformable = function(obj){
-    
+
     // Move the associated element a specified delta. Of note: because events
-    // aren't scoped by key, TimelineSetter uses plain old jQuery events for 
+    // aren't scoped by key, TimelineSetter uses plain old jQuery events for
     // message passing. So each registered callback first checks to see if the
     // event fired matches the event it is listening for.
     obj.move = function(e){
@@ -57,13 +57,13 @@
   // Check to see if we're on a mobile device.
   var touchInit = 'ontouchstart' in document;
   if(touchInit) jQuery.event.props.push("touches");
-  
+
   // The `draggable` plugin tracks changes in X offsets due to mouse movement
   // or finger gestures and proxies associated events on a particular element.
   // Most of this is inspired by polymaps.
   var draggable = function(obj){
     var drag;
-    
+
     // Start tracking deltas due to a tap or single click.
     function mousedown(e){
       e.preventDefault();
@@ -119,8 +119,8 @@
   // Older versions of safari fire incredibly huge mousewheel deltas. We'll need
   // to dampen the effects.
   var safari = /WebKit\/533/.test(navigator.userAgent);
-  
-  // The `wheel` plugin captures events triggered by mousewheel, and dampen the 
+
+  // The `wheel` plugin captures events triggered by mousewheel, and dampen the
   // delta if running in Safari.
   var wheel = function(obj){
     function mousewheel(e){
@@ -211,11 +211,11 @@
       Minutes  : 60,
       Seconds  : 1
     },
-    
+
     // The order used when testing where exactly a timespan falls.
     INTERVAL_ORDER : ['Seconds','Minutes','Hours','Date','Month','FullYear'],
-    
-    // A test to find the appropriate range of intervals, for example if a range of 
+
+    // A test to find the appropriate range of intervals, for example if a range of
     // timestamps only spans hours this will return true when called with `"Hours"`.
     isAtLeastA : function(interval) {
       return ((this.max - this.min) > this.INTERVALS[interval]);
@@ -253,13 +253,13 @@
       date["set" + intvl](date["get" + intvl]() + 1);
       return date.getTime() / 1000;
     },
-    
-    // The actual difference in timespans accounting for time oddities like 
+
+    // The actual difference in timespans accounting for time oddities like
     // different length months and leap years.
     span : function(ts){
       return this.ceil(ts) - this.floor(ts);
     },
-    
+
     // Calculate and return a list of human formatted strings and raw timestamps.
     getRanges : function() {
       if (this.intervals) return this.intervals;
@@ -305,7 +305,7 @@
     return (number < 10 ? '0' : '') + number;
   };
 
-  // A quick and dirty hash manager for setting and getting values from 
+  // A quick and dirty hash manager for setting and getting values from
   // `window.location.hash`
   var hashStrip = /^#*/;
   var history = {
@@ -318,19 +318,36 @@
     }
   };
 
+  // Every new `Series` gets a color from this list. If there are too many series
+  // the remaining series will be a simple grey.
+  var colors = ["#065718", "#EDC047", "#91ADD1", "#929E5E", "#9E5E23", "#C44846", "#065718", "#EDD4A5", "#CECECE"];
+  var color = function(){
+    var chosen;
+    if (colors.length > 0) {
+      chosen = colors[0];
+      colors.shift();
+    } else {
+      chosen = "#444";
+    }
+    return chosen;
+  };
 
-  
+
+
   // Models
   // ------
 
-  
+  // The main kickoff point for rendering the timeline. The `Timeline` constructor
+  // takes a json array of card representations and then builds series, calculates 
+  // intervals `sync`s the `Bar` and `CardContainer` objects and triggers the
+  // `render` event. 
   var Timeline = function(data) {
     data = data.sort(function(a, b){ return a.timestamp - b.timestamp; });
     this.bySid    = {};
     this.series   = [];
     this.bounds   = new Bounds();
     this.bar      = new Bar(this);
-    this.cardCont = new CardContainer(this);
+    this.cardCont = new CardScroller(this);
     this.createSeries(data);
 
     var range = new Intervals(this.bounds);
@@ -346,11 +363,15 @@
   observable(Timeline.prototype);
 
   Timeline.prototype = _.extend(Timeline.prototype, {
+    // Loop through the JSON and add each element to a series.
     createSeries : function(series){
       for(var i = 0; i < series.length; i++)
         this.add(series[i]);
     },
 
+    // If a particular element in the JSON array mentions a series that's not
+    // in the `bySid` object add it. Then add a card to the `Series` and extend
+    // the global `bounds`.
     add : function(card){
       if(!(card.series in this.bySid)){
         this.bySid[card.series] = new Series(card, this);
@@ -369,6 +390,9 @@
   // Views
   // -----
 
+  // The main interactive element in the timeline is `.TS-notchbar`. Behind the 
+  // scenes `Bar` handles the moving and zooming behaviours through the `draggable`
+  // and `wheel` plugins. 
   var Bar = function(timeline) {
     this.el = $(".TS-notchbar");
     this.el.css({ "left": 0 });
@@ -388,6 +412,9 @@
   transformable(Bar.prototype);
 
   Bar.prototype = _.extend(Bar.prototype, {
+    // Every time the `Bar` is moved, it calculates whether the proposed movement
+    // will move the `.TS-notchbar` off of its parent. If so, it recaculates
+    // `deltaX` to be a more correct value.
     moving : function(e){
       var parent  = this.el.parent();
       var pOffset = parent.offset().left;
@@ -405,6 +432,10 @@
       this.move(e);
     },
 
+    // As the timeline zooms, the `Bar` tries to keep the current notch (i.e. 
+    // `.TS-notch_active`) as close to its original position as possible. 
+    // There's a slight bug here because the timeline zooms and then moves the
+    // bar to correct for this behaviour, and in future versions we'll fix this.
     doZoom : function(e, width){
       var that = this;
       var notch = $(".TS-notch_active");
@@ -427,6 +458,8 @@
       });
     },
 
+    // When asked to render the bar places the appropriate timestamp notches
+    // inside `.TS-notchbar`.
     render : function(){
       var intervals = this.timeline.intervals;
       var bounds    = this.timeline.bounds;
@@ -439,29 +472,16 @@
   });
 
 
-
-  var CardContainer = function(timeline){
+  // The `CardScroller` mirrors the moving and zooming of the `Bar` and is the
+  // canvas where individual cards are rendered.
+  var CardScroller = function(timeline){
     this.el = $("#TS-card_scroller_inner");
   };
-  observable(CardContainer.prototype);
-  transformable(CardContainer.prototype);
+  observable(CardScroller.prototype);
+  transformable(CardScroller.prototype);
 
 
-
-  var colors = ["#065718", "#EDC047", "#91ADD1", "#929E5E", "#9E5E23", "#C44846", "#065718", "#EDD4A5", "#CECECE"];
-  var color = function(){
-    var chosen;
-    if (colors.length > 0) {
-      chosen = colors[0];
-      colors.shift();
-    } else {
-      chosen = "#444";
-    }
-    return chosen;
-  };
-
-
-
+  // Each `Series` picks a unique color and keeps an array of `Cards`.
   var Series = function(series, timeline) {
     this.timeline = timeline;
     this.name     = series.series;
@@ -474,44 +494,43 @@
   observable(Series.prototype);
 
   Series.prototype = _.extend(Series.prototype, {
+    // Create and add a particular card to the cards array.
     add : function(card){
       var crd = new Card(card, this);
-      this.cards.splice(this.sortedIndex(crd), 0, crd);
+      this.cards.push(crd);
     },
-
-    sortedIndex : function(card){
-      return _.sortedIndex(this.cards, card, this._comparator);
-    },
-
+    
+    // The comparing function for `max` and `min`.
     _comparator : function(crd){
       return crd.timestamp;
     },
 
+    // Inactivate this series legend item and trigger a `hideNotch` event.
     hideNotches : function(e){
       e.preventDefault();
       this.el.addClass("TS-series_legend_item_inactive");
-      _.each(this.cards, function(card){
-        card.hideNotch();
-      });
+      this.trigger($.Event("hideNotch"));
     },
 
+    // Activate the legend item and trigger the `showNotch` event.
     showNotches : function(e){
       e.preventDefault();
       this.el.removeClass("TS-series_legend_item_inactive");
-      _.each(this.cards, function(card){
-        card.showNotch();
-      });
+      this.trigger($.Event("showNotch"));
     },
 
+    // Create and append the label to `.TS-series_nav_container` and bind up
+    // `hideNotches` and `showNotches`.
     render : function(e){
       if(!e.type === "render") return;
       if(this.name.length === 0) return;
       this.el = $(this.template(this));
       $(".TS-series_nav_container").append(this.el);
-      this.el.toggle(this.hideNotches,this.showNotches);
+      this.el.toggle(this.hideNotches, this.showNotches);
     }
   });
-
+  
+  // Proxy to underscore for `min` and `max`.
   _(["min", "max"]).each(function(key){
     Series.prototype[key] = function() {
       return _[key].call(_, this.cards, this._comparator).get("timestamp");
@@ -519,7 +538,8 @@
   });
 
 
-
+  // Every `Card` handles a notch div which is immediately appended to the `Bar`
+  // and a `.TS-card_container` which is lazily rendered. 
   var Card = function(card, series) {
     this.series = series;
     var card = _.clone(card);
@@ -528,9 +548,9 @@
     this.attributes.topcolor = series.color;
     this.template = template("#TS-card_tmpl");
     this.ntemplate = template("#TS-notch_tmpl");
-    _.bindAll(this, "render", "activate", "position", "setPermalink");
+    _.bindAll(this, "render", "activate", "position", "setPermalink", "toggleNotch");
+    this.series.bind(this.toggleNotch);
     this.series.timeline.bind(this.render);
-    this.series.bind(this.deactivate);
     this.series.timeline.bar.bind(this.position);
     this.id = [
       this.get('timestamp'),
@@ -538,15 +558,20 @@
     ].join("-");
   };
 
-  Card.prototype = _.extend(Card.prototype, {
+  Card.prototype = {
+    // Get a particular attribute by key.
     get : function(key){
       return this.attributes[key];
     },
 
+    // A version of `jQuery` scoped to the `Card`'s element.
     $ : function(query){
       return $(query, this.el);
     },
 
+    // When each `Card` is rendered via a render event, it appends a notch to the
+    // `Bar` and binds a click handler so it can be activated. if the `Card`'s id 
+    // is currently selected via `window.location.hash` it's activated.
     render : function(e){
       if(!e.type === "render") return;
       this.offset = this.series.timeline.bounds.project(this.timestamp, 100);
@@ -556,11 +581,28 @@
       this.notch.click(this.activate);
       if (history.get() === this.id) this.activate();
     },
+    
+    // As the `Bar` moves each card checks to see if it's outside the viewport,
+    // if it is the card is flipped so as to be visible for the longest period
+    // of time.
+    position : function(e) {
+      if (e.type !== "move" || !this.el) return;
+      var onBarEdge = this.cardOffset().onBarEdge;
 
+      switch(onBarEdge) {
+        case 'right':
+          this.el.css({"margin-left": -(this.cardOffset().item.width() + 7)});
+          this.$(".TS-css_arrow").css("left", this.cardOffset().item.width());
+          break;
+        case 'default':
+          this.el.css({"margin-left": this.originalMargin});
+          this.$(".TS-css_arrow").css("left", 0);
+      }
+    },
+
+    // A utility function to suss out whether the card is fully viewable.
     cardOffset : function() {
-      if (!this.el) return {
-        onBarEdge : false
-      };
+      if (!this.el) return { onBarEdge : false };
 
       var that = this;
       var item = this.el.children(".TS-item");
@@ -580,38 +622,10 @@
                       false
       };
     },
-
-    position : function(e) {
-      if (e.type !== "move" || !this.el) return;
-      var onBarEdge = this.cardOffset().onBarEdge;
-
-      switch(onBarEdge) {
-        case 'right':
-          this.el.css({"margin-left": -(this.cardOffset().item.width() + 7)});
-          this.$(".TS-css_arrow").css("left", this.cardOffset().item.width());
-          break;
-        case 'default':
-          this.el.css({"margin-left": this.originalMargin});
-          this.$(".TS-css_arrow").css("left", 0);
-      }
-    },
-
-    moveBarWithCard : function() {
-      var e = $.Event('moving');
-      var onBarEdge = this.cardOffset().onBarEdge;
-
-      switch(onBarEdge) {
-        case 'right':
-          e.deltaX = -(this.cardOffset().item.width());
-          this.series.timeline.bar.moving(e);
-          break;
-        case 'left':
-          e.deltaX = (this.cardOffset().item.width());
-          this.series.timeline.bar.moving(e);
-      }
-      this.position($.Event('move'));
-    },
-
+    
+    // The first time a card is activated it renders its `template` and appends
+    // its element to the `Bar`. After doing so it does a hacky width check (for ie)
+    // and moves the `Bar` if its element isn't currently visible.
     activate : function(e){
       this.hideActiveCard();
       if (!this.el) {
@@ -632,31 +646,53 @@
       }
 
       this.moveBarWithCard();
-      this.notch.addClass(("TS-notch_active"));
+      this.notch.addClass("TS-notch_active");
+    },
+    
+    // Move the `Bar` if the `Card`'s element isn't visible.
+    moveBarWithCard : function() {
+      var e = $.Event('moving');
+      var onBarEdge = this.cardOffset().onBarEdge;
+
+      switch(onBarEdge) {
+        case 'right':
+          e.deltaX = -(this.cardOffset().item.width());
+          this.series.timeline.bar.moving(e);
+          break;
+        case 'left':
+          e.deltaX = (this.cardOffset().item.width());
+          this.series.timeline.bar.moving(e);
+      }
+      this.position($.Event('move'));
     },
 
+    // The click handler to set the current hash to the `Card`'s id.
     setPermalink : function() {
       history.set(this.id);
     },
 
+    // Globally hide any cards with `TS-card_active`.
     hideActiveCard : function() {
       $(".TS-card_active").removeClass("TS-card_active").hide();
       $(".TS-notch_active").removeClass("TS-notch_active");
     },
 
-    hideNotch : function(){
-      this.notch.hide().removeClass("TS-notch_active").addClass("TS-series_inactive");
-      if(this.el) this.el.hide();
-    },
-
-    showNotch : function(){
-      this.notch.removeClass("TS-series_inactive").show();
+    // An event listener to toggle this notche on and off via `Series`.
+    toggleNotch : function(e){
+      switch(e.type) {
+        case "hideNotch":
+          this.notch.hide().removeClass("TS-notch_active").addClass("TS-series_inactive");
+          if(this.el) this.el.hide();
+          return;
+        case "showNotch":
+          this.notch.removeClass("TS-series_inactive").show();
+      }
     }
 
-  });
+  };
 
 
-
+  // Simple inheritance helper for `Controls`.
   var ctor = function(){};
   var inherits = function(child, parent){
     ctor.prototype  = parent.prototype;
@@ -667,6 +703,7 @@
   // Controls
   // --------
 
+  // Each control is basically a callback wrapper for a given DOM element.
   var Control = function(direction){
     this.direction = direction;
     this.el = $(this.prefix + direction);
@@ -674,7 +711,7 @@
     this.el.bind('click', function(e) { e.preventDefault(); that.click(e);});
   };
 
-
+  // Each `Zoom` control adjusts the `curZoom` when clicked.
   var curZoom = 100;
   var Zoom = function(direction) {
     Control.apply(this, arguments);
@@ -683,6 +720,9 @@
 
   Zoom.prototype = _.extend(Zoom.prototype, {
     prefix : ".TS-zoom_",
+    
+    // Adjust the `curZoom` up or down by 100 and trigger a `doZoom` event on
+    // `.TS-notchbar` 
     click : function() {
       curZoom += (this.direction === "in" ? +100 : -100);
       if (curZoom >= 100) {
@@ -694,7 +734,7 @@
   });
 
 
-
+  // Each chooser activates the next or previous notch.
   var Chooser = function(direction) {
     Control.apply(this, arguments);
     this.notches = $(".TS-notch");
@@ -703,6 +743,8 @@
 
   Chooser.prototype = _.extend(Control.prototype, {
     prefix: ".TS-choose_",
+    
+    // Figure out which notch to activate and do so.
     click: function(e){
       var el;
       var notches    = this.notches.not(".TS-series_inactive");
@@ -719,9 +761,10 @@
   });
 
 
-
+  // Finally we'll kick everything off by creating a `Timeline`, some `Controls`
+  // and binding to `"keydown"`.
   $(function(){
-    window.timeline = new Timeline(TimelineSetter.timelineData);
+    TimelineSetter.timeline = new Timeline(TimelineSetter.timelineData);
     new Zoom("in");
     new Zoom("out");
     var chooseNext = new Chooser("next");
