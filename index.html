@@ -107,6 +107,8 @@ server-side processing at all once you&rsquo;ve generated a timeline.</p>
 
 <p>TimelineSetter <a href="https://github.com/propublica/timeline-setter/">source on Github</a>.</p>
 
+<p><a id="samples"></a></p>
+
 <h2>Assorted Docs and Samples</h2>
 
 <ul>
@@ -115,6 +117,8 @@ server-side processing at all once you&rsquo;ve generated a timeline.</p>
 <li>A <a href="doc/timeline-sample.html">sample TimelineSetter timeline</a></li>
 </ul>
 
+
+<p><a id="innards"></a></p>
 
 <h2>How it Works</h2>
 
@@ -127,6 +131,8 @@ deploy a timeline, or you can package them up with your HTML and paste it into
 your CMS all at once. You can <a href="#styling">customize the CSS</a> to match the look
 and feel of your site.</p>
 
+<p><a id="deps"></a></p>
+
 <h2>Dependencies</h2>
 
 <p>TimelineSetter relies on <a href="http://propublica.github.com/table-fu/">TableFu</a>, as
@@ -135,6 +141,8 @@ well as the JavaScript libraries
 <a href="http://jquery.com/">jQuery</a>. All of these are either installed along with
 TableSetter, or packaged with the source. JQuery is loaded via Google&rsquo;s CDN.
 It has been tested with jQuery 1.5.1 and Underscore 1.1.5.</p>
+
+<p><a id="install"></a></p>
 
 <h2>Installation</h2>
 
@@ -146,6 +154,8 @@ It has been tested with jQuery 1.5.1 and Underscore 1.1.5.</p>
 <p>(Note: We haven&rsquo;t tested using the TimelineSetter tools on Windows even once,
 though the timelines themselves have been tested in modern browsers on
 Windows, Mac and Linux.)</p>
+
+<p><a id="commandline"></a></p>
 
 <h2>The `timeline-setter` command</h2>
 
@@ -179,6 +189,8 @@ without any arguments, or by adding the <code>-h</code> flag. Run the command li
 generate a timeline. All columns are required, though as you&rsquo;ll see, some of
 them can be left blank. Here&rsquo;s a summary of each column and its significance:</p>
 
+<p><a id="date-csv"></a></p>
+
 <h3>date</h3>
 
 <p>The date the event happened. Right now, TimelineSetter only supports
@@ -186,19 +198,27 @@ single-date events, but this can be specific down to the second. The generator
 will try its best to parse out human dates. Try &ldquo;March 20, 2010,&rdquo; &ldquo;3/20/2010,&rdquo;
 &ldquo;Mar. 20, 2010 11:59 PM&rdquo; etc.</p>
 
+<p><a id="display-date-csv"></a></p>
+
 <h3>display_date</h3>
 
 <p>The date <em>displayed</em> on the event&rsquo;s card in the timeline. If this is blank, it
 will fall back to <code>date</code></p>
 
+<p><a id="desc-csv"></a></p>
+
 <h3>description</h3>
 
 <p>A description of the event.</p>
+
+<p><a id="link-csv"></a></p>
 
 <h3>link</h3>
 
 <p>A URL to send users to more details about an event. This will generate a &ldquo;read
 more&rdquo; button at the bottom of the card pointing to the URL.</p>
+
+<p><a id="series-csv"></a></p>
 
 <h3>series</h3>
 
@@ -209,12 +229,16 @@ the spreadsheet. Events not assigned to a series will be part of the &ldquo;defa
 series, which have their timeline notches colored charcoal, and have no
 associated checkbox.</p>
 
+<p><a id="html-csv"></a></p>
+
 <h3>html</h3>
 
 <p>Any arbitrary HTML that will be inserted above <code>description</code>. This
 field may contain image tags, YouTube tags, etc. &mdash; nearly everything except
 <code>&lt;script&gt;</code> tags. If you choose to use JavaScript, you must do it inside an
 iframe and call that iframe inside this field.</p>
+
+<p><a id="deployment"></a></p>
 
 <h2>Folder structure and deployment</h2>
 
@@ -238,6 +262,8 @@ To drop into your CMS, simply copy the relevant bits of <code>timeline.html</cod
 paste into your site&rsquo;s template. Then, adjust the <code>&lt;link&gt;</code> and <code>&lt;script&gt;</code> tags
 to point to their appropriate destinations.</p>
 
+<p><a id="defn"></a></p>
+
 <h2>Definitions</h2>
 
 <p>The timeline is made up of non-clickable <em>interval notches</em> used to denote
@@ -252,6 +278,8 @@ associated <em>event cards</em>.</p>
 stylesheet is packaged alongside each generated asset bundle, and is available
 in <code>stylesheets/timeline-setter.css</code>. You can alter this stylesheet, or
 replace it completely. Here&rsquo;s a guide to do that.</p>
+
+<p><a id="styling-container"></a></p>
 
 <h3>Overview and Styling the Container and Top Matter</h3>
 
@@ -271,6 +299,8 @@ JavaScript. We support a maximum of nine series colors (assigned in this order:
 check <code>CardContainer.colors</code> in timeline-setter.js to override). Technically
 you can create an unlimited number of series, but they will eventually fall back
 to the default charcoal notch color.</p>
+
+<p><a id="styling-bar"></a></p>
 
 <h3>Styling the bar, notches and cards</h3>
 
@@ -293,6 +323,8 @@ classes corresponding to spreadsheet columns. <code>.TS-item-label</code> corres
 <code>display_date</code> falling through to <code>date</code>. Finally, <code>TS-permalink</code>
 is a fragment link which will show the active card on page load if used.</p>
 
+<p><a id="roadmap"></a></p>
+
 <h2>Roadmap</h2>
 
 <p>On the client side, there are a number of features we plan to add, including:</p>
@@ -311,6 +343,8 @@ Feb. 21, 1952 and Jan. 26, 1957, as shown
 </ul>
 
 
+<p><a id="links"></a></p>
+
 <h2>Links</h2>
 
 <ul>
@@ -318,9 +352,13 @@ Feb. 21, 1952 and Jan. 26, 1957, as shown
 </ul>
 
 
+<p><a id="credits"></a></p>
+
 <h2>Credits</h2>
 
 <p><a href="http://twitter.com/a_l">Al Shaw</a>, <a href="http://github.com/thejefflarson">Jeff Larson</a>, ProPublica</p>
+
+<p><a id="contact"></a></p>
 
 <h2>Contact</h2>
 
@@ -328,11 +366,17 @@ Feb. 21, 1952 and Jan. 26, 1957, as shown
 <a href="https://github.com/propublica/timeline-setter/issues">Issue Tracker</a>. General
 questions should go to <a href="mailto:opensource@propublica.org">opensource@propublica.org</a>.</p>
 
+<p><a id="changelog"></a></p>
+
 <h2>Change Log</h2>
+
+<p><a id="release-001"></a></p>
 
 <h3>0.0.1</h3>
 
 <p>Initial release</p>
+
+<p><a id="license"></a></p>
 
 <h2>License</h2>
 
