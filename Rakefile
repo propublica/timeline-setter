@@ -1,6 +1,7 @@
 require 'rubygems'
 require 'rake'
 require 'rake/clean'
+require 'rake/rdoctask'
 require 'rspec/core/rake_task'
 require './lib/timeline_setter'
 
@@ -61,10 +62,23 @@ rescue LoadError
   puts "Jeweler (or a dependency) not available. Install it with: gem install jeweler"
 end
 
+Rake::RDocTask.new do |rdoc|
+  version = File.exist?('VERSION') ? File.read('VERSION') : ""
+  rdoc.rdoc_dir = 'rdoc'
+  rdoc.title = "TimelineSetter #{version}"
+  rdoc.rdoc_files.include('README*')
+  rdoc.rdoc_files.include('lib/**/*.rb')
+end
+
 # run tests with `rake spec`
 RSpec::Core::RakeTask.new(:spec) do |spec|
   spec.pattern = 'spec/*_spec.rb'
   spec.rspec_opts = ['--color', '--format nested']
+end
+
+desc "generate yard docs"
+task :yard do
+  `yard -o ./rdoc`
 end
 
 
