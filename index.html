@@ -187,7 +187,7 @@ will try its best to parse out human dates. Try &ldquo;March 20, 2010,&rdquo; &l
 <h3>display_date</h3>
 
 <p>The date <em>displayed</em> on the event&rsquo;s card in the timeline. If this is blank, it
-will fall back to <code>event_date</code></p>
+will fall back to <code>date</code></p>
 
 <h3>description</h3>
 
@@ -209,7 +209,7 @@ associated checkbox.</p>
 
 <h3>html</h3>
 
-<p>Any arbitrary HTML that will be inserted above the <code>event_description</code>. This
+<p>Any arbitrary HTML that will be inserted above <code>description</code>. This
 field may contain image tags, YouTube tags, etc. &mdash; nearly everything except
 <code>&lt;script&gt;</code> tags. If you choose to use JavaScript, you must do it inside an
 iframe and call that iframe inside this field.</p>
@@ -286,7 +286,7 @@ second      =&gt; 11:59:22
 
 <p>Event notches are templated through <code>#TS-card-tmpl</code> and contain individual
 classes corresponding to spreadsheet columns. <code>.TS-item-label</code> corresponds to
-<code>description</code>, <code>.TS-item_html</code> corresponds to <code>event_html</code>,
+<code>description</code>, <code>.TS-item_html</code> corresponds to <code>html</code>,
 <code>.TS-read_btn</code> is linked to <code>link</code> and <code>.TS-item_year</code> corresponds to
 <code>display_date</code> falling through to <code>date</code>. Finally, <code>TS-permalink</code>
 is a fragment link which will show the active card on page load if used.</p>
