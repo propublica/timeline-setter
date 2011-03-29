@@ -84,7 +84,7 @@
       obj.el.trigger(e);
     };
 
-    // We're done tracking the movement set drag back to null for the next event.
+    // We're done tracking the movement set drag back to `null` for the next event.
     function mouseup(e){
       if(!drag) return;
       drag = null;
@@ -93,13 +93,13 @@
     };
 
     if(!touchInit) {
-      // Bind on mouse events if we have a mouse;
+      // Bind on mouse events if we have a mouse...
       obj.el.bind("mousedown", mousedown);
 
       $(document).bind("mousemove", mousemove);
       $(document).bind("mouseup", mouseup);
     } else {
-      // Otherwise capture `touchstart` events in order to simulate `doubletap` events.
+      // otherwise capture `touchstart` events in order to simulate `doubletap` events.
       var last;
       obj.el.bind("touchstart", function(e) {
         var now = Date.now();
@@ -121,7 +121,7 @@
   var safari = /WebKit\/533/.test(navigator.userAgent);
 
   // The `wheel` plugin captures events triggered by mousewheel, and dampen the
-  // delta if running in Safari.
+  // `delta` if running in Safari.
   var wheel = function(obj){
     function mousewheel(e){
       e.preventDefault();
@@ -177,7 +177,7 @@
 
   // A utility function to format dates in AP Style.
   Intervals.dateStr = function(timestamp, interval) {
-    var d                 = new Date(timestamp * 1000);
+    var d                 = new Date(timestamp);
     var dYear             = d.getFullYear();
     var dMonth            = Intervals.HUMAN_DATES.months[d.getMonth()];
     var dDate             = dMonth + ". " + d.getDate() + ', ' + dYear;
@@ -204,12 +204,12 @@
   Intervals.prototype = {
     // Sane estimates of date ranges for the `isAtLeastA` test.
     INTERVALS : {
-      FullYear : 31536000,
-      Month    : 2592000,
-      Date     : 86400,
-      Hours    : 3600,
-      Minutes  : 60,
-      Seconds  : 1
+      FullYear : 31536000000,
+      Month    : 2592000000,
+      Date     : 86400000,
+      Hours    : 3600000,
+      Minutes  : 60000,
+      Seconds  : 1000
     },
 
     // The order used when testing where exactly a timespan falls.
@@ -238,20 +238,20 @@
     // Zero out a date from the current interval down to seconds.
     floor : function(ts){
       var idx = this.idx;
-      var date = new Date(ts * 1000);
+      var date = new Date(ts);
       while(idx--){
         var intvl = this.INTERVAL_ORDER[idx];
         date["set" + intvl](intvl === "Date" ? 1 : 0);
       }
-      return date.getTime() / 1000;
+      return date.getTime();
     },
 
     // Find the next date based on the past in timestamp.
     ceil : function(ts){
-      var date = new Date(this.floor(ts) * 1000);
+      var date = new Date(this.floor(ts));
       var intvl = this.INTERVAL_ORDER[this.idx];
       date["set" + intvl](date["get" + intvl]() + 1);
-      return date.getTime() / 1000;
+      return date.getTime();
     },
 
     // The actual difference in timespans accounting for time oddities like
@@ -734,7 +734,7 @@
   });
 
 
-  // Each chooser activates the next or previous notch.
+  // Each `Chooser` activates the next or previous notch.
   var Chooser = function(direction) {
     Control.apply(this, arguments);
     this.notches = $(".TS-notch");
@@ -744,7 +744,8 @@
   Chooser.prototype = _.extend(Control.prototype, {
     prefix: ".TS-choose_",
     
-    // Figure out which notch to activate and do so.
+    // Figure out which notch to activate and do so by triggering a click on
+    // that notch.
     click: function(e){
       var el;
       var notches    = this.notches.not(".TS-series_inactive");
