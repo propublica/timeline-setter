@@ -86,7 +86,7 @@ will try its best to parse out human dates. Try "March 20, 2010," "3/20/2010,"
 ### display\_date
 
 The date *displayed* on the event's card in the timeline. If this is blank, it
-will fall back to `event_date`
+will fall back to `date`
 
 ### description
 
@@ -108,7 +108,7 @@ associated checkbox.
 
 ### html
 
-Any arbitrary HTML that will be inserted above the `event_description`. This
+Any arbitrary HTML that will be inserted above `description`. This
 field may contain image tags, YouTube tags, etc. -- nearly everything except
 `<script>` tags. If you choose to use JavaScript, you must do it inside an
 iframe and call that iframe inside this field.
@@ -182,7 +182,7 @@ interval notches:
 
 Event notches are templated through `#TS-card-tmpl` and contain individual
 classes corresponding to spreadsheet columns. `.TS-item-label` corresponds to
-`description`, `.TS-item_html` corresponds to `event_html`,
+`description`, `.TS-item_html` corresponds to `html`,
 `.TS-read_btn` is linked to `link` and `.TS-item_year` corresponds to
 `display_date` falling through to `date`. Finally, `TS-permalink`
 is a fragment link which will show the active card on page load if used.
