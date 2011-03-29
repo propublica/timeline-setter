@@ -1,16 +1,18 @@
 module TimelineSetter
   class Parser
     attr_reader :events
-  
-    # sheet should contain columns for
-    #  * event_date
-    #  * event_display_date
-    #  * event_description
-    #  * event_link
-    #  * event_thumbnail
-    #  * event_series
-    #  * event_media_type
-    #  * event_html
+    
+    # Initialize a new timeline from a CSV file via TableFu,
+    # add a hash for each row (event) in the sheet to an events array.
+    # Sheet should contain columns for
+    #  * date
+    #  * display_date
+    #  * description
+    #  * link
+    #  * thumbnail
+    #  * series
+    #  * html
+    #
     def initialize(sheet)
       @events = []
       spreadsheet = TableFu.new(sheet) do |s|
