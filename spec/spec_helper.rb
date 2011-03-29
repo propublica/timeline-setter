@@ -10,6 +10,3 @@ date,display_date,description,link,,series,event_html
 "Aug. 10, 2003",,"Savelkoul deploys to Iraq, where he is based at Camp Forehead, near the Mansour District of Baghdad. ",,,Brock Savelkoul,
 "Dec. 1, 2003",December 2003,Savelkoul and his unit are ambushed in the Mansour district. Many of them are shaken by the experience.,,,Brock Savelkoul,
 CSV
-
-RSpec.configure do |config| 
-end
