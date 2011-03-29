@@ -30,6 +30,7 @@ task :gh_pages do
   current_branch = $1
   
   `git commit -am "docs"`
+  `git push github #{current_branch}`
   `git checkout gh-pages`
   `git merge #{current_branch}`
   `git push github gh-pages`
