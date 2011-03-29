@@ -15,12 +15,14 @@ server-side processing at all once you've generated a timeline.
 
 TimelineSetter [source on Github](https://github.com/propublica/timeline-setter/).
 
+<a id="samples"></a>
 ## Assorted Docs and Samples
 
 * TimelineSetter Ruby source [documentation](documentation/index.html)
 * timeline-setter.js [annotated source](doc/timeline-setter.html)
 * A [sample TimelineSetter timeline](doc/timeline-sample.html)
 
+<a id="innards"></a>
 ## How it Works
 
 The project is broken into two parts: a Ruby package (along with a binary) for
@@ -32,6 +34,7 @@ deploy a timeline, or you can package them up with your HTML and paste it into
 your CMS all at once. You can [customize the CSS](#styling) to match the look
 and feel of your site.
 
+<a id="deps"></a>
 ## Dependencies
 
 TimelineSetter relies on [TableFu](http://propublica.github.com/table-fu/), as
@@ -41,6 +44,7 @@ well as the JavaScript libraries
 TableSetter, or packaged with the source. JQuery is loaded via Google's CDN.
 It has been tested with jQuery 1.5.1 and Underscore 1.1.5.
 
+<a id="install"></a>
 ## Installation
 
 Install TimelineSetter through RubyGems on Unix-like OSes:
@@ -51,6 +55,7 @@ Install TimelineSetter through RubyGems on Unix-like OSes:
 though the timelines themselves have been tested in modern browsers on
 Windows, Mac and Linux.)
 
+<a id="commandline"></a>
 ## The \`timeline-setter\` command
 
 After TimelineSetter is installed, the `timeline-setter` command should be
@@ -78,6 +83,7 @@ TimelineSetter looks for certain column names in your CSV file in order to
 generate a timeline. All columns are required, though as you'll see, some of
 them can be left blank. Here's a summary of each column and its significance:
 
+<a id="date-csv"></a>
 ### date
 
 The date the event happened. Right now, TimelineSetter only supports
@@ -85,20 +91,24 @@ single-date events, but this can be specific down to the second. The generator
 will try its best to parse out human dates. Try "March 20, 2010," "3/20/2010,"
 "Mar. 20, 2010 11:59 PM" etc.
 
+<a id="display-date-csv"></a>
 ### display\_date
 
 The date *displayed* on the event's card in the timeline. If this is blank, it
 will fall back to `date`
 
+<a id="desc-csv"></a>
 ### description
 
 A description of the event.
 
+<a id="link-csv"></a>
 ### link
 
 A URL to send users to more details about an event. This will generate a "read
 more" button at the bottom of the card pointing to the URL.
 
+<a id="series-csv"></a>
 ### series
 
 A string representing the name of the series of events this particular event
@@ -108,6 +118,7 @@ the spreadsheet. Events not assigned to a series will be part of the "default"
 series, which have their timeline notches colored charcoal, and have no
 associated checkbox.
 
+<a id="html-csv"></a>
 ### html
 
 Any arbitrary HTML that will be inserted above `description`. This
@@ -115,6 +126,7 @@ field may contain image tags, YouTube tags, etc. -- nearly everything except
 `<script>` tags. If you choose to use JavaScript, you must do it inside an
 iframe and call that iframe inside this field.
 
+<a id="deployment"></a>
 ## Folder structure and deployment
 
 After you've generated a timeline with the `timeline-setter` command, you
@@ -136,6 +148,7 @@ To drop into your CMS, simply copy the relevant bits of `timeline.html` and
 paste into your site's template. Then, adjust the `<link>` and `<script>` tags
 to point to their appropriate destinations.
 
+<a id="defn"></a>
 ## Definitions
 
 The timeline is made up of non-clickable *interval notches* used to denote
@@ -150,6 +163,7 @@ stylesheet is packaged alongside each generated asset bundle, and is available
 in `stylesheets/timeline-setter.css`. You can alter this stylesheet, or
 replace it completely. Here's a guide to do that.
 
+<a id="styling-container"></a>
 ### Overview and Styling the Container and Top Matter
 
 All TimelineSetter CSS is scoped within a namespace starting with `TS.` The
@@ -169,6 +183,7 @@ check `CardContainer.colors` in timeline-setter.js to override). Technically
 you can create an unlimited number of series, but they will eventually fall back
 to the default charcoal notch color.
 
+<a id="styling-bar"></a>
 ### Styling the bar, notches and cards
 
 Interval notches are templated within `script#TS-year_notch_tmpl`. Their
@@ -189,6 +204,7 @@ classes corresponding to spreadsheet columns. `.TS-item-label` corresponds to
 `display_date` falling through to `date`. Finally, `TS-permalink`
 is a fragment link which will show the active card on page load if used.
 
+<a id="roadmap"></a>
 ## Roadmap
 
 On the client side, there are a number of features we plan to add, including:
@@ -204,26 +220,32 @@ On the client side, there are a number of features we plan to add, including:
 * Embed code
 * JavaScript tests
 
+<a id="links"></a>
 ## Links
 
 * In the Wild: [ProPublica: How One Blast Affected Five Soldiers](http://www.propublica.org/special/tbi-psycho-platoon-timeline)
 
+<a id="credits"></a>
 ## Credits
 
 [Al Shaw](http://twitter.com/a_l), [Jeff Larson](http://github.com/thejefflarson), ProPublica
 
+<a id="contact"></a>
 ## Contact
 
 For issues with TimelineSetter, use the 
 [Issue Tracker](https://github.com/propublica/timeline-setter/issues). General 
 questions should go to <a href="mailto:opensource@propublica.org">opensource@propublica.org</a>.
 
+<a id="changelog"></a>
 ## Change Log
 
+<a id="release-001"></a>
 ### 0.0.1
 
 Initial release
 
+<a id="license"></a>
 ## License 
 
 <%= license %>
