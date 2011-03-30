@@ -629,7 +629,7 @@
     // `.TS-item_label` to the maximum width of the card's children, or 
     // if that is less than the `.TS-item_year` element's width, `.TS-item_label`
     // gets `.TS-item_year`s width. Which is a funny way of saying, if you'd
-    // like to set the width of the card as a whole, fiddle with `.TS-item_label`s
+    // like to set the width of the card as a whole, fiddle with `.TS-item_year`s
     // width.
     activate : function(e){
       this.hideActiveCard();
