@@ -20,7 +20,7 @@ TimelineSetter [source on Github](https://github.com/propublica/timeline-setter/
 
 * TimelineSetter Ruby source [documentation](documentation/index.html)
 * timeline-setter.js [annotated source](doc/timeline-setter.html)
-* A [sample TimelineSetter timeline](doc/timeline-sample.html)
+* A [TimelineSetter demo](doc/twitter-demo.html) using Twitter data
 
 <a id="innards"></a>
 ## How it Works
