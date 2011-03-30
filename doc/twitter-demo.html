@@ -58,7 +58,7 @@
 
       var twitterToTS = function(data) {
         _(data).each(function(item) {
-          var datum             = {}
+          var datum             = {};
           datum['timestamp']    = Date.parse(item['created_at']);
           datum['date']         = item['created_at'];
           datum['display_date'] = humanDate(datum['timestamp']);
