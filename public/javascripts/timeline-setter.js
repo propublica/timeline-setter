@@ -624,8 +624,13 @@
     },
     
     // The first time a card is activated it renders its `template` and appends
-    // its element to the `Bar`. After doing so it does a hacky width check (for ie)
-    // and moves the `Bar` if its element isn't currently visible.
+    // its element to the `Bar`. After doing so it moves the `Bar` if its 
+    // element isn't currently visible. For ie each card sets the width of 
+    // `.TS-item_label` to the maximum width of the card's children, or 
+    // if that is less than the `.TS-item_year` element's width, `.TS-item_label`
+    // gets `.TS-item_year`s width. Which is a funny way of saying, if you'd
+    // like to set the width of the card as a whole, fiddle with `.TS-item_label`s
+    // width.
     activate : function(e){
       this.hideActiveCard();
       if (!this.el) {
@@ -639,10 +644,10 @@
       this.el.show().addClass(("TS-card_active"));
 
       var max = _.max(_.toArray(this.$(".TS-item_user_html").children()), function(el){ return $(el).width(); });
-      if($(max).width() > 150){
+      if($(max).width() > this.$(".TS-item_year").width()){
         this.$(".TS-item_label").css("width", $(max).width());
       } else {
-        this.$(".TS-item_label").css("width", 150);
+        this.$(".TS-item_label").css("width", this.$(".TS-item_year").width());
       }
 
       this.moveBarWithCard();
