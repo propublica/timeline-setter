@@ -39,7 +39,7 @@ module TimelineSetter
         end
       end
       option_parser.parse!
-      
+
       if @options.empty?
         puts option_parser.on_tail
         exit

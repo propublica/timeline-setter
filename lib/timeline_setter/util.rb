@@ -1,6 +1,6 @@
 module TimelineSetter
   module Util
-    
+
     # Utility method to lightly minify CSS -- just remove \s+ where we can.
     def minify_css(css)
       # take out new lines

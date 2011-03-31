@@ -1,9 +1,9 @@
 (function(){
-  
-  // Expose `TimelineSetter` globally, so we can call `Timeline.Timeline.boot()` 
+
+  // Expose `TimelineSetter` globally, so we can call `Timeline.Timeline.boot()`
   // to kick off at any point.
   var TimelineSetter = window.TimelineSetter = (window.TimelineSetter || {});
-  
+
   // Mixins
   // ------
   // Each mixin operates on an object's `prototype`.
@@ -342,9 +342,9 @@
   // ------
 
   // The main kickoff point for rendering the timeline. The `Timeline` constructor
-  // takes a json array of card representations and then builds series, calculates 
+  // takes a json array of card representations and then builds series, calculates
   // intervals `sync`s the `Bar` and `CardContainer` objects and triggers the
-  // `render` event. 
+  // `render` event.
   var Timeline = TimelineSetter.Timeline = function(data) {
     data = data.sort(function(a, b){ return a.timestamp - b.timestamp; });
     this.bySid    = {};
@@ -394,9 +394,9 @@
   // Views
   // -----
 
-  // The main interactive element in the timeline is `.TS-notchbar`. Behind the 
+  // The main interactive element in the timeline is `.TS-notchbar`. Behind the
   // scenes `Bar` handles the moving and zooming behaviours through the `draggable`
-  // and `wheel` plugins. 
+  // and `wheel` plugins.
   var Bar = function(timeline) {
     this.el = $(".TS-notchbar");
     this.el.css({ "left": 0 });
@@ -436,8 +436,8 @@
       this.move(e);
     },
 
-    // As the timeline zooms, the `Bar` tries to keep the current notch (i.e. 
-    // `.TS-notch_active`) as close to its original position as possible. 
+    // As the timeline zooms, the `Bar` tries to keep the current notch (i.e.
+    // `.TS-notch_active`) as close to its original position as possible.
     // There's a slight bug here because the timeline zooms and then moves the
     // bar to correct for this behaviour, and in future versions we'll fix this.
     doZoom : function(e, width){
@@ -503,7 +503,7 @@
       var crd = new Card(card, this);
       this.cards.push(crd);
     },
-    
+
     // The comparing function for `max` and `min`.
     _comparator : function(crd){
       return crd.timestamp;
@@ -533,7 +533,7 @@
       this.el.toggle(this.hideNotches, this.showNotches);
     }
   });
-  
+
   // Proxy to underscore for `min` and `max`.
   _(["min", "max"]).each(function(key){
     Series.prototype[key] = function() {
@@ -543,7 +543,7 @@
 
 
   // Every `Card` handles a notch div which is immediately appended to the `Bar`
-  // and a `.TS-card_container` which is lazily rendered. 
+  // and a `.TS-card_container` which is lazily rendered.
   var Card = function(card, series) {
     this.series = series;
     var card = _.clone(card);
@@ -574,7 +574,7 @@
     },
 
     // When each `Card` is rendered via a render event, it appends a notch to the
-    // `Bar` and binds a click handler so it can be activated. if the `Card`'s id 
+    // `Bar` and binds a click handler so it can be activated. if the `Card`'s id
     // is currently selected via `window.location.hash` it's activated.
     render : function(e){
       if(!e.type === "render") return;
@@ -585,7 +585,7 @@
       this.notch.click(this.activate);
       if (history.get() === this.id) this.activate();
     },
-    
+
     // As the `Bar` moves each card checks to see if it's outside the viewport,
     // if it is the card is flipped so as to be visible for the longest period
     // of time.
@@ -626,11 +626,11 @@
                       false
       };
     },
-    
+
     // The first time a card is activated it renders its `template` and appends
-    // its element to the `Bar`. After doing so it moves the `Bar` if its 
-    // element isn't currently visible. For ie each card sets the width of 
-    // `.TS-item_label` to the maximum width of the card's children, or 
+    // its element to the `Bar`. After doing so it moves the `Bar` if its
+    // element isn't currently visible. For ie each card sets the width of
+    // `.TS-item_label` to the maximum width of the card's children, or
     // if that is less than the `.TS-item_year` element's width, `.TS-item_label`
     // gets `.TS-item_year`s width. Which is a funny way of saying, if you'd
     // like to set the width of the card as a whole, fiddle with `.TS-item_year`s
@@ -657,7 +657,7 @@
       this.moveBarWithCard();
       this.notch.addClass("TS-notch_active");
     },
-    
+
     // Move the `Bar` if the `Card`'s element isn't visible.
     moveBarWithCard : function() {
       var e = $.Event('moving');
@@ -729,9 +729,9 @@
 
   Zoom.prototype = _.extend(Zoom.prototype, {
     prefix : ".TS-zoom_",
-    
+
     // Adjust the `curZoom` up or down by 100 and trigger a `doZoom` event on
-    // `.TS-notchbar` 
+    // `.TS-notchbar`
     click : function() {
       curZoom += (this.direction === "in" ? +100 : -100);
       if (curZoom >= 100) {
@@ -752,7 +752,7 @@
 
   Chooser.prototype = _.extend(Control.prototype, {
     prefix: ".TS-choose_",
-    
+
     // Figure out which notch to activate and do so by triggering a click on
     // that notch.
     click: function(e){
@@ -774,10 +774,10 @@
   // Finally, let's create the whole timeline. Boot is exposed globally via
   // `TimelineSetter.Timeline.boot()` which takes the JSON generated by
   // the timeline-setter binary as an argument. This is handy if you want
-  // to be able to generate timelines at arbitrary times (say, for example, 
+  // to be able to generate timelines at arbitrary times (say, for example,
   // in an ajax callback).
   //
-  // In the default install of TimelineSetter, Boot is called in the generated 
+  // In the default install of TimelineSetter, Boot is called in the generated
   // HTML. We'll kick everything off by creating a `Timeline`, some `Controls`
   // and binding to `"keydown"`.
   Timeline.boot = function(data) {
@@ -798,7 +798,7 @@
           return;
         }
       });
-    });    
+    });
 
   };
 
