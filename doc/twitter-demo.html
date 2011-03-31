@@ -4,7 +4,7 @@
     <link href="http://propublica.github.com/timeline-setter/public/stylesheets/timeline-setter.css" rel="stylesheet" />
     <script src="http://propublica.github.com/timeline-setter/public/javascripts/vendor/jquery-min.js"></script>
     <script src="http://propublica.github.com/timeline-setter/public/javascripts/vendor/underscore-min.js"></script>
-    <script src="http://propublica.github.com/timeline-setter/public/javascripts/timeline-setter.js"></script>
+    <script src="../public/javascripts/timeline-setter.js"></script>
     <script src="https://github.com/bcherry/twitter-text-js/raw/master/twitter-text.js"></script>
     <style>
       #timeline_setter .TS-item_label a {
@@ -68,8 +68,12 @@
         };
 
         var humanDate = function(timestamp) {
-          var d = new Date(timestamp);
-          return (d.getMonth() + 1) + '/' + d.getDate() + ", " + (d.getHours() > 12 ? d.getHours() - 12 : d.getHours()) + ":" + padNumber(d.getMinutes()) + " " + (d.getHours() > 12 ? "p.m." : "a.m.");
+          var d         = new Date(timestamp);
+          var bigHours  = d.getHours() > 12;
+          var isPM      = d.getHours() >= 12;
+          var strDate   = (d.getMonth() + 1) + '/' + d.getDate() + ", "
+          var strTime   = (bigHours ? d.getHours() - 12 : (d.getHours() > 0 ? d.getHours() : "12")) + ":" + padNumber(d.getMinutes()) + " " + (isPM ? 'p.m.' : 'a.m.');
+          return strDate + strTime;
         };
 
         var padNumber = function(number) {
