@@ -777,11 +777,10 @@
   // to be able to generate timelines at arbitrary times (say, for example, 
   // in an ajax callback).
   //
-  // In the default install of TimelineSetter, Boot is called in the generated HTML.
+  // In the default install of TimelineSetter, Boot is called in the generated 
+  // HTML. We'll kick everything off by creating a `Timeline`, some `Controls`
+  // and binding to `"keydown"`.
   Timeline.boot = function(data) {
-    
-    // Finally we'll kick everything off by creating a `Timeline`, some `Controls`
-    // and binding to `"keydown"`.
     $(function(){
       TimelineSetter.timeline = new Timeline(data);
       new Zoom("in");
