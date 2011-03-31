@@ -4,7 +4,7 @@
     <link href="http://propublica.github.com/timeline-setter/public/stylesheets/timeline-setter.css" rel="stylesheet" />
     <script src="http://propublica.github.com/timeline-setter/public/javascripts/vendor/jquery-min.js"></script>
     <script src="http://propublica.github.com/timeline-setter/public/javascripts/vendor/underscore-min.js"></script>
-    <script src="http://propublica.github.com/timeline-setter/public/javascripts/timeline-setter.js"></script>
+    <script src="../public/javascripts/timeline-setter.js"></script>
     <script src="https://github.com/bcherry/twitter-text-js/raw/master/twitter-text.js"></script>
     <style>
       #timeline_setter .TS-item_label a {
@@ -62,7 +62,6 @@
             datum['description']  = twttr.txt.autoLink(item['text']);
             datum['link']         = "http://twitter.com/" + item['user']['screen_name'] + '/status/' + item['id_str'];
             datum['series']       = item['user']['screen_name'];
-            datum['html']         = '';
             tsTimeline.push(datum);
           });
         };
@@ -97,23 +96,23 @@
         </div>
     </script>
     <script id="TS-card_tmpl" type="text/jst">
-    <div class="TS-card_container TS-card_container_<%= series.replace(/\W/, "") %>">
-    <div class="TS-css_arrow TS-css_arrow_up" style="border-bottom-color:<%= topcolor %>"></div>
-      <div class="TS-item" data-timestamp="<%= timestamp %>" style="border-top:1px solid <%= topcolor %>">
+    <div class="TS-card_container TS-card_container_<%= (card.get("series") || "").replace(/\W/, "") %>">
+    <div class="TS-css_arrow TS-css_arrow_up" style="border-bottom-color:<%= card.get("topcolor") %>"></div>
+      <div class="TS-item" data-timestamp="<%= card.get("timestamp") %>" style="border-top:1px solid <%= card.get("topcolor") %>">
         <div class="TS-item_label">
-          <% if (!_.isEmpty(html)){ %>
+          <% if (!_.isEmpty(card.get("html"))){ %>
             <div class="TS-item_user_html">
-              <%= html %>
+              <%= card.get("html") %>
             </div>
           <% } %>
-          <%= description %>
+          <%= card.get("description") %>
         </div>
-          <% if (!_.isEmpty(link)){ %>
-              <div class="TS-read_btn"><a target="_blank" href="<%= link %>">Read More</a></div>
+          <% if (!_.isEmpty(card.get("link"))){ %>
+              <div class="TS-read_btn"><a target="_blank" href="<%= card.get("link") %>">Read More</a></div>
           <% } %>
 
         <div class="TS-item_year">
-          <span class="TS-item_year_text"><%= display_date.length > 0 ? display_date : date %></span>
+          <span class="TS-item_year_text"><%= (card.get("display_date") || "").length > 0 ? card.get("display_date") : card.get("date") %></span>
           <div class="TS-permalink">&#8734;</div>
         </div>
       </div>

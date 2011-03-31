@@ -16,6 +16,10 @@ module TimelineSetter
       @events.to_json
     end
 
+    def timeline_markup
+      ERB.new(File.open("#{TimelineSetter::ROOT}/templates/timeline-markup.erb").read).result(binding)
+    end
+
     # Create timeline HTML by interpolating events hash into an ERB template.
     # Re-template timeline by editing ../templates/timeline.erb
     # This version preserves external links to CSS and JS.
@@ -30,6 +34,7 @@ module TimelineSetter
       css = minify_css(File.open("#{TimelineSetter::ROOT}/public/stylesheets/timeline-setter.css").read)
       libs = Dir.glob("#{TimelineSetter::ROOT}/public/javascripts/vendor/**")
       libs.each { |lib| js << File.open(lib,'r').read }
+      min_html = minify_html(timeline_markup)
       js << Closure::Compiler.new.compile(File.open("#{TimelineSetter::ROOT}/public/javascripts/timeline-setter.js", 'r'))
       @timeline = ERB.new(File.open("#{TimelineSetter::ROOT}/templates/timeline-min.erb").read).result(binding)
     end

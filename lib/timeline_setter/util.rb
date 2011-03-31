@@ -20,5 +20,9 @@ module TimelineSetter
 
       css
     end
+
+    def minify_html(html)
+      html.gsub(/(?:^|\s+?)(<.*?>)/, '\1')
+    end
   end
 end

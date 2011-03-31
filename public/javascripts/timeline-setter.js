@@ -639,7 +639,7 @@
     activate : function(e){
       this.hideActiveCard();
       if (!this.el) {
-        this.el = $(this.template(this.attributes));
+        this.el = $(this.template({card: this}));
         this.el.css({"left": this.offset + "%"});
         $("#TS-card_scroller_inner").append(this.el);
         this.originalMargin = this.el.css("margin-left");
