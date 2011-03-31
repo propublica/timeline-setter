@@ -556,9 +556,10 @@ the timeline-setter binary as an argument. This is handy if you want
 to be able to generate timelines at arbitrary times (say, for example, 
 in an ajax callback).</p>
 
-<p>In the default install of TimelineSetter, Boot is called in the generated HTML.</p>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="nx">Timeline</span><span class="p">.</span><span class="nx">boot</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
-    </pre></div>             </td>           </tr>                               <tr id="section-77">             <td class="docs">               <div class="octowrap">                 <a class="octothorpe" href="#section-77">#</a>               </div>               <p>Finally we'll kick everything off by creating a <code>Timeline</code>, some <code>Controls</code>
-and binding to <code>"keydown"</code>.</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="nx">$</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
+<p>In the default install of TimelineSetter, Boot is called in the generated 
+HTML. We'll kick everything off by creating a <code>Timeline</code>, some <code>Controls</code>
+and binding to <code>"keydown"</code>.</p>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="nx">Timeline</span><span class="p">.</span><span class="nx">boot</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">$</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
       <span class="nx">TimelineSetter</span><span class="p">.</span><span class="nx">timeline</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Timeline</span><span class="p">(</span><span class="nx">data</span><span class="p">);</span>
       <span class="k">new</span> <span class="nx">Zoom</span><span class="p">(</span><span class="s2">&quot;in&quot;</span><span class="p">);</span>
       <span class="k">new</span> <span class="nx">Zoom</span><span class="p">(</span><span class="s2">&quot;out&quot;</span><span class="p">);</span>
