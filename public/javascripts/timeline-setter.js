@@ -323,16 +323,32 @@
     }
   };
 
-  // Every new `Series` gets a color from this list. If there are too many series
-  // the remaining series will be a simple grey.
-  var colors = ["#065718", "#EDC047", "#91ADD1", "#929E5E", "#9E5E23", "#C44846", "#065718", "#EDD4A5", "#CECECE"];
+  // Every new `Series` gets new color. If there are too many series
+  // the remaining series will be a simple gray.
+  
+  // These colors can be styled like such in
+  // timeline-setter.css, where the numbers 1-9 cycle through in that order:
+  //
+  //      .TS-notch_color_1,.TS-series_legend_swatch_1 {
+  //        background: #065718 !important;
+  //      }
+  //      .TS-css_arrow_color_1 {
+  //        border-bottom-color:#065718 !important;
+  //      }
+  //      .TS-item_color_1 {
+  //       border-top:1px solid #065718 !important;
+  //      }
+  //
+  // The default color will fall through to what is styled with
+  // `.TS-foo_color_default`
+  var curColor = 1;
   var color = function(){
     var chosen;
-    if (colors.length > 0) {
-      chosen = colors[0];
-      colors.shift();
+    if (curColor < 10) {
+      chosen = curColor;
+      curColor += 1;
     } else {
-      chosen = "#444";
+      chosen = "default";
     }
     return chosen;
   };
@@ -490,7 +506,7 @@
   var Series = function(series, timeline) {
     this.timeline = timeline;
     this.name     = series.series;
-    this.color    = this.name.length > 0 ? color() : "#444";
+    this.color    = this.name.length > 0 ? color() : "default";
     this.cards    = [];
     _.bindAll(this, "render", "showNotches", "hideNotches");
     this.template = template("#TS-series_legend_tmpl");
