@@ -470,7 +470,7 @@
 
       for (var i = 0; i < intervals.length; i++) {
         var html = this.template({'timestamp' : intervals[i].timestamp, 'human' : intervals[i].human });
-        this.el.append($(html).css("left", (bounds.project(intervals[i].timestamp, 100) | 0) + "%"));
+        this.el.append($(html).css("left", bounds.project(intervals[i].timestamp, 100) + "%"));
       }
     }
   });
