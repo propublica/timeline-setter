@@ -65,7 +65,8 @@ without any arguments, or by adding the `-h` flag. Run the command like so:
 
     timeline-setter -c /path/to/data.csv -o /path/to/output/directory
 
-Running `timeline-setter` with no `-o` option will generate the timeline (and supporting assets if applicable) within the current directory.
+Running `timeline-setter` with no `-o` option will generate the timeline (and 
+supporting assets if applicable) within the current directory.
 
 Full list of options:
 
@@ -116,7 +117,8 @@ is a part of. TimelineSetter will find all the unique series among events in
 the spreadsheet and assign both colors and checkboxes for them at the top of
 the spreadsheet. Events not assigned to a series will be part of the "default"
 series, which have their timeline notches colored charcoal, and have no
-associated checkbox.
+associated checkbox. *Note:* As a corollary, if you only have one series, it is
+best not to assign a name.
 
 <a id="html-csv"></a>
 ### html
