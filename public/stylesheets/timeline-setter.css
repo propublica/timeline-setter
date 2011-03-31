@@ -284,7 +284,7 @@
     
     /* default */
     .TS-notch_color_default,.TS-series_legend_swatch_default {
-      background: #444;
+      background-color: #444;
     }
     .TS-css_arrow_color_default {
       border-bottom-color:#444;
@@ -295,7 +295,7 @@
     
     /* 1 */
     .TS-notch_color_1,.TS-series_legend_swatch_1 {
-      background: #065718 !important;
+      background-color: #065718 !important;
     }
     .TS-css_arrow_color_1 {
       border-bottom-color:#065718 !important;
@@ -306,7 +306,7 @@
     
     /* 2 */
     .TS-notch_color_2,.TS-series_legend_swatch_2 {
-      background: #EDC047 !important;
+      background-color: #EDC047 !important;
     }
     .TS-css_arrow_color_2 {
       border-bottom-color:#EDC047 !important;
@@ -317,7 +317,7 @@
 
     /* 3 */    
     .TS-notch_color_3,.TS-series_legend_swatch_3 {
-      background: #91ADD1 !important;
+      background-color: #91ADD1 !important;
     }
     .TS-css_arrow_color_3 {
       border-bottom-color:#91ADD1 !important;
@@ -328,7 +328,7 @@
     
     /* 4 */
     .TS-notch_color_4,.TS-series_legend_swatch_4 {
-      background: #929E5E !important;
+      background-color: #929E5E !important;
     }
     .TS-css_arrow_color_4 {
       border-bottom-color:#929E5E !important;
@@ -339,7 +339,7 @@
 
     /* 5 */    
     .TS-notch_color_5,.TS-series_legend_swatch_5 {
-      background: #9E5E23 !important;
+      background-color: #9E5E23 !important;
     }
     .TS-css_arrow_color_5 {
       border-bottom-color:#9E5E23 !important;
@@ -350,7 +350,7 @@
 
     /* 6 */    
     .TS-notch_color_6,.TS-series_legend_swatch_6 {
-      background: #C44846 !important;
+      background-color: #C44846 !important;
     }
     .TS-css_arrow_color_6 {
       border-bottom-color:#C44846 !important;
@@ -361,7 +361,7 @@
     
     /* 7 */
     .TS-notch_color_7,.TS-series_legend_swatch_7 {
-      background: #065718 !important;
+      background-color: #065718 !important;
     }
     .TS-css_arrow_color_7 {
       border-bottom-color:#065718 !important;
@@ -373,7 +373,7 @@
 
     /* 8 */    
     .TS-notch_color_8,.TS-series_legend_swatch_8 {
-      background: #EDD4A5 !important;
+      background-color: #EDD4A5 !important;
     }
     .TS-css_arrow_color_8 {
       border-bottom-color:#EDD4A5 !important;
@@ -384,7 +384,7 @@
 
     /* 9 */
     .TS-notch_color_9,.TS-series_legend_swatch_9 {
-      background: #CECECE !important;
+      background-color: #CECECE !important;
     }
     .TS-css_arrow_color_9 {
       border-bottom-color:#CECECE !important;

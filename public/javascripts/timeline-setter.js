@@ -184,7 +184,7 @@
     var d                 = new Date(timestamp);
     var dYear             = d.getFullYear();
     var dMonth            = Intervals.HUMAN_DATES.months[d.getMonth()];
-    var dDate             = dMonth + ". " + d.getDate() + ', ' + dYear;
+    var dDate             = dMonth + " " + d.getDate() + ', ' + dYear;
     var bigHours          = d.getHours() > 12;
     var isPM              = d.getHours() >= 12;
     var dHourWithMinutes  = (bigHours ? d.getHours() - 12 : (d.getHours() > 0 ? d.getHours() : "12")) + ":" + padNumber(d.getMinutes()) + " " + (isPM ? 'p.m.' : 'a.m.');
