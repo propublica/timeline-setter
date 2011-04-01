@@ -29,15 +29,15 @@
   </div>
 </script>
 <script id="TS-notch_tmpl" type="text/jst">
-  <div class="TS-notch TS-notch_<%%= timestamp %> TS-notch_<%%= series.replace(/\W/, "") %> TS-notch_color_<%%= topcolor %>"></div>
+  <div class="TS-notch TS-notch_<%%= timestamp %> TS-notch_<%%= series.replace(/\W/g, "") %> TS-notch_color_<%%= topcolor %>"></div>
 </script>
 <script id="TS-series_legend_tmpl" type="text/jst">
-    <div class="TS-series_legend_item TS-series_legend_item<%%= name.replace(/\W/, "") %>">
+    <div class="TS-series_legend_item TS-series_legend_item_<%%= name.replace(/\W/g, "") %>">
       <span class="TS-series_legend_swatch TS-series_legend_swatch_<%%= color %>">&nbsp;</span> <span class="TS-series_legend_text"><%%= name %></span>
     </div>
 </script>
 <script id="TS-card_tmpl" type="text/jst">
-<div class="TS-card_container TS-card_container_<%%= (card.get("series") || "").replace(/\W/, "") %>">
+<div class="TS-card_container TS-card_container_<%%= (card.get("series") || "").replace(/\W/g, "") %>">
 <div class="TS-css_arrow TS-css_arrow_up TS-css_arrow_color_<%%= card.get("topcolor") %>"></div>
   <div class="TS-item TS-item_color_<%%= card.get("topcolor") %>" data-timestamp="<%%= card.get("timestamp") %>">
     <div class="TS-item_label">
