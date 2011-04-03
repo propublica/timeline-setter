@@ -117,10 +117,10 @@ server-side processing at all once you&rsquo;ve generated a timeline.</p>
 <p>The project is broken into two parts: a Ruby package (along with a binary) for
 generating the assets, and the HTML, CSS and JavaScript for the timeline
 itself. TimelineSetter will create a unique HTML page that embeds a JSON
-object with your data.The CSS and JavaScript are identical for every timeline
+object with your data. The CSS and JavaScript are identical for every timeline
 created, so you can host those centrally and simply point to them when you
-deploy a timeline, or you can package them up with your HTML and paste it into
-your CMS all at once. You can <a href="#styling">customize the CSS</a> to match the look
+deploy a timeline, or (with the minified option) you can package them up with your HTML
+and paste it into your CMS all at once. You can <a href="#styling">customize the CSS</a> to match the look
 and feel of your site.</p>
 
 <p><a id="deps"></a></p>
@@ -131,8 +131,8 @@ and feel of your site.</p>
 well as the JavaScript libraries
 <a href="http://documentcloud.github.com/underscore/">Underscore</a> and
 <a href="http://jquery.com/">jQuery</a>. All of these are either installed along with
-TableSetter, or packaged with the source. JQuery is loaded via Google&rsquo;s CDN.
-It has been tested with jQuery 1.5.1 and Underscore 1.1.5.</p>
+TableSetter, or packaged with the source. It has been tested with jQuery 1.5.1
+and Underscore 1.1.5.</p>
 
 <p><a id="install"></a></p>
 
