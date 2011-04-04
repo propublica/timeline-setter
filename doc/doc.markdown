@@ -243,7 +243,7 @@ questions should go to <a href="mailto:opensource@propublica.org">opensource@pro
 ## Change Log
 
 <a id="release-001"></a>
-### 0.0.1
+### 0.1.0
 
 Initial release
 
