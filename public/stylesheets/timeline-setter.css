@@ -72,6 +72,7 @@
       text-transform:uppercase;
       font-weight:normal;
       text-align:center;
+      display:block;
     }
     .TS-read_btn:hover {
       color:black;cursor:pointer;text-decoration:none;background:#cecece;
