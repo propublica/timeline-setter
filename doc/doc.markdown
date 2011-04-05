@@ -126,7 +126,7 @@ best not to assign a name.
 Any arbitrary HTML that will be inserted above `description`. This
 field may contain image tags, YouTube tags, etc. -- nearly everything except
 `<script>` tags. If you choose to use JavaScript, you must do it inside an
-iframe and call that iframe inside this field.
+iframe and call that iframe inside this field. **Note**: If you put an image or iframe in this field, make sure to set `height` and `width` attributes, or the card may not extend around the image.
 
 <a id="deployment"></a>
 ## Folder structure and deployment
@@ -226,6 +226,7 @@ On the client side, there are a number of features we plan to add, including:
 ## Links
 
 * In the Wild: [ProPublica: How One Blast Affected Five Soldiers](http://www.propublica.org/special/tbi-psycho-platoon-timeline)
+* In the Wild: [TPM: The Wisconsin Union Struggle Timeline](http://www.talkingpointsmemo.com/interactive/2011/04/the-wisconsin-union-struggle-timeline.php)
 
 <a id="credits"></a>
 ## Credits
