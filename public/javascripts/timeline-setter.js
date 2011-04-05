@@ -607,7 +607,7 @@
 
     // As the `Bar` moves the current card checks to see if it's outside the viewport,
     // if it is the card is flipped so as to be visible for the longest period
-    // of time. The magic number here is half the witch of the css arrow.
+    // of time. The magic number here (7) is half the width of the css arrow.
     flip : function(e) {
       if (e.type !== "move" || !this.el || !this.el.is(":visible")) return;
       var rightEdge  = this.$(".TS-item").offset().left + this.$(".TS-item").width();
