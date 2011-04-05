@@ -28,10 +28,10 @@ TimelineSetter [source on Github](https://github.com/propublica/timeline-setter/
 The project is broken into two parts: a Ruby package (along with a binary) for
 generating the assets, and the HTML, CSS and JavaScript for the timeline
 itself. TimelineSetter will create a unique HTML page that embeds a JSON
-object with your data.The CSS and JavaScript are identical for every timeline
+object with your data. The CSS and JavaScript are identical for every timeline
 created, so you can host those centrally and simply point to them when you
-deploy a timeline, or you can package them up with your HTML and paste it into
-your CMS all at once. You can [customize the CSS](#styling) to match the look
+deploy a timeline, or (with the minified option) you can package them up with your HTML 
+and paste it into your CMS all at once. You can [customize the CSS](#styling) to match the look
 and feel of your site.
 
 <a id="deps"></a>
@@ -41,8 +41,8 @@ TimelineSetter relies on [TableFu](http://propublica.github.com/table-fu/), as
 well as the JavaScript libraries
 [Underscore](http://documentcloud.github.com/underscore/) and
 [jQuery](http://jquery.com/). All of these are either installed along with
-TableSetter, or packaged with the source. JQuery is loaded via Google's CDN.
-It has been tested with jQuery 1.5.1 and Underscore 1.1.5.
+TableSetter, or packaged with the source. It has been tested with jQuery 1.5.1 
+and Underscore 1.1.5.
 
 <a id="install"></a>
 ## Installation
@@ -126,7 +126,7 @@ best not to assign a name.
 Any arbitrary HTML that will be inserted above `description`. This
 field may contain image tags, YouTube tags, etc. -- nearly everything except
 `<script>` tags. If you choose to use JavaScript, you must do it inside an
-iframe and call that iframe inside this field.
+iframe and call that iframe inside this field. **Note**: If you put an image or iframe in this field, make sure to set `height` and `width` attributes, or the card may not extend around the image.
 
 <a id="deployment"></a>
 ## Folder structure and deployment
@@ -181,7 +181,7 @@ Series checkboxes are injected into `.TS-series_nav_container` and templated
 via `script#TS-notch_tmpl`. Currently, series colors are hard coded in the
 JavaScript. We support a maximum of nine series colors (assigned in this order:
 ``#065718, #EDC047, #91ADD1, #929E5E, #9E5E23, #C44846, #065718, #EDD4A5, #CECECE``,
-check `CardContainer.colors` in timeline-setter.js to override). Technically
+they can be overridden in the "color priority" section of `timeline-setter.css`). Technically
 you can create an unlimited number of series, but they will eventually fall back
 to the default charcoal notch color.
 
@@ -226,6 +226,7 @@ On the client side, there are a number of features we plan to add, including:
 ## Links
 
 * In the Wild: [ProPublica: How One Blast Affected Five Soldiers](http://www.propublica.org/special/tbi-psycho-platoon-timeline)
+* In the Wild: [TPM: The Wisconsin Union Struggle Timeline](http://www.talkingpointsmemo.com/interactive/2011/04/the-wisconsin-union-struggle-timeline.php)
 
 <a id="credits"></a>
 ## Credits
@@ -243,7 +244,7 @@ questions should go to <a href="mailto:opensource@propublica.org">opensource@pro
 ## Change Log
 
 <a id="release-001"></a>
-### 0.0.1
+### 0.1.0
 
 Initial release
 

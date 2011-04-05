@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{timeline_setter}
-  s.version = "0.0.1"
+  s.version = "0.1.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Al Shaw", "Jeff Larson"]
-  s.date = %q{2011-03-24}
+  s.date = %q{2011-04-04}
   s.default_executable = %q{timeline-setter}
   s.description = %q{TimelineSetter is a tool to create HTML timelines from spreadsheets of events.}
   s.email = %q{almshaw@gmail.com}
@@ -19,28 +19,53 @@ Gem::Specification.new do |s|
     "README"
   ]
   s.files = [
+    ".document",
     "LICENSE.txt",
     "README",
     "Rakefile",
     "bin/timeline-setter",
     "doc/doc.markdown",
     "doc/doc_wrapper.erb",
+    "doc/docco.css",
+    "doc/timeline-setter.html",
     "doc/todo.markdown",
+    "doc/twitter-demo.html",
+    "documentation/TimelineSetter.html",
+    "documentation/TimelineSetter/CLI.html",
+    "documentation/TimelineSetter/Parser.html",
+    "documentation/TimelineSetter/Timeline.html",
+    "documentation/TimelineSetter/Util.html",
+    "documentation/_index.html",
+    "documentation/class_list.html",
+    "documentation/css/common.css",
+    "documentation/css/full_list.css",
+    "documentation/css/style.css",
+    "documentation/file.README.html",
+    "documentation/file_list.html",
+    "documentation/frames.html",
+    "documentation/index.html",
+    "documentation/js/app.js",
+    "documentation/js/full_list.js",
+    "documentation/js/jquery.js",
+    "documentation/method_list.html",
+    "documentation/top-level-namespace.html",
     "index.html",
     "lib/timeline_setter.rb",
     "lib/timeline_setter/cli.rb",
-    "lib/timeline_setter/event.rb",
     "lib/timeline_setter/parser.rb",
     "lib/timeline_setter/timeline.rb",
     "lib/timeline_setter/version.rb",
     "public/javascripts/timeline-setter.js",
+    "public/javascripts/vendor/jquery-min.js",
     "public/javascripts/vendor/underscore-min.js",
     "public/stylesheets/timeline-setter.css",
-    "spec/spec.opts",
     "spec/spec_helper.rb",
+    "spec/test_data.csv",
     "spec/timeline_setter_spec.rb",
-    "templates/event.erb",
-    "templates/timeline.erb"
+    "templates/timeline-markup.erb",
+    "templates/timeline-min.erb",
+    "templates/timeline.erb",
+    "timeline_setter.gemspec"
   ]
   s.homepage = %q{http://github.com/propublica/timeline-setter}
   s.require_paths = ["lib"]
@@ -58,15 +83,21 @@ Gem::Specification.new do |s|
     if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0') then
       s.add_runtime_dependency(%q<json>, [">= 0"])
       s.add_runtime_dependency(%q<table_fu>, [">= 0"])
+      s.add_runtime_dependency(%q<kompress>, [">= 0.0.2"])
+      s.add_runtime_dependency(%q<closure-compiler>, [">= 0"])
       s.add_development_dependency(%q<rspec>, [">= 2.0.0"])
     else
       s.add_dependency(%q<json>, [">= 0"])
       s.add_dependency(%q<table_fu>, [">= 0"])
+      s.add_dependency(%q<kompress>, [">= 0.0.2"])
+      s.add_dependency(%q<closure-compiler>, [">= 0"])
       s.add_dependency(%q<rspec>, [">= 2.0.0"])
     end
   else
     s.add_dependency(%q<json>, [">= 0"])
     s.add_dependency(%q<table_fu>, [">= 0"])
+    s.add_dependency(%q<kompress>, [">= 0.0.2"])
+    s.add_dependency(%q<closure-compiler>, [">= 0"])
     s.add_dependency(%q<rspec>, [">= 2.0.0"])
   end
 end

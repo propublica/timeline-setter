@@ -82,7 +82,7 @@
   </head>
   <body>
     <a href="http://www.propublica.org" class="propublica">&nbsp;</a>
-    <h1>TimelineSetter 0.0.1</h1>
+    <h1>TimelineSetter 0.1.0</h1>
 
 <p>TimelineSetter creates beautiful timelines.</p>
 
@@ -117,10 +117,10 @@ server-side processing at all once you&rsquo;ve generated a timeline.</p>
 <p>The project is broken into two parts: a Ruby package (along with a binary) for
 generating the assets, and the HTML, CSS and JavaScript for the timeline
 itself. TimelineSetter will create a unique HTML page that embeds a JSON
-object with your data.The CSS and JavaScript are identical for every timeline
+object with your data. The CSS and JavaScript are identical for every timeline
 created, so you can host those centrally and simply point to them when you
-deploy a timeline, or you can package them up with your HTML and paste it into
-your CMS all at once. You can <a href="#styling">customize the CSS</a> to match the look
+deploy a timeline, or (with the minified option) you can package them up with your HTML
+and paste it into your CMS all at once. You can <a href="#styling">customize the CSS</a> to match the look
 and feel of your site.</p>
 
 <p><a id="deps"></a></p>
@@ -131,8 +131,8 @@ and feel of your site.</p>
 well as the JavaScript libraries
 <a href="http://documentcloud.github.com/underscore/">Underscore</a> and
 <a href="http://jquery.com/">jQuery</a>. All of these are either installed along with
-TableSetter, or packaged with the source. JQuery is loaded via Google&rsquo;s CDN.
-It has been tested with jQuery 1.5.1 and Underscore 1.1.5.</p>
+TableSetter, or packaged with the source. It has been tested with jQuery 1.5.1
+and Underscore 1.1.5.</p>
 
 <p><a id="install"></a></p>
 
@@ -230,7 +230,7 @@ best not to assign a name.</p>
 <p>Any arbitrary HTML that will be inserted above <code>description</code>. This
 field may contain image tags, YouTube tags, etc. &mdash; nearly everything except
 <code>&lt;script&gt;</code> tags. If you choose to use JavaScript, you must do it inside an
-iframe and call that iframe inside this field.</p>
+iframe and call that iframe inside this field. <strong>Note</strong>: If you put an image or iframe in this field, make sure to set <code>height</code> and <code>width</code> attributes, or the card may not extend around the image.</p>
 
 <p><a id="deployment"></a></p>
 
@@ -290,7 +290,7 @@ in/out, previous/next buttons) are available within <code>#TS-top_matter_contain
 via <code>script#TS-notch_tmpl</code>. Currently, series colors are hard coded in the
 JavaScript. We support a maximum of nine series colors (assigned in this order:
 <code>#065718, #EDC047, #91ADD1, #929E5E, #9E5E23, #C44846, #065718, #EDD4A5, #CECECE</code>,
-check <code>CardContainer.colors</code> in timeline-setter.js to override). Technically
+they can be overridden in the &ldquo;color priority&rdquo; section of <code>timeline-setter.css</code>). Technically
 you can create an unlimited number of series, but they will eventually fall back
 to the default charcoal notch color.</p>
 
@@ -343,6 +343,7 @@ Feb. 21, 1952 and Jan. 26, 1957, as shown
 
 <ul>
 <li>In the Wild: <a href="http://www.propublica.org/special/tbi-psycho-platoon-timeline">ProPublica: How One Blast Affected Five Soldiers</a></li>
+<li>In the Wild: <a href="http://www.talkingpointsmemo.com/interactive/2011/04/the-wisconsin-union-struggle-timeline.php">TPM: The Wisconsin Union Struggle Timeline</a></li>
 </ul>
 
 
@@ -366,7 +367,7 @@ questions should go to <a href="mailto:opensource@propublica.org">opensource@pro
 
 <p><a id="release-001"></a></p>
 
-<h3>0.0.1</h3>
+<h3>0.1.0</h3>
 
 <p>Initial release</p>
 
