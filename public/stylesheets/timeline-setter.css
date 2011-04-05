@@ -151,9 +151,6 @@
       width:4px;
       cursor:pointer;
     }
-    .TS-notch:hover {
-      background:#cecece;
-    }
     .TS-card_container {
       position:absolute;
       margin-left:-5px;

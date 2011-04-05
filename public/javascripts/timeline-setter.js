@@ -21,7 +21,7 @@
 
     // Invoke all callbacks registered to the object with `bind`.
     obj.trigger = function(){
-      if(!this._callbacks) return;
+      if (!this._callbacks) return;
       for(var i = 0; callback = this._callbacks[i]; i++)
         callback.apply(this, arguments);
     };
@@ -37,9 +37,9 @@
     // message passing. So each registered callback first checks to see if the
     // event fired matches the event it is listening for.
     obj.move = function(e){
-      if(!e.type === "move" || !e.deltaX) return;
+      if (!e.type === "move" || !e.deltaX) return;
 
-      if(_.isUndefined(this.currOffset)) this.currOffset = 0;
+      if (_.isUndefined(this.currOffset)) this.currOffset = 0;
       this.currOffset += e.deltaX;
       this.el.css({"left" : this.currOffset});
     };
@@ -48,7 +48,7 @@
     // in order to zoom the Timeline all that's needed is to increase or decrease
     // the percentage width.
     obj.zoom = function(e){
-      if(!e.type === "zoom") return;
+      if (!e.type === "zoom") return;
       this.el.css({ "width": e.width });
     };
   };
@@ -60,7 +60,7 @@
 
   // Check to see if we're on a mobile device.
   var touchInit = 'ontouchstart' in document;
-  if(touchInit) jQuery.event.props.push("touches");
+  if (touchInit) jQuery.event.props.push("touches");
 
   // The `draggable` plugin tracks changes in X offsets due to mouse movement
   // or finger gestures and proxies associated events on a particular element.
@@ -78,7 +78,7 @@
 
     // The user is interacting; capture the offset and trigger a `dragging` event.
     function mousemove(e){
-      if(!drag) return;
+      if (!drag) return;
       e.preventDefault();
       e.type = "dragging";
       e = _.extend(e, {
@@ -90,13 +90,13 @@
 
     // We're done tracking the movement set drag back to `null` for the next event.
     function mouseup(e){
-      if(!drag) return;
+      if (!drag) return;
       drag = null;
       e.type = "dragend";
       obj.el.trigger(e);
     };
 
-    if(!touchInit) {
+    if (!touchInit) {
       // Bind on mouse events if we have a mouse...
       obj.el.bind("mousedown", mousedown);
 
@@ -130,7 +130,7 @@
     function mousewheel(e){
       e.preventDefault();
       var delta = (e.wheelDelta || -e.detail);
-      if(safari){
+      if (safari){
         var negative = delta < 0 ? -1 : 1;
         delta = Math.log(Math.abs(delta)) * negative * 2;
       };
@@ -288,7 +288,7 @@
     var events = Array.prototype.slice.call(arguments, 2);
     _.each(events, function(ev){
       origin.bind(function(e){
-        if(e.type === ev && listener[ev])
+        if (e.type === ev && listener[ev])
           listener[ev](e);
       });
     });
@@ -302,7 +302,7 @@
   // Simple function to strip suffixes like `"px"` and return a clean integer for
   // use.
   var cleanNumber = function(str){
-    return parseInt(str.replace(/^[^+\-\d]?([+\-]\d+)?.*$/, "$1"), 10);
+    return parseInt(str.replace(/^[^+\-\d]?([+\-]?\d+)?.*$/, "$1"), 10);
   };
 
   // Zero pad a number less than 10 and return a 2 digit value.
@@ -362,7 +362,7 @@
   // takes a json array of card representations and then builds series, calculates
   // intervals `sync`s the `Bar` and `CardContainer` objects and triggers the
   // `render` event.
-  var Timeline = TimelineSetter.Timeline = function(data) {
+  var Timeline = TimelineSetter.Timeline = function(data) {    
     data = data.sort(function(a, b){ return a.timestamp - b.timestamp; });
     this.bySid    = {};
     this.series   = [];
@@ -394,12 +394,13 @@
     // in the `bySid` object add it. Then add a card to the `Series` and extend
     // the global `bounds`.
     add : function(card){
-      if(!(card.series in this.bySid)){
+      if (!(card.series in this.bySid)){
         this.bySid[card.series] = new Series(card, this);
         this.series.push(this.bySid[card.series]);
       }
       var series = this.bySid[card.series];
       series.add(card);
+      
       this.bounds.extend(series.max());
       this.bounds.extend(series.min());
     }
@@ -441,11 +442,11 @@
       var pOffset = parent.offset().left;
       var offset  = this.el.offset().left;
       var width   = this.el.width();
-      if(_.isUndefined(e.deltaX)) e.deltaX = 0;
+      if (_.isUndefined(e.deltaX)) e.deltaX = 0;
 
-      if(offset + width + e.deltaX < pOffset + parent.width())
+      if (offset + width + e.deltaX < pOffset + parent.width())
         e.deltaX = (pOffset + parent.width()) - (offset + width);
-      if(offset + e.deltaX > pOffset)
+      if (offset + e.deltaX > pOffset)
         e.deltaX = pOffset - offset;
 
       e.type = "move";
@@ -543,8 +544,8 @@
     // Create and append the label to `.TS-series_nav_container` and bind up
     // `hideNotches` and `showNotches`.
     render : function(e){
-      if(!e.type === "render") return;
-      if(this.name.length === 0) return;
+      if (!e.type === "render") return;
+      if (this.name.length === 0) return;
       this.el = $(this.template(this));
       $(".TS-series_nav_container").append(this.el);
       this.el.toggle(this.hideNotches, this.showNotches);
@@ -567,12 +568,13 @@
     this.timestamp = card.timestamp;
     this.attributes = card;
     this.attributes.topcolor = series.color;
+    
     this.template = template("#TS-card_tmpl");
     this.ntemplate = template("#TS-notch_tmpl");
-    _.bindAll(this, "render", "activate", "position", "setPermalink", "toggleNotch", "setWidth");
+    _.bindAll(this, "render", "activate", "flip", "setPermalink", "toggleNotch");
     this.series.bind(this.toggleNotch);
     this.series.timeline.bind(this.render);
-    this.series.timeline.bar.bind(this.position);
+    this.series.timeline.bar.bind(this.flip);
     this.id = [
       this.get('timestamp'),
       this.get('description').split(/ /)[0].replace(/[^a-zA-Z\-]/g,"")
@@ -594,7 +596,7 @@
     // `Bar` and binds a click handler so it can be activated. if the `Card`'s id
     // is currently selected via `window.location.hash` it's activated.
     render : function(e){
-      if(!e.type === "render") return;
+      if (!e.type === "render") return;
       this.offset = this.series.timeline.bounds.project(this.timestamp, 100);
       var html = this.ntemplate(this.attributes);
       this.notch = $(html).css({"left": this.offset + "%"});
@@ -603,45 +605,22 @@
       if (history.get() === this.id) this.activate();
     },
 
-    // As the `Bar` moves each card checks to see if it's outside the viewport,
+    // As the `Bar` moves the current card checks to see if it's outside the viewport,
     // if it is the card is flipped so as to be visible for the longest period
-    // of time.
-    position : function(e) {
-      if (e.type !== "move" || !this.el) return;
-      var onBarEdge = this.cardOffset().onBarEdge;
-
-      switch(onBarEdge) {
-        case 'right':
-          this.el.css({"margin-left": -(this.cardOffset().item.width() + 7)});
-          this.$(".TS-css_arrow").css("left", this.cardOffset().item.width());
-          break;
-        case 'default':
-          this.el.css({"margin-left": this.originalMargin});
-          this.$(".TS-css_arrow").css("left", 0);
+    // of time. The magic number here is half the witch of the css arrow.
+    flip : function(e) {
+      if (e.type !== "move" || !this.el || !this.el.is(":visible")) return;
+      var rightEdge  = this.$(".TS-item").offset().left + this.$(".TS-item").width();
+      var tRightEdge = $("#timeline_setter").offset().left + $("#timeline_setter").width();
+      var margin     = this.el.css("margin-left") === this.originalMargin;
+      var flippable  = this.$(".TS-item").width() < $("#timeline_setter").width() / 2;
+      if (tRightEdge - rightEdge < 0 && margin) {
+        this.el.css({"margin-left": -(this.$(".TS-item").width() + 7)});
+        this.$(".TS-css_arrow").css({"left" : this.$(".TS-item").width()});
+      } else if (this.el.offset().left - $("#timeline_setter").offset().left < 0 && !margin && flippable) {
+        this.el.css({"margin-left": this.originalMargin});
+        this.$(".TS-css_arrow").css({"left": 0});
       }
-    },
-
-    // A utility function to suss out whether the card is fully viewable.
-    cardOffset : function() {
-      if (!this.el) return { onBarEdge : false };
-
-      var that = this;
-      var item = this.el.children(".TS-item");
-      var currentMargin = this.el.css("margin-left");
-      var timeline = $("#timeline_setter");
-      var right = (this.el.offset().left + item.width()) - (timeline.offset().left + timeline.width());
-      var left = (this.el.offset().left) - timeline.offset().left;
-
-      return {
-        item : item,
-        onBarEdge : (right > 0 && currentMargin === that.originalMargin) ?
-                      'right' :
-                    (left < 0 && that.el.css("margin-left") !== that.originalMargin) ?
-                      'default' :
-                    (left < 0 && that.el.css("margin-left") === that.originalMargin) ?
-                      'left' :
-                      false
-      };
     },
 
     // The first time a card is activated it renders its `template` and appends
@@ -656,13 +635,19 @@
         $("#TS-card_scroller_inner").append(this.el);
         this.originalMargin = this.el.css("margin-left");
         this.el.delegate(".TS-permalink", "click", this.setPermalink);
-        this.$("img").load(this.setWidth);
+        // Reactivate if there are images in the html so we can recalculate
+        // widths and position accordingly.
+        this.$("img").load(this.activate);
       }
-
       this.el.show().addClass(("TS-card_active"));
-      this.setWidth();
-      this.moveBarWithCard();
       this.notch.addClass("TS-notch_active");
+      this.setWidth();
+      
+      // In the case that the card is outside the bounds the wrong way when 
+      // it's flipped, we'll take care of it here before we move the actual
+      // card. 
+      this.flip($.Event("move"));
+      this.move();
     },
     
     // For Internet Explorer each card sets the width of` .TS-item_label` to
@@ -672,28 +657,25 @@
     // the card as a whole, fiddle with `.TS-item_year`s width.
     setWidth : function(){
       var max = _.max(_.toArray(this.$(".TS-item_user_html").children()), function(el){ return $(el).width(); });
-      if($(max).width() > this.$(".TS-item_year").width()){
+      if ($(max).width() > this.$(".TS-item_year").width()) {
         this.$(".TS-item_label").css("width", $(max).width());
       } else {
         this.$(".TS-item_label").css("width", this.$(".TS-item_year").width());
       }
     },
 
-    // Move the `Bar` if the `Card`'s element isn't visible.
-    moveBarWithCard : function() {
+    // Move the `Bar` if the card is outside the visible region on activation.
+    move : function() {
       var e = $.Event('moving');
-      var onBarEdge = this.cardOffset().onBarEdge;
-
-      switch(onBarEdge) {
-        case 'right':
-          e.deltaX = -(this.cardOffset().item.width());
-          this.series.timeline.bar.moving(e);
-          break;
-        case 'left':
-          e.deltaX = (this.cardOffset().item.width());
-          this.series.timeline.bar.moving(e);
+      var offset  = this.$(".TS-item").offset();
+      var toffset = $("#timeline_setter").offset();
+      if (offset.left < toffset.left) {
+        e.deltaX = toffset.left - offset.left + cleanNumber(this.$(".TS-item").css("padding-left"));
+        this.series.timeline.bar.moving(e);
+      } else if (offset.left + this.$(".TS-item").outerWidth() > toffset.left + $("#timeline_setter").width()) {
+        e.deltaX = toffset.left + $("#timeline_setter").width() - (offset.left + this.$(".TS-item").outerWidth());
+        this.series.timeline.bar.moving(e);
       }
-      this.position($.Event('move'));
     },
 
     // The click handler to set the current hash to the `Card`'s id.
@@ -709,10 +691,10 @@
 
     // An event listener to toggle this notche on and off via `Series`.
     toggleNotch : function(e){
-      switch(e.type) {
+      switch (e.type) {
         case "hideNotch":
           this.notch.hide().removeClass("TS-notch_active").addClass("TS-series_inactive");
-          if(this.el) this.el.hide();
+          if (this.el) this.el.hide();
           return;
         case "showNotch":
           this.notch.removeClass("TS-series_inactive").show();
@@ -786,7 +768,7 @@
       } else {
         el = (curCardIdx > 0 ? notches.eq(curCardIdx - 1) : false);
       }
-      if(!el) return;
+      if (!el) return;
       el.trigger("click");
     }
   });
@@ -803,7 +785,9 @@
   // and binding to `"keydown"`.
   Timeline.boot = function(data) {
     $(function(){
+      
       TimelineSetter.timeline = new Timeline(data);
+      
       new Zoom("in");
       new Zoom("out");
       var chooseNext = new Chooser("next");
