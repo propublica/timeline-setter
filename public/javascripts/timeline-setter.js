@@ -569,7 +569,7 @@
     this.attributes.topcolor = series.color;
     this.template = template("#TS-card_tmpl");
     this.ntemplate = template("#TS-notch_tmpl");
-    _.bindAll(this, "render", "activate", "position", "setPermalink", "toggleNotch");
+    _.bindAll(this, "render", "activate", "position", "setPermalink", "toggleNotch", "setWidth");
     this.series.bind(this.toggleNotch);
     this.series.timeline.bind(this.render);
     this.series.timeline.bar.bind(this.position);
@@ -645,13 +645,9 @@
     },
 
     // The first time a card is activated it renders its `template` and appends
-    // its element to the `Bar`. After doing so it moves the `Bar` if its
-    // element isn't currently visible. For ie each card sets the width of
-    // `.TS-item_label` to the maximum width of the card's children, or
-    // if that is less than the `.TS-item_year` element's width, `.TS-item_label`
-    // gets `.TS-item_year`s width. Which is a funny way of saying, if you'd
-    // like to set the width of the card as a whole, fiddle with `.TS-item_year`s
-    // width.
+    // its element to the `Bar`. After doing so it sets the width if `.TS-item_label`
+    // and moves the `Bar` if its element outside the visible portion of the
+    // timeline.
     activate : function(e){
       this.hideActiveCard();
       if (!this.el) {
@@ -660,19 +656,27 @@
         $("#TS-card_scroller_inner").append(this.el);
         this.originalMargin = this.el.css("margin-left");
         this.el.delegate(".TS-permalink", "click", this.setPermalink);
+        this.$("img").load(this.setWidth);
       }
 
       this.el.show().addClass(("TS-card_active"));
-
+      this.setWidth();
+      this.moveBarWithCard();
+      this.notch.addClass("TS-notch_active");
+    },
+    
+    // For Internet Explorer each card sets the width of` .TS-item_label` to
+    // the maximum width of the card's children, or if that is less than the
+    // `.TS-item_year` element's width, `.TS-item_label` gets `.TS-item_year`s
+    // width. Which is a funny way of saying, if you'd like to set the width of
+    // the card as a whole, fiddle with `.TS-item_year`s width.
+    setWidth : function(){
       var max = _.max(_.toArray(this.$(".TS-item_user_html").children()), function(el){ return $(el).width(); });
       if($(max).width() > this.$(".TS-item_year").width()){
         this.$(".TS-item_label").css("width", $(max).width());
       } else {
         this.$(".TS-item_label").css("width", this.$(".TS-item_year").width());
       }
-
-      this.moveBarWithCard();
-      this.notch.addClass("TS-notch_active");
     },
 
     // Move the `Bar` if the `Card`'s element isn't visible.
