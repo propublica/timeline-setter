@@ -278,7 +278,7 @@
     }
     
     /* color priority */
-    /* "#065718", "#EDC047", "#91ADD1", "#929E5E", "#9E5E23", "#C44846", "#065718", "#EDD4A5", "#CECECE" */
+    /* "#065718", "#EDC047", "#91ADD1", "#929E5E", "#9E5E23", "#C44846", "#465363", "#EDD4A5", "#CECECE" */
     
     /* default */
     .TS-notch_color_default,.TS-series_legend_swatch_default {
@@ -359,13 +359,13 @@
     
     /* 7 */
     .TS-notch_color_7,.TS-series_legend_swatch_7 {
-      background-color: #065718 !important;
+      background-color: #465363 !important;
     }
     .TS-css_arrow_color_7 {
-      border-bottom-color:#065718 !important;
+      border-bottom-color:#465363 !important;
     }
     .TS-item_color_7 {
-      border-top:1px solid #065718 !important;
+      border-top:1px solid #465363 !important;
     }
 
 
