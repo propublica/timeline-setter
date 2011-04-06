@@ -180,7 +180,7 @@ in/out, previous/next buttons) are available within `#TS-top_matter_container .T
 Series checkboxes are injected into `.TS-series_nav_container` and templated
 via `script#TS-notch_tmpl`. Currently, series colors are hard coded in the
 JavaScript. We support a maximum of nine series colors (assigned in this order:
-``#065718, #EDC047, #91ADD1, #929E5E, #9E5E23, #C44846, #065718, #EDD4A5, #CECECE``,
+``#065718, #EDC047, #91ADD1, #929E5E, #9E5E23, #C44846, #465363, #EDD4A5, #CECECE``,
 they can be overridden in the "color priority" section of `timeline-setter.css`). Technically
 you can create an unlimited number of series, but they will eventually fall back
 to the default charcoal notch color.
