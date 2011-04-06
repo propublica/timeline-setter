@@ -82,7 +82,7 @@ Full list of options:
 
 TimelineSetter looks for certain column names in your CSV file in order to
 generate a timeline. All columns are required, though as you'll see, some of
-them can be left blank. Here's a summary of each column and its significance:
+them can be left blank (see a [sample CSV](https://github.com/propublica/timeline-setter/blob/master/spec/test_data.csv)). Here's a summary of each column and its significance:
 
 <a id="date-csv"></a>
 ### date
