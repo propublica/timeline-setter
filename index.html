@@ -82,7 +82,7 @@
   </head>
   <body>
     <a href="http://www.propublica.org" class="propublica">&nbsp;</a>
-    <h1>TimelineSetter 0.1.0</h1>
+    <h1>TimelineSetter 0.1.1</h1>
 
 <p>TimelineSetter creates beautiful timelines.</p>
 
@@ -289,7 +289,7 @@ in/out, previous/next buttons) are available within <code>#TS-top_matter_contain
 <p>Series checkboxes are injected into <code>.TS-series_nav_container</code> and templated
 via <code>script#TS-notch_tmpl</code>. Currently, series colors are hard coded in the
 JavaScript. We support a maximum of nine series colors (assigned in this order:
-<code>#065718, #EDC047, #91ADD1, #929E5E, #9E5E23, #C44846, #065718, #EDD4A5, #CECECE</code>,
+<code>#065718, #EDC047, #91ADD1, #929E5E, #9E5E23, #C44846, #465363, #EDD4A5, #CECECE</code>,
 they can be overridden in the &ldquo;color priority&rdquo; section of <code>timeline-setter.css</code>). Technically
 you can create an unlimited number of series, but they will eventually fall back
 to the default charcoal notch color.</p>
@@ -365,7 +365,23 @@ questions should go to <a href="mailto:opensource@propublica.org">opensource@pro
 
 <h2>Change Log</h2>
 
-<p><a id="release-001"></a></p>
+<p><a id="release-011"></a></p>
+
+<h3>0.1.1</h3>
+
+<ul>
+<li>Made JavaScript smarter about image widths, so now images can be used without specifying height and width attributes</li>
+<li>Fixed &ldquo;read more&rdquo; buttons so they can be clicked everywhere, not just on the text</li>
+<li>Fixed a CLI bug where timeline was being put in the wrong place when output directory is specified without a trailing slash</li>
+<li>Fixed duplicate colors in CSS</li>
+<li>Fixed layout rendering problems when a card was more than half the size of the timeline</li>
+<li>Fixed an issue where JSON couldn&rsquo;t be generated in Ruby 1.9</li>
+</ul>
+
+
+<p><em>Thanks to <a href="http://github.com/palewire">Ben Welsh</a> for pointing out most of these issues</em></p>
+
+<p><a id="release-010"></a></p>
 
 <h3>0.1.0</h3>
 
