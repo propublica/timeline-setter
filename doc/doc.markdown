@@ -253,6 +253,8 @@ questions should go to <a href="mailto:opensource@propublica.org">opensource@pro
 * Fixed layout rendering problems when a card was more than half the size of the timeline
 * Fixed an issue where JSON couldn't be generated in Ruby 1.9
 
+_Thanks to [Ben Welsh](http://github.com/palewire) for pointing out most of these issues_
+
 <a id="release-010"></a>
 ### 0.1.0
 
