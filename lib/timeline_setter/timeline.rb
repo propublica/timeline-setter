@@ -10,7 +10,7 @@ module TimelineSetter
     # Convert human dates to timestamps, sort the hash by timestamp, and
     # convert the events hash to JSON to stick into our HTML.
     def to_json
-      @events.collect {|r| r[:timestamp] = Time.parse(r[:date]).to_i * 1000 }.sort{|a,b| b[:timestamp] <=> a[:timestamp]}
+      @events.each {|r| r[:timestamp] = Time.parse(r[:date]).to_i * 1000 }
       @events.to_json
     end
 
