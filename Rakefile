@@ -33,7 +33,7 @@ task :gh_pages do
   `git push github #{current_branch}`
   `git checkout gh-pages`
   `git merge #{current_branch}`
-  `git push github gh-pages`
+  `git push -f github gh-pages`
   `git checkout #{current_branch}`
 end
 
