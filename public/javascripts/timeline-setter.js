@@ -610,13 +610,21 @@
     // of time. The magic number here (7) is half the width of the css arrow.
     flip : function(e) {
       if (e.type !== "move" || !this.el || !this.el.is(":visible")) return;
-      var rightEdge  = this.$(".TS-item").offset().left + this.$(".TS-item").width();
-      var tRightEdge = $("#timeline_setter").offset().left + $("#timeline_setter").width();
-      var margin     = this.el.css("margin-left") === this.originalMargin;
-      var flippable  = this.$(".TS-item").width() < $("#timeline_setter").width() / 2;
-      if (tRightEdge - rightEdge < 0 && margin) {
+      var rightEdge   = this.$(".TS-item").offset().left + this.$(".TS-item").width();
+      var tRightEdge  = $("#timeline_setter").offset().left + $("#timeline_setter").width();
+      var margin      = this.el.css("margin-left") === this.originalMargin;
+      var flippable   = this.$(".TS-item").width() < $("#timeline_setter").width() / 2;
+      var offTimeline = this.el.position().left - this.$(".TS-item").width() < 0;
+      
+      // If the card's right edge is more than the timeline's right edge and 
+      // it's never been flipped before and it won't go off the timeline when
+      // flipped. We'll flip it.
+      if (tRightEdge - rightEdge < 0 && margin && !offTimeline) {
         this.el.css({"margin-left": -(this.$(".TS-item").width() + 7)});
         this.$(".TS-css_arrow").css({"left" : this.$(".TS-item").width()});
+        // Otherwise, if the card is off the left side of the timeline and we have
+        // flipped it before and the card's width is less than half of the width
+        // of the whole timeline, we'll flip it to the default position.
       } else if (this.el.offset().left - $("#timeline_setter").offset().left < 0 && !margin && flippable) {
         this.el.css({"margin-left": this.originalMargin});
         this.$(".TS-css_arrow").css({"left": 0});
