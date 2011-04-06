@@ -243,7 +243,17 @@ questions should go to <a href="mailto:opensource@propublica.org">opensource@pro
 <a id="changelog"></a>
 ## Change Log
 
-<a id="release-001"></a>
+<a id="release-011"></a>
+### 0.1.1
+
+* Made JavaScript smarter about image widths, so now images can be used without specifying height and width attributes
+* Fixed "read more" buttons so they can be clicked everywhere, not just on the text
+* Fixed a CLI bug where timeline was being put in the wrong place when output directory is specified without a trailing slash
+* Fixed duplicate colors in CSS
+* Fixed layout rendering problems when a card was more than half the size of the timeline
+* Fixed an issue where JSON couldn't be generated in Ruby 1.9
+
+<a id="release-010"></a>
 ### 0.1.0
 
 Initial release
