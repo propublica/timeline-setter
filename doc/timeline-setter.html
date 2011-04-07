@@ -166,8 +166,8 @@ And if you pass in the year 2010 or 2015 you'll get 2010 back.</p>             <
         <span class="k">return</span> <span class="p">(</span><span class="nx">date</span><span class="p">.</span><span class="nx">getFullYear</span><span class="p">()</span> <span class="o">/</span> <span class="mi">10</span> <span class="o">|</span> <span class="mi">0</span><span class="p">)</span> <span class="o">*</span> <span class="mi">10</span><span class="p">;</span>
     <span class="p">},</span>
     </pre></div>             </td>           </tr>                               <tr id="section-32">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-32">&#182;</a>               </div>               <p>Returns the first year of the five year "lustrum" a Date belongs to
-as an integer. A lustrum a fancy Roman word for a "five-year period."
-You can read more about it here: http://en.wikipedia.org/wiki/Lustrum
+as an integer. A lustrum is a fancy Roman word for a "five-year period."
+You can read more about it <a href="http://en.wikipedia.org/wiki/Lustrum">here</a>. 
 This all means that if you pass in the year 2011 you'll get 2010 back.
 And if you pass in the year 1997 you'll get 1995 back.</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="nx">getLustrum</span> <span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">date</span><span class="p">)</span> <span class="p">{</span>
         <span class="k">return</span> <span class="p">(</span><span class="nx">date</span><span class="p">.</span><span class="nx">getFullYear</span><span class="p">()</span> <span class="o">/</span> <span class="mi">5</span> <span class="o">|</span> <span class="mi">0</span><span class="p">)</span> <span class="o">*</span> <span class="mi">5</span><span class="p">;</span>
