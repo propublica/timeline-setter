@@ -188,6 +188,8 @@
     switch (interval) {
       case "Decade":
         return dYear;
+      case "Lustrum":
+        return dYear;
       case "FullYear":
         return dYear;
       case "Month":
@@ -207,6 +209,7 @@
     // Sane estimates of date ranges for the `isAtLeastA` test.
     INTERVALS : {
       Decade   : 315360000000,
+      Lustrum  : 157680000000,
       FullYear : 31536000000,
       Month    : 2592000000,
       Date     : 86400000,
@@ -216,7 +219,7 @@
     },
 
     // The order used when testing where exactly a timespan falls.
-    INTERVAL_ORDER : ['Seconds','Minutes','Hours','Date','Month','FullYear', 'Decade'],
+    INTERVAL_ORDER : ['Seconds','Minutes','Hours','Date','Month','FullYear', 'Lustrum', 'Decade'],
 
     // A test to find the appropriate range of intervals, for example if a range of
     // timestamps only spans hours this will return true when called with `"Hours"`.
@@ -246,7 +249,16 @@
     getDecade : function(date) {
         return (date.getFullYear() / 10 | 0) * 10;
     },
-
+    
+    // Returns the first year of the five year "lustrum" a Date belongs to
+    // as an integer. A lustrum a fancy Roman word for a "five-year period."
+    // You can read more about it here: http://en.wikipedia.org/wiki/Lustrum
+    // This all means that if you pass in the year 2011 you'll get 2010 back.
+    // And if you pass in the year 1997 you'll get 1995 back.
+    getLustrum : function(date) {
+        return ((date.getFullYear() / 5 | 0) * 10) / 2;
+    },
+    
     // Zero out a date from the current interval down to seconds.
     floor : function(ts){
       var idx = this.idx;
@@ -254,8 +266,11 @@
       while(idx--){
         var intvl = this.INTERVAL_ORDER[idx];
         switch(intvl){
-          case 'FullYear':
+          case 'Lustrum':
             date["setFullYear"](this.getDecade(date));
+            break;
+          case 'FullYear':
+            date["setFullYear"](this.getLustrum(date));
             break;
           default: 
             date["set" + intvl](intvl === "Date" ? 1 : 0);
@@ -271,6 +286,9 @@
       switch(intvl){
         case 'Decade':
           date["setFullYear"](this.getDecade(date) + 10);
+          break;
+        case 'Lustrum':
+          date["setFullYear"](this.getLustrum(date) + 5);
           break;
         default: 
           date["set" + intvl](date["get" + intvl]() + 1);
