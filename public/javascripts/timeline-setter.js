@@ -261,7 +261,7 @@
     // This all means that if you pass in the year 2011 you'll get 2010 back.
     // And if you pass in the year 1997 you'll get 1995 back.
     getLustrum : function(date) {
-        return ((date.getFullYear() / 5 | 0) * 10) / 2;
+        return (date.getFullYear() / 5 | 0) * 5;
     },
     
     // Zero out a date from the current interval down to seconds.
