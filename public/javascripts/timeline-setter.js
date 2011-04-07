@@ -186,6 +186,8 @@
     var dHourMinuteSecond = dHourWithMinutes + ":" + padNumber(d.getSeconds());
 
     switch (interval) {
+      case "Decade":
+        return dYear;
       case "FullYear":
         return dYear;
       case "Month":
@@ -204,6 +206,7 @@
   Intervals.prototype = {
     // Sane estimates of date ranges for the `isAtLeastA` test.
     INTERVALS : {
+      Decade   : 315360000000,
       FullYear : 31536000000,
       Month    : 2592000000,
       Date     : 86400000,
@@ -213,7 +216,7 @@
     },
 
     // The order used when testing where exactly a timespan falls.
-    INTERVAL_ORDER : ['Seconds','Minutes','Hours','Date','Month','FullYear'],
+    INTERVAL_ORDER : ['Seconds','Minutes','Hours','Date','Month','FullYear', 'Decade'],
 
     // A test to find the appropriate range of intervals, for example if a range of
     // timestamps only spans hours this will return true when called with `"Hours"`.
@@ -235,13 +238,28 @@
       return this.INTERVALS[this.INTERVAL_ORDER[this.idx]];
     },
 
+    // Return the first year of the decade a Date belongs to as an integer.
+    // Decades are defined in the conventional (ie. 60s) sense,
+    // instead of the more precise mathematical method that starts
+    // with year one. For example, the current decade runs from 2010-2019.
+    // And if you pass in the year 2010 or 2015 you'll get 2010 back.
+    getDecade : function(date) {
+        return (date.getFullYear() / 10 | 0) * 10;
+    },
+
     // Zero out a date from the current interval down to seconds.
     floor : function(ts){
       var idx = this.idx;
       var date = new Date(ts);
       while(idx--){
         var intvl = this.INTERVAL_ORDER[idx];
-        date["set" + intvl](intvl === "Date" ? 1 : 0);
+        switch(intvl){
+          case 'FullYear':
+            date["setFullYear"](this.getDecade(date));
+            break;
+          default: 
+            date["set" + intvl](intvl === "Date" ? 1 : 0);
+        }
       }
       return date.getTime();
     },
@@ -250,7 +268,13 @@
     ceil : function(ts){
       var date = new Date(this.floor(ts));
       var intvl = this.INTERVAL_ORDER[this.idx];
-      date["set" + intvl](date["get" + intvl]() + 1);
+      switch(intvl){
+        case 'Decade':
+          date["setFullYear"](this.getDecade(date) + 10);
+          break;
+        default: 
+          date["set" + intvl](date["get" + intvl]() + 1);
+      }
       return date.getTime();
     },
 
