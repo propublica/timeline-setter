@@ -256,8 +256,8 @@
     },
     
     // Returns the first year of the five year "lustrum" a Date belongs to
-    // as an integer. A lustrum a fancy Roman word for a "five-year period."
-    // You can read more about it here: http://en.wikipedia.org/wiki/Lustrum
+    // as an integer. A lustrum is a fancy Roman word for a "five-year period."
+    // You can read more about it [here](http://en.wikipedia.org/wiki/Lustrum). 
     // This all means that if you pass in the year 2011 you'll get 2010 back.
     // And if you pass in the year 1997 you'll get 1995 back.
     getLustrum : function(date) {
