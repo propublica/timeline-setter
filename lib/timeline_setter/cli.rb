@@ -61,15 +61,19 @@ module TimelineSetter
     end
 
     def outdir
-      @options[:output] ? (File.dirname(@options[:output]) + '/') : File.dirname("#{TimelineSetter::ROOT}/public/timeline.html") + '/'
+      @options[:output] ? @options[:output] : "#{`pwd`.strip}/"
+    end
+    
+    def timeline_page_path
+      File.join(outdir, 'timeline.html')
     end
 
     def compile!
       if @options[:assets]
-        FileUtils.cp_r(Dir.glob('public/*'), outdir)
+        FileUtils.cp_r(Dir.glob("#{TimelineSetter::ROOT}/public/*"), outdir)
       end
 
-      File.open(outdir + 'timeline.html', 'w+') do |doc|
+      File.open(timeline_page_path, 'w+') do |doc|
         doc.write html
       end
 
@@ -77,7 +81,7 @@ module TimelineSetter
 
       if @options[:open]
         puts "== Opening ..."
-        %x{ open #{outdir}timeline.html }
+        %x[ open #{timeline_page_path} ]
       end
     end
 

@@ -8,6 +8,7 @@ require 'time'
 require 'erb'
 require 'table_fu'
 require 'json'
+require 'kompress'
 
 begin
   require 'closure-compiler'
@@ -17,6 +18,5 @@ end
 
 
 require "#{TimelineSetter::ROOT}/lib/timeline_setter/version"
-require "#{TimelineSetter::ROOT}/lib/timeline_setter/util"
 require "#{TimelineSetter::ROOT}/lib/timeline_setter/parser"
 require "#{TimelineSetter::ROOT}/lib/timeline_setter/timeline"

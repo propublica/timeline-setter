@@ -30,9 +30,10 @@ task :gh_pages do
   current_branch = $1
   
   `git commit -am "docs"`
+  `git push github #{current_branch}`
   `git checkout gh-pages`
   `git merge #{current_branch}`
-  `git push github gh-pages`
+  `git push -f github gh-pages`
   `git checkout #{current_branch}`
 end
 
@@ -56,6 +57,7 @@ begin
     gem.require_paths = ['lib']
     gem.add_dependency "json"
     gem.add_dependency "table_fu"
+    gem.add_dependency "kompress", ">= 0.0.2"
     gem.add_dependency "closure-compiler"
     gem.add_development_dependency "rspec", ">= 2.0.0"
     gem.version = TimelineSetter::VERSION
@@ -86,8 +88,10 @@ end
 
 desc "generate sample timeline"
 task :sample do
-  `./bin/timeline-setter -c ./tbi.csv -m`
-  `cp ./public/timeline.html ./doc/timeline-sample.html`
+  # noop this for now.
+  
+  # `./bin/timeline-setter -c ./tbi.csv -m -o ./public/`
+  # `cp ./public/timeline.html ./doc/timeline-sample.html`
 end
 
 

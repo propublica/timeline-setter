@@ -70,25 +70,17 @@
     
   
     
-      <dt class="r2">Includes:</dt>
-      <dd class="r2"><span class='object_link'><a href="Util.html" title="TimelineSetter::Util (module)">Util</a></span></dd>
-      
-    
   
   
   
-    <dt class="r1 last">Defined in:</dt>
-    <dd class="r1 last">lib/timeline_setter/timeline.rb</dd>
+    <dt class="r2 last">Defined in:</dt>
+    <dd class="r2 last">lib/timeline_setter/timeline.rb</dd>
   
 </dl>
 <div class="clear"></div>
 
 
 
-  
-  
-  
-  
   <h2>Instance Attribute Summary <small>(<a href="#" class="summary_toggle">collapse</a>)</small></h2>
   <ul class="summary">
     
@@ -160,6 +152,27 @@ Parser#initialize.
         <li class="public ">
   <span class="summary_signature">
     
+      <a href="#timeline_markup-instance_method" title="#timeline_markup (instance method)">- (Object) <strong>timeline_markup</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
       <a href="#timeline_min-instance_method" title="#timeline_min (instance method)">- (Object) <strong>timeline_min</strong> </a>
     
 
@@ -178,6 +191,27 @@ Create a minified one-page version of a timeline by minifying CSS and JS
 and embedding all assets into our ERB template.
 </p>
 </div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#tmpl-instance_method" title="#tmpl (instance method)">- (Object) <strong>tmpl</strong>(tmpl_file) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
   
 </li>
 
@@ -210,16 +244,6 @@ the events hash to JSON to stick into our HTML.
     </ul>
   
 
-
-  
-  
-  
-  
-  
-  
-  
-  <h3 class="inherited">Methods included from <span class='object_link'><a href="Util.html" title="TimelineSetter::Util (module)">Util</a></span></h3>
-  <p class="inherited"><span class='object_link'><a href="Util.html#minify_css-instance_method" title="TimelineSetter::Util#minify_css (method)">#minify_css</a></span></p>
 <div id="constructor_details" class="method_details_list">
   <h2>Constructor Details</h2>
   
@@ -248,12 +272,12 @@ Parser#initialize
       <pre class="lines">
 
 
-8
-9
-10</pre>
+6
+7
+8</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/timeline_setter/timeline.rb', line 8</span>
+      <pre class="code"><span class="info file"># File 'lib/timeline_setter/timeline.rb', line 6</span>
 
 <span class='def def kw'>def</span> <span class='initialize identifier id'>initialize</span><span class='lparen token'>(</span><span class='events identifier id'>events</span><span class='rparen token'>)</span>
   <span class='@events ivar id'>@events</span> <span class='assign token'>=</span> <span class='events identifier id'>events</span>
@@ -298,15 +322,15 @@ preserves external links to CSS and JS.
       <pre class="lines">
 
 
-22
-23
-24</pre>
+24
+25
+26</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/timeline_setter/timeline.rb', line 22</span>
+      <pre class="code"><span class="info file"># File 'lib/timeline_setter/timeline.rb', line 24</span>
 
 <span class='def def kw'>def</span> <span class='timeline identifier id'>timeline</span>
-  <span class='@timeline ivar id'>@timeline</span> <span class='assign token'>=</span> <span class='ERB constant id'>ERB</span><span class='dot token'>.</span><span class='new identifier id'>new</span><span class='lparen token'>(</span><span class='File constant id'>File</span><span class='dot token'>.</span><span class='open identifier id'>open</span><span class='lparen token'>(</span><span class='dstring node'>&quot;#{TimelineSetter::ROOT}/templates/timeline.erb&quot;</span><span class='rparen token'>)</span><span class='dot token'>.</span><span class='read identifier id'>read</span><span class='rparen token'>)</span><span class='dot token'>.</span><span class='result identifier id'>result</span><span class='lparen token'>(</span><span class='binding identifier id'>binding</span><span class='rparen token'>)</span>
+  <span class='@timeline ivar id'>@timeline</span> <span class='assign token'>=</span> <span class='tmpl identifier id'>tmpl</span><span class='lparen token'>(</span><span class='string val'>&quot;timeline.erb&quot;</span><span class='rparen token'>)</span>
 <span class='end end kw'>end</span>
 </pre>
     </td>
@@ -322,7 +346,36 @@ preserves external links to CSS and JS.
     
     
       <div class="method_details first">
-  <p class="signature first" id="timeline_min-instance_method">
+  <p class="signature first" id="timeline_markup-instance_method">
+  
+    - (<tt>Object</tt>) <strong>timeline_markup</strong> 
+  
+
+  
+</p><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+17
+18
+19</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/timeline_setter/timeline.rb', line 17</span>
+
+<span class='def def kw'>def</span> <span class='timeline_markup identifier id'>timeline_markup</span>
+  <span class='tmpl identifier id'>tmpl</span><span class='lparen token'>(</span><span class='string val'>&quot;timeline-markup.erb&quot;</span><span class='rparen token'>)</span>
+<span class='end end kw'>end</span>
+</pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <p class="signature " id="timeline_min-instance_method">
   
     - (<tt>Object</tt>) <strong>timeline_min</strong> 
   
@@ -346,25 +399,56 @@ and embedding all assets into our ERB template.
       <pre class="lines">
 
 
-28
-29
 30
 31
 32
 33
 34
-35</pre>
+35
+36
+37
+38</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/timeline_setter/timeline.rb', line 28</span>
+      <pre class="code"><span class="info file"># File 'lib/timeline_setter/timeline.rb', line 30</span>
 
 <span class='def def kw'>def</span> <span class='timeline_min identifier id'>timeline_min</span>
-  <span class='js identifier id'>js</span> <span class='assign token'>=</span> <span class='string val'>&quot;&quot;</span>
-  <span class='css identifier id'>css</span> <span class='assign token'>=</span> <span class='minify_css identifier id'>minify_css</span><span class='lparen token'>(</span><span class='File constant id'>File</span><span class='dot token'>.</span><span class='open identifier id'>open</span><span class='lparen token'>(</span><span class='dstring node'>&quot;#{TimelineSetter::ROOT}/public/stylesheets/timeline-setter.css&quot;</span><span class='rparen token'>)</span><span class='dot token'>.</span><span class='read identifier id'>read</span><span class='rparen token'>)</span>
+  <span class='@js ivar id'>@js</span> <span class='assign token'>=</span> <span class='string val'>&quot;&quot;</span>
+  <span class='@css ivar id'>@css</span> <span class='assign token'>=</span> <span class='Kompress constant id'>Kompress</span><span class='colon2 op'>::</span><span class='CSS constant id'>CSS</span><span class='dot token'>.</span><span class='new identifier id'>new</span><span class='lparen token'>(</span><span class='File constant id'>File</span><span class='dot token'>.</span><span class='open identifier id'>open</span><span class='lparen token'>(</span><span class='dstring node'>&quot;#{TimelineSetter::ROOT}/public/stylesheets/timeline-setter.css&quot;</span><span class='rparen token'>)</span><span class='dot token'>.</span><span class='read identifier id'>read</span><span class='rparen token'>)</span><span class='dot token'>.</span><span class='css identifier id'>css</span>
   <span class='libs identifier id'>libs</span> <span class='assign token'>=</span> <span class='Dir constant id'>Dir</span><span class='dot token'>.</span><span class='glob identifier id'>glob</span><span class='lparen token'>(</span><span class='dstring node'>&quot;#{TimelineSetter::ROOT}/public/javascripts/vendor/**&quot;</span><span class='rparen token'>)</span>
-  <span class='libs identifier id'>libs</span><span class='dot token'>.</span><span class='each identifier id'>each</span> <span class='lbrace token'>{</span> <span class='bitor op'>|</span><span class='lib identifier id'>lib</span><span class='bitor op'>|</span> <span class='js identifier id'>js</span> <span class='lshft op'>&lt;&lt;</span> <span class='File constant id'>File</span><span class='dot token'>.</span><span class='open identifier id'>open</span><span class='lparen token'>(</span><span class='lib identifier id'>lib</span><span class='comma token'>,</span><span class='string val'>'r'</span><span class='rparen token'>)</span><span class='dot token'>.</span><span class='read identifier id'>read</span> <span class='rbrace token'>}</span>
-  <span class='js identifier id'>js</span> <span class='lshft op'>&lt;&lt;</span> <span class='Closure constant id'>Closure</span><span class='colon2 op'>::</span><span class='Compiler constant id'>Compiler</span><span class='dot token'>.</span><span class='new identifier id'>new</span><span class='dot token'>.</span><span class='compile identifier id'>compile</span><span class='lparen token'>(</span><span class='File constant id'>File</span><span class='dot token'>.</span><span class='open identifier id'>open</span><span class='lparen token'>(</span><span class='dstring node'>&quot;#{TimelineSetter::ROOT}/public/javascripts/timeline-setter.js&quot;</span><span class='comma token'>,</span> <span class='string val'>'r'</span><span class='rparen token'>)</span><span class='rparen token'>)</span>
-  <span class='@timeline ivar id'>@timeline</span> <span class='assign token'>=</span> <span class='ERB constant id'>ERB</span><span class='dot token'>.</span><span class='new identifier id'>new</span><span class='lparen token'>(</span><span class='File constant id'>File</span><span class='dot token'>.</span><span class='open identifier id'>open</span><span class='lparen token'>(</span><span class='dstring node'>&quot;#{TimelineSetter::ROOT}/templates/timeline-min.erb&quot;</span><span class='rparen token'>)</span><span class='dot token'>.</span><span class='read identifier id'>read</span><span class='rparen token'>)</span><span class='dot token'>.</span><span class='result identifier id'>result</span><span class='lparen token'>(</span><span class='binding identifier id'>binding</span><span class='rparen token'>)</span>
+  <span class='libs identifier id'>libs</span><span class='dot token'>.</span><span class='each identifier id'>each</span> <span class='lbrace token'>{</span> <span class='bitor op'>|</span><span class='lib identifier id'>lib</span><span class='bitor op'>|</span> <span class='@js ivar id'>@js</span> <span class='lshft op'>&lt;&lt;</span> <span class='File constant id'>File</span><span class='dot token'>.</span><span class='open identifier id'>open</span><span class='lparen token'>(</span><span class='lib identifier id'>lib</span><span class='comma token'>,</span><span class='string val'>'r'</span><span class='rparen token'>)</span><span class='dot token'>.</span><span class='read identifier id'>read</span> <span class='rbrace token'>}</span>
+  <span class='@min_html ivar id'>@min_html</span> <span class='assign token'>=</span> <span class='Kompress constant id'>Kompress</span><span class='colon2 op'>::</span><span class='HTML constant id'>HTML</span><span class='dot token'>.</span><span class='new identifier id'>new</span><span class='lparen token'>(</span><span class='timeline_markup identifier id'>timeline_markup</span><span class='rparen token'>)</span><span class='dot token'>.</span><span class='html identifier id'>html</span>
+  <span class='@js ivar id'>@js</span> <span class='lshft op'>&lt;&lt;</span> <span class='Closure constant id'>Closure</span><span class='colon2 op'>::</span><span class='Compiler constant id'>Compiler</span><span class='dot token'>.</span><span class='new identifier id'>new</span><span class='dot token'>.</span><span class='compile identifier id'>compile</span><span class='lparen token'>(</span><span class='File constant id'>File</span><span class='dot token'>.</span><span class='open identifier id'>open</span><span class='lparen token'>(</span><span class='dstring node'>&quot;#{TimelineSetter::ROOT}/public/javascripts/timeline-setter.js&quot;</span><span class='comma token'>,</span> <span class='string val'>'r'</span><span class='rparen token'>)</span><span class='rparen token'>)</span>
+  <span class='@timeline ivar id'>@timeline</span> <span class='assign token'>=</span> <span class='tmpl identifier id'>tmpl</span><span class='lparen token'>(</span><span class='string val'>&quot;timeline-min.erb&quot;</span><span class='rparen token'>)</span>
+<span class='end end kw'>end</span>
+</pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <p class="signature " id="tmpl-instance_method">
+  
+    - (<tt>Object</tt>) <strong>tmpl</strong>(tmpl_file) 
+  
+
+  
+</p><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+40
+41
+42</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/timeline_setter/timeline.rb', line 40</span>
+
+<span class='def def kw'>def</span> <span class='tmpl identifier id'>tmpl</span><span class='lparen token'>(</span><span class='tmpl_file identifier id'>tmpl_file</span><span class='rparen token'>)</span>
+  <span class='ERB constant id'>ERB</span><span class='dot token'>.</span><span class='new identifier id'>new</span><span class='lparen token'>(</span><span class='File constant id'>File</span><span class='dot token'>.</span><span class='open identifier id'>open</span><span class='lparen token'>(</span><span class='dstring node'>&quot;#{TimelineSetter::ROOT}/templates/#{tmpl_file}&quot;</span><span class='rparen token'>)</span><span class='dot token'>.</span><span class='read identifier id'>read</span><span class='rparen token'>)</span><span class='dot token'>.</span><span class='result identifier id'>result</span><span class='lparen token'>(</span><span class='binding identifier id'>binding</span><span class='rparen token'>)</span>
 <span class='end end kw'>end</span>
 </pre>
     </td>
@@ -397,16 +481,16 @@ the events hash to JSON to stick into our HTML.
       <pre class="lines">
 
 
+12
+13
 14
-15
-16
-17</pre>
+15</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/timeline_setter/timeline.rb', line 14</span>
+      <pre class="code"><span class="info file"># File 'lib/timeline_setter/timeline.rb', line 12</span>
 
 <span class='def def kw'>def</span> <span class='to_json identifier id'>to_json</span>
-  <span class='@events ivar id'>@events</span><span class='dot token'>.</span><span class='collect identifier id'>collect</span> <span class='lbrace token'>{</span><span class='bitor op'>|</span><span class='r identifier id'>r</span><span class='bitor op'>|</span> <span class='r identifier id'>r</span><span class='lbrack token'>[</span><span class='symbol val'>:timestamp</span><span class='rbrack token'>]</span> <span class='assign token'>=</span> <span class='Time constant id'>Time</span><span class='dot token'>.</span><span class='parse identifier id'>parse</span><span class='lparen token'>(</span><span class='r identifier id'>r</span><span class='lbrack token'>[</span><span class='symbol val'>:date</span><span class='rbrack token'>]</span><span class='rparen token'>)</span><span class='dot token'>.</span><span class='to_i identifier id'>to_i</span> <span class='mult op'>*</span> <span class='integer val'>1000</span> <span class='rbrace token'>}</span><span class='dot token'>.</span><span class='sort identifier id'>sort</span><span class='lbrace token'>{</span><span class='bitor op'>|</span><span class='a identifier id'>a</span><span class='comma token'>,</span><span class='b identifier id'>b</span><span class='bitor op'>|</span> <span class='b identifier id'>b</span><span class='lbrack token'>[</span><span class='symbol val'>:timestamp</span><span class='rbrack token'>]</span> <span class='cmp op'>&lt;=&gt;</span> <span class='a identifier id'>a</span><span class='lbrack token'>[</span><span class='symbol val'>:timestamp</span><span class='rbrack token'>]</span><span class='rbrace token'>}</span>
+  <span class='@events ivar id'>@events</span><span class='dot token'>.</span><span class='each identifier id'>each</span> <span class='lbrace token'>{</span><span class='bitor op'>|</span><span class='r identifier id'>r</span><span class='bitor op'>|</span> <span class='r identifier id'>r</span><span class='lbrack token'>[</span><span class='symbol val'>:timestamp</span><span class='rbrack token'>]</span> <span class='assign token'>=</span> <span class='Time constant id'>Time</span><span class='dot token'>.</span><span class='parse identifier id'>parse</span><span class='lparen token'>(</span><span class='r identifier id'>r</span><span class='lbrack token'>[</span><span class='symbol val'>:date</span><span class='rbrack token'>]</span><span class='rparen token'>)</span><span class='dot token'>.</span><span class='to_i identifier id'>to_i</span> <span class='mult op'>*</span> <span class='integer val'>1000</span> <span class='rbrace token'>}</span>
   <span class='@events ivar id'>@events</span><span class='dot token'>.</span><span class='to_json identifier id'>to_json</span>
 <span class='end end kw'>end</span>
 </pre>
@@ -420,7 +504,7 @@ the events hash to JSON to stick into our HTML.
 </div>
     
     <div id="footer">
-  Generated on Tue Mar 29 12:10:19 2011 by 
+  Generated on Wed Apr  6 11:29:14 2011 by 
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.6.5 (ruby-1.8.7).
 </div>
