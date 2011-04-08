@@ -231,7 +231,7 @@ On the client side, there are a number of features we plan to add, including:
 <a id="credits"></a>
 ## Credits
 
-[Al Shaw](http://twitter.com/a_l), [Jeff Larson](http://github.com/thejefflarson), ProPublica
+[Al Shaw](http://github.com/ashaw), [Jeff Larson](http://github.com/thejefflarson), ProPublica, [Ben Welsh](http://github.com/palewire), Los Angeles Times
 
 <a id="contact"></a>
 ## Contact
@@ -242,6 +242,12 @@ questions should go to <a href="mailto:opensource@propublica.org">opensource@pro
 
 <a id="changelog"></a>
 ## Change Log
+
+<a id="release-012"></a>
+### 0.1.2
+
+* Support for decade and lustrum (five year period) interval notches. _Thanks, [Ben Welsh](http://github.com/palewire)_
+
 
 <a id="release-011"></a>
 ### 0.1.1
