@@ -267,18 +267,18 @@
       return (date.getFullYear() / 5 | 0) * 5;
     },
     
-   // Returns a new Date object that is "rounded down" the previous Sunday
-    getWeek : function(date) {
-      loopDate = new Date();
-      loopDate.setTime(date.valueOf());
-      while (true) {
-        if (loopDate.getDay() === 0) {
-          break;
-        } else {
-          loopDate.setTime(loopDate.valueOf() - 86400000);
-        }
-      }
-      return loopDate;
+    // Return a Date object rounded down to the previous Sunday, a.k.a. the first day of the week.
+    getWeekFloor: function(date) {
+        thisDate = new Date();
+        thisDate.setDate(date.getDate() - date.getDay());
+        return thisDate;
+    },
+    
+    // Return a Date object rounded up to the next Sunday, a.k.a. the start of the next week.
+    getWeekCeil: function(date) {
+        thisDate = new Date();
+        thisDate.setDate(date.getDate() + (7 - date.getDay()));
+        return thisDate;
     },
     
     // Zero out a date from the current interval down to seconds.
@@ -295,9 +295,7 @@
             date["setFullYear"](this.getLustrum(date));
             break;
           case 'Week':
-            date['setMonth'](date.getMonth());
-          case 'Date':
-            date.setTime(this.getWeek(date).getTime());
+            date.setDate(this.getWeekFloor(date).getDate());
             break;
           default: 
             date["set" + intvl](intvl === "Date" ? 1 : 0);
@@ -318,7 +316,7 @@
           date["setFullYear"](this.getLustrum(date) + 5);
           break;
         case 'Week':
-          date.setTime(this.getWeek(date).getTime() + this.INTERVALS['Week']);
+          date.setDate(this.getWeekCeil(date).getDate());
           break;
         default: 
           date["set" + intvl](date["get" + intvl]() + 1);
