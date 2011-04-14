@@ -294,6 +294,8 @@
           case 'FullYear':
             date["setFullYear"](this.getLustrum(date));
             break;
+          case 'Week':
+            date['setMonth'](date.getMonth());
           case 'Date':
             date.setTime(this.getWeek(date).getTime());
             break;
