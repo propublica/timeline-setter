@@ -199,6 +199,8 @@
         return dYear;
       case "Month":
         return dMonth + ', ' + dYear;
+      case "Week":
+        return dDate;
       case "Date":
         return dDate;
       case "Hours":
@@ -217,6 +219,7 @@
       Lustrum  : 157680000000,
       FullYear : 31536000000,
       Month    : 2592000000,
+      Week     : 604800000,
       Date     : 86400000,
       Hours    : 3600000,
       Minutes  : 60000,
@@ -224,7 +227,7 @@
     },
 
     // The order used when testing where exactly a timespan falls.
-    INTERVAL_ORDER : ['Seconds','Minutes','Hours','Date','Month','FullYear', 'Lustrum', 'Decade'],
+    INTERVAL_ORDER : ['Seconds','Minutes','Hours','Date','Week','Month','FullYear','Lustrum','Decade'],
 
     // A test to find the appropriate range of intervals, for example if a range of
     // timestamps only spans hours this will return true when called with `"Hours"`.
@@ -263,7 +266,21 @@
     getLustrum : function(date) {
       return (date.getFullYear() / 5 | 0) * 5;
     },
-  
+    
+   // Returns a new Date object that is "rounded down" the previous Sunday
+    getWeek : function(date) {
+      loopDate = new Date();
+      loopDate.setTime(date.valueOf());
+      while (true) {
+        if (loopDate.getDay() === 0) {
+          break;
+        } else {
+          loopDate.setTime(loopDate.valueOf() - 86400000);
+        }
+      }
+      return loopDate;
+    },
+    
     // Zero out a date from the current interval down to seconds.
     floor : function(ts){
       var idx = this.idx;
@@ -276,6 +293,9 @@
             break;
           case 'FullYear':
             date["setFullYear"](this.getLustrum(date));
+            break;
+          case 'Date':
+            date.setTime(this.getWeek(date).getTime());
             break;
           default: 
             date["set" + intvl](intvl === "Date" ? 1 : 0);
@@ -294,6 +314,9 @@
           break;
         case 'Lustrum':
           date["setFullYear"](this.getLustrum(date) + 5);
+          break;
+        case 'Week':
+          date.setTime(this.getWeek(date).getTime() + this.INTERVALS['Week']);
           break;
         default: 
           date["set" + intvl](date["get" + intvl]() + 1);
