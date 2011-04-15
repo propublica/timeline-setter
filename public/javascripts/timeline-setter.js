@@ -269,37 +269,72 @@
     
     // Return a Date object rounded down to the previous Sunday, a.k.a. the first day of the week.
     getWeekFloor: function(date) {
-        thisDate = new Date();
+        thisDate = new Date(date.getFullYear(), date.getMonth(), date.getDate());
         thisDate.setDate(date.getDate() - date.getDay());
         return thisDate;
     },
     
     // Return a Date object rounded up to the next Sunday, a.k.a. the start of the next week.
     getWeekCeil: function(date) {
-        thisDate = new Date();
-        thisDate.setDate(date.getDate() + (7 - date.getDay()));
+        thisDate = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+        thisDate.setDate(thisDate.getDate() + (7 - date.getDay()));
         return thisDate;
     },
     
     // Zero out a date from the current interval down to seconds.
     floor : function(ts){
-      var idx = this.idx;
       var date = new Date(ts);
-      while(idx--){
-        var intvl = this.INTERVAL_ORDER[idx];
-        switch(intvl){
-          case 'Lustrum':
-            date["setFullYear"](this.getDecade(date));
-            break;
-          case 'FullYear':
-            date["setFullYear"](this.getLustrum(date));
-            break;
-          case 'Week':
-            date.setDate(this.getWeekFloor(date).getDate());
-            break;
-          default: 
-            date["set" + intvl](intvl === "Date" ? 1 : 0);
-        }
+      var intvl = this.INTERVAL_ORDER[this.idx];
+      switch(intvl){
+        case 'Decade':
+          date.setFullYear(this.getDecade(date));
+          date.setMonth(0);
+          date.setDate(1);
+          date.setHours(0);
+          date.setMinutes(0);
+          date.setSeconds(0);
+          break;
+        case 'Lustrum':
+          date.setFullYear(this.getLustrum(date));
+          date.setMonth(0);
+          date.setDate(1);
+          date.setHours(0);
+          date.setMinutes(0);
+          date.setSeconds(0);
+          break;
+        case 'FullYear':
+          date.setMonth(0);
+          date.setDate(1);
+          date.setHours(0);
+          date.setMinutes(0);
+          date.setSeconds(0);
+          break;
+        case 'Month':
+          date.setDate(1);
+          date.setHours(0);
+          date.setMinutes(0);
+          date.setSeconds(0);
+          break;
+        case 'Week':
+          date.setDate(this.getWeekFloor(date).getDate());
+          date.setHours(0);
+          date.setMinutes(0);
+          date.setSeconds(0);
+          break;
+        case 'Date':
+          date.setHours(0);
+          date.setMinutes(0);
+          date.setSeconds(0);
+          break;
+        case 'Hours':
+          date.setMinutes(0);
+          date.setSeconds(0);
+          break;
+        case 'Minutes':
+          date.setSeconds(0);
+          break;
+        case 'Seconds':
+          break;
       }
       return date.getTime();
     },
@@ -316,7 +351,7 @@
           date["setFullYear"](this.getLustrum(date) + 5);
           break;
         case 'Week':
-          date.setDate(this.getWeekCeil(date).getDate());
+          date.setTime(this.getWeekCeil(date).getTime());
           break;
         default: 
           date["set" + intvl](date["get" + intvl]() + 1);
