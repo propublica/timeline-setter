@@ -285,57 +285,25 @@
     floor : function(ts){
       var date = new Date(ts);
       var intvl = this.INTERVAL_ORDER[this.idx];
-      switch(intvl){
-        case 'Decade':
-          date.setFullYear(this.getDecade(date));
-          date.setMonth(0);
-          date.setDate(1);
-          date.setHours(0);
-          date.setMinutes(0);
-          date.setSeconds(0);
-          break;
-        case 'Lustrum':
-          date.setFullYear(this.getLustrum(date));
-          date.setMonth(0);
-          date.setDate(1);
-          date.setHours(0);
-          date.setMinutes(0);
-          date.setSeconds(0);
-          break;
-        case 'FullYear':
-          date.setMonth(0);
-          date.setDate(1);
-          date.setHours(0);
-          date.setMinutes(0);
-          date.setSeconds(0);
-          break;
-        case 'Month':
-          date.setDate(1);
-          date.setHours(0);
-          date.setMinutes(0);
-          date.setSeconds(0);
-          break;
-        case 'Week':
-          date.setDate(this.getWeekFloor(date).getDate());
-          date.setHours(0);
-          date.setMinutes(0);
-          date.setSeconds(0);
-          break;
-        case 'Date':
-          date.setHours(0);
-          date.setMinutes(0);
-          date.setSeconds(0);
-          break;
-        case 'Hours':
-          date.setMinutes(0);
-          date.setSeconds(0);
-          break;
-        case 'Minutes':
-          date.setSeconds(0);
-          break;
-        case 'Seconds':
-          break;
+      
+      while(idx--){
+        var intvl = this.INTERVAL_ORDER[idx];
+        switch(intvl){
+          case 'Decade':
+          case 'Lustrum':
+            date.setFullYear(this.getDecade(date));
+            break;
+          case 'FullYear':
+            date.setFullYear(this.getLustrum(date));
+            break;
+          case 'Week':
+            date.setDate(this.getWeekFloor(date).getDate());
+            break;
+          default: 
+            date["set" + intvl](intvl === "Date" ? 1 : 0);
+        }
       }
+
       return date.getTime();
     },
 
