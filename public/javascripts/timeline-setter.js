@@ -289,10 +289,7 @@
       while(idx--){
         var intvl = this.INTERVAL_ORDER[idx];
         switch(intvl){
-          case 'Decade':
           case 'Lustrum':
-            date.setFullYear(this.getDecade(date));
-            break;
           case 'FullYear':
             date.setFullYear(this.getLustrum(date));
             break;
