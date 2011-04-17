@@ -256,6 +256,11 @@
       background-image:none !important;
       filter:alpha(opacity=40); /* IE can't do data URLs, so this will serve as 'inactive' UI for series heds in IE */
     }
+    .TS-series_legend_item_singleton {}
+    .TS-series_legend_item_singleton .TS-series_legend_swatch {
+      background-image:none !important;
+      filter:alpha(opacity=40); /* IE can't do data URLs, so this will serve as 'inactive' UI for series heds in IE */
+    }
     .TS-item h2, .TS-img-hed {
       font-family: 'Helvetica Neue',arial,sans-serif;
       font-size: 18px;
