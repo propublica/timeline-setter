@@ -303,7 +303,7 @@
       // Zero out the rest
       while(idx--){
         var intvl = this.INTERVAL_ORDER[idx];
-        date["set" + intvl](intvl === "Date" ? 1 : 0);
+        if(invl !== 'Week') date["set" + intvl](intvl === "Date" ? 1 : 0);
       }
 
       return date.getTime();
