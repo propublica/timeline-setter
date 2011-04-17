@@ -283,59 +283,29 @@
     
     // Zero out a date from the current interval down to seconds.
     floor : function(ts){
-      var date = new Date(ts);
-      var intvl = this.INTERVAL_ORDER[this.idx];
+      var date  = new Date(ts);
+      var intvl = this.INTERVAL_ORDER[idx];
+      var idx   = _.indexOf(this.INTERVAL_ORDER,'FullYear');
+      
+      // Zero the special extensions, and adjust as idx necessary.
       switch(intvl){
-        case 'Decade':
+        case 'Decade':      
           date.setFullYear(this.getDecade(date));
-          date.setMonth(0);
-          date.setDate(1);
-          date.setHours(0);
-          date.setMinutes(0);
-          date.setSeconds(0);
           break;
         case 'Lustrum':
           date.setFullYear(this.getLustrum(date));
-          date.setMonth(0);
-          date.setDate(1);
-          date.setHours(0);
-          date.setMinutes(0);
-          date.setSeconds(0);
-          break;
-        case 'FullYear':
-          date.setMonth(0);
-          date.setDate(1);
-          date.setHours(0);
-          date.setMinutes(0);
-          date.setSeconds(0);
-          break;
-        case 'Month':
-          date.setDate(1);
-          date.setHours(0);
-          date.setMinutes(0);
-          date.setSeconds(0);
           break;
         case 'Week':
           date.setDate(this.getWeekFloor(date).getDate());
-          date.setHours(0);
-          date.setMinutes(0);
-          date.setSeconds(0);
-          break;
-        case 'Date':
-          date.setHours(0);
-          date.setMinutes(0);
-          date.setSeconds(0);
-          break;
-        case 'Hours':
-          date.setMinutes(0);
-          date.setSeconds(0);
-          break;
-        case 'Minutes':
-          date.setSeconds(0);
-          break;
-        case 'Seconds':
-          break;
+          idx = _.indexOf(this.INTERVAL_ORDER, 'Week');
       }
+      
+      // Zero out the rest
+      while(idx--){
+        var intvl = this.INTERVAL_ORDER[idx];
+        date["set" + intvl](intvl === "Date" ? 1 : 0);
+      }
+
       return date.getTime();
     },
 
@@ -345,10 +315,10 @@
       var intvl = this.INTERVAL_ORDER[this.idx];
       switch(intvl){
         case 'Decade':
-          date["setFullYear"](this.getDecade(date) + 10);
+          date.setFullYear(this.getDecade(date) + 10);
           break;
         case 'Lustrum':
-          date["setFullYear"](this.getLustrum(date) + 5);
+          date.setFullYear(this.getLustrum(date) + 5);
           break;
         case 'Week':
           date.setTime(this.getWeekCeil(date).getTime());
