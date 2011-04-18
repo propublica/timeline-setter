@@ -199,6 +199,8 @@
         return dYear;
       case "Month":
         return dMonth + ', ' + dYear;
+      case "Week":
+        return dDate;
       case "Date":
         return dDate;
       case "Hours":
@@ -217,6 +219,7 @@
       Lustrum  : 157680000000,
       FullYear : 31536000000,
       Month    : 2592000000,
+      Week     : 604800000,
       Date     : 86400000,
       Hours    : 3600000,
       Minutes  : 60000,
@@ -224,7 +227,7 @@
     },
 
     // The order used when testing where exactly a timespan falls.
-    INTERVAL_ORDER : ['Seconds','Minutes','Hours','Date','Month','FullYear', 'Lustrum', 'Decade'],
+    INTERVAL_ORDER : ['Seconds','Minutes','Hours','Date','Week','Month','FullYear','Lustrum','Decade'],
 
     // A test to find the appropriate range of intervals, for example if a range of
     // timestamps only spans hours this will return true when called with `"Hours"`.
@@ -263,24 +266,46 @@
     getLustrum : function(date) {
       return (date.getFullYear() / 5 | 0) * 5;
     },
-  
+    
+    // Return a Date object rounded down to the previous Sunday, a.k.a. the first day of the week.
+    getWeekFloor: function(date) {
+        thisDate = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+        thisDate.setDate(date.getDate() - date.getDay());
+        return thisDate;
+    },
+    
+    // Return a Date object rounded up to the next Sunday, a.k.a. the start of the next week.
+    getWeekCeil: function(date) {
+        thisDate = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+        thisDate.setDate(thisDate.getDate() + (7 - date.getDay()));
+        return thisDate;
+    },
+    
     // Zero out a date from the current interval down to seconds.
     floor : function(ts){
-      var idx = this.idx;
-      var date = new Date(ts);
+      var date  = new Date(ts);
+      var intvl = this.INTERVAL_ORDER[idx];
+      var idx   = _.indexOf(this.INTERVAL_ORDER,'FullYear');
+      
+      // Zero the special extensions, and adjust as idx necessary.
+      switch(intvl){
+        case 'Decade':      
+          date.setFullYear(this.getDecade(date));
+          break;
+        case 'Lustrum':
+          date.setFullYear(this.getLustrum(date));
+          break;
+        case 'Week':
+          date.setDate(this.getWeekFloor(date).getDate());
+          idx = _.indexOf(this.INTERVAL_ORDER, 'Week');
+      }
+      
+      // Zero out the rest
       while(idx--){
         var intvl = this.INTERVAL_ORDER[idx];
-        switch(intvl){
-          case 'Lustrum':
-            date["setFullYear"](this.getDecade(date));
-            break;
-          case 'FullYear':
-            date["setFullYear"](this.getLustrum(date));
-            break;
-          default: 
-            date["set" + intvl](intvl === "Date" ? 1 : 0);
-        }
+        if(invl !== 'Week') date["set" + intvl](intvl === "Date" ? 1 : 0);
       }
+
       return date.getTime();
     },
 
@@ -290,10 +315,13 @@
       var intvl = this.INTERVAL_ORDER[this.idx];
       switch(intvl){
         case 'Decade':
-          date["setFullYear"](this.getDecade(date) + 10);
+          date.setFullYear(this.getDecade(date) + 10);
           break;
         case 'Lustrum':
-          date["setFullYear"](this.getLustrum(date) + 5);
+          date.setFullYear(this.getLustrum(date) + 5);
+          break;
+        case 'Week':
+          date.setTime(this.getWeekCeil(date).getTime());
           break;
         default: 
           date["set" + intvl](date["get" + intvl]() + 1);
