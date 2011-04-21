@@ -269,23 +269,25 @@
     
     // Return a Date object rounded down to the previous Sunday, a.k.a. the first day of the week.
     getWeekFloor: function(date) {
-        thisDate = new Date(date.getFullYear(), date.getMonth(), date.getDate());
-        thisDate.setDate(date.getDate() - date.getDay());
-        return thisDate;
+      thisDate = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+      thisDate.setDate(date.getDate() - date.getDay());
+      return thisDate;
     },
     
     // Return a Date object rounded up to the next Sunday, a.k.a. the start of the next week.
     getWeekCeil: function(date) {
-        thisDate = new Date(date.getFullYear(), date.getMonth(), date.getDate());
-        thisDate.setDate(thisDate.getDate() + (7 - date.getDay()));
-        return thisDate;
+      thisDate = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+      thisDate.setDate(thisDate.getDate() + (7 - date.getDay()));
+      return thisDate;
     },
     
     // Zero out a date from the current interval down to seconds.
     floor : function(ts){
       var date  = new Date(ts);
-      var intvl = this.INTERVAL_ORDER[idx];
-      var idx   = _.indexOf(this.INTERVAL_ORDER,'FullYear');
+      var intvl = this.INTERVAL_ORDER[this.idx];
+      var idx   = this.idx > _.indexOf(this.INTERVAL_ORDER,'FullYear') ?
+                  _.indexOf(this.INTERVAL_ORDER,'FullYear') :
+                  idx;
       
       // Zero the special extensions, and adjust as idx necessary.
       switch(intvl){
@@ -305,7 +307,6 @@
         var intvl = this.INTERVAL_ORDER[idx];
         if(intvl !== 'Week') date["set" + intvl](intvl === "Date" ? 1 : 0);
       }
-
       return date.getTime();
     },
 
