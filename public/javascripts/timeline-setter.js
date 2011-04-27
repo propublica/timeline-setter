@@ -643,7 +643,7 @@
   // Each `Series` picks a unique color and keeps an array of `Cards`.
   var Series = function(series, timeline) {
     this.timeline = timeline;
-    this.name     = series.series || "Key events";
+    this.name     = series.series;
     this.color    = this.name.length > 0 ? color() : "default";
     this.cards    = [];
     _.bindAll(this, "render", "showNotches", "hideNotches");
@@ -685,11 +685,7 @@
       if (this.name.length === 0) return;
       this.el = $(this.template(this));
       $(".TS-series_nav_container").append(this.el);
-      if (this.timeline.series.length == 1) {
-        this.el.addClass("TS-series_legend_item_singleton");
-      } else {
-        this.el.toggle(this.hideNotches, this.showNotches);
-      }
+      this.el.toggle(this.hideNotches, this.showNotches);
     }
   });
 
