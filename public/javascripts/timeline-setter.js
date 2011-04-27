@@ -285,16 +285,16 @@
     
     // Return a Date object rounded down to the previous Sunday, a.k.a. the first day of the week.
     getWeekFloor: function(date) {
-        thisDate = new Date(date.getFullYear(), date.getMonth(), date.getDate());
-        thisDate.setDate(date.getDate() - date.getDay());
-        return thisDate;
+      thisDate = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+      thisDate.setDate(date.getDate() - date.getDay());
+      return thisDate;
     },
     
     // Return a Date object rounded up to the next Sunday, a.k.a. the start of the next week.
     getWeekCeil: function(date) {
-        thisDate = new Date(date.getFullYear(), date.getMonth(), date.getDate());
-        thisDate.setDate(thisDate.getDate() + (7 - date.getDay()));
-        return thisDate;
+      thisDate = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+      thisDate.setDate(thisDate.getDate() + (7 - date.getDay()));
+      return thisDate;
     },
     
     floor : function(ts){

@@ -227,6 +227,7 @@ On the client side, there are a number of features we plan to add, including:
 
 * In the Wild: [ProPublica: How One Blast Affected Five Soldiers](http://www.propublica.org/special/tbi-psycho-platoon-timeline)
 * In the Wild: [TPM: The Wisconsin Union Struggle Timeline](http://www.talkingpointsmemo.com/interactive/2011/04/the-wisconsin-union-struggle-timeline.php)
+* In the Wild: [Los Angeles Times: Bell: 'Corruption on Steroids'](http://timelines.latimes.com/bell/)
 
 <a id="credits"></a>
 ## Credits
