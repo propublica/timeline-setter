@@ -191,6 +191,10 @@
     var dHourMinuteSecond = dHourWithMinutes + ":" + padNumber(d.getSeconds());
 
     switch (interval) {
+      case "Century":
+        return dYear;
+      case "HalfCentury":
+        return dYear;
       case "Decade":
         return dYear;
       case "Lustrum":
@@ -215,19 +219,21 @@
   Intervals.prototype = {
     // Sane estimates of date ranges for the `isAtLeastA` test.
     INTERVALS : {
-      Decade   : 315360000000,
-      Lustrum  : 157680000000,
-      FullYear : 31536000000,
-      Month    : 2592000000,
-      Week     : 604800000,
-      Date     : 86400000,
-      Hours    : 3600000,
-      Minutes  : 60000,
-      Seconds  : 1000
+      Century     : 3153600000000,
+      HalfCentury : 1576800000000,
+      Decade      : 315360000000,
+      Lustrum     : 157680000000,
+      FullYear    : 31536000000,
+      Month       : 2592000000,
+      Week        : 604800000,
+      Date        : 86400000,
+      Hours       : 3600000,
+      Minutes     : 60000,
+      Seconds     : 1000
     },
 
     // The order used when testing where exactly a timespan falls.
-    INTERVAL_ORDER : ['Seconds','Minutes','Hours','Date','Week','Month','FullYear','Lustrum','Decade'],
+    INTERVAL_ORDER : ['Seconds','Minutes','Hours','Date','Week','Month','FullYear','Lustrum','Decade','HalfCentury','Century'],
 
     // A test to find the appropriate range of intervals, for example if a range of
     // timestamps only spans hours this will return true when called with `"Hours"`.
@@ -247,6 +253,16 @@
     // Return the calculated `maxInterval`.
     getMaxInterval : function() {
       return this.INTERVALS[this.INTERVAL_ORDER[this.idx]];
+    },
+
+    // Return the first year of the century a Date belongs to as an integer.
+    getCentury : function(date) {
+      return (date.getFullYear() / 100 | 0) * 100;
+    },
+    
+    // Return the first year of the half-century a Date belongs to as an integer.
+    getHalfCentury : function(date) {
+      return (date.getFullYear() / 50 | 0) * 50;
     },
 
     // Return the first year of the decade a Date belongs to as an integer.
@@ -285,6 +301,22 @@
       var date = new Date(ts);
       var intvl = this.INTERVAL_ORDER[this.idx];
       switch(intvl){
+        case 'Century':
+          date.setFullYear(this.getCentury(date));
+          date.setMonth(0);
+          date.setDate(1);
+          date.setHours(0);
+          date.setMinutes(0);
+          date.setSeconds(0);
+          break;
+        case 'HalfCentury':
+          date.setFullYear(this.getHalfCentury(date));
+          date.setMonth(0);
+          date.setDate(1);
+          date.setHours(0);
+          date.setMinutes(0);
+          date.setSeconds(0);
+          break;
         case 'Decade':
           date.setFullYear(this.getDecade(date));
           date.setMonth(0);
@@ -343,6 +375,12 @@
       var date = new Date(this.floor(ts));
       var intvl = this.INTERVAL_ORDER[this.idx];
       switch(intvl){
+        case 'Century':
+          date["setFullYear"](this.getCentury(date) + 100);
+          break;
+        case 'HalfCentury':
+          date["setFullYear"](this.getHalfCentury(date) + 50);
+          break;
         case 'Decade':
           date.setFullYear(this.getDecade(date) + 10);
           break;
