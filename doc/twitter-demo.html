@@ -49,9 +49,8 @@
             twitterToTS(data);
             reqsDone += 1;
 
-            if (reqsDone === usernames.length) {
-            TimelineSetter.Timeline.boot(tsTimeline);
-            }
+            if (reqsDone === usernames.length)
+              TimelineSetter.Timeline.boot(tsTimeline);
           });
         };
 
