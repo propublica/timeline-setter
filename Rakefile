@@ -25,10 +25,10 @@ task :gh_pages do
   `rake yard`
   `rake docco`
   `rake sample`
-  
+
   `git branch` =~ /^\* (.+)?\n/
   current_branch = $1
-  
+
   `git commit -am "docs"`
   `git push github #{current_branch}`
   `git checkout gh-pages`
@@ -85,14 +85,5 @@ desc "generate yard docs"
 task :yard do
   `yard -o ./documentation`
 end
-
-desc "generate sample timeline"
-task :sample do
-  # noop this for now.
-  
-  # `./bin/timeline-setter -c ./tbi.csv -m -o ./public/`
-  # `cp ./public/timeline.html ./doc/timeline-sample.html`
-end
-
 
 

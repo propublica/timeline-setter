@@ -168,10 +168,18 @@
 
   // `Intervals` is a particularly focused class to calculate even breaks based
   // on the passed in `Bounds`.
-  var Intervals = function(bounds) {
+  var Intervals = function(bounds, interval) {
     this.max = bounds.max;
     this.min = bounds.min;
-    this.setMaxInterval();
+
+    if(!interval || !this.INTERVALS[interval]) {
+      var i = this.computeMaxInterval();
+      this.maxInterval = this.INTERVAL_ORDER[i];
+      this.idx = i;
+    } else {
+      this.maxInterval = interval;
+      this.idx = _.indexOf(this.INTERVAL_ORDER, interval);
+    }
   };
 
   // An object containing human translations for date indexes.
@@ -236,12 +244,10 @@
     },
 
     // Find the maximum interval we should use based on the estimates in `INTERVALS`.
-    setMaxInterval : function() {
+    computeMaxInterval : function() {
       for (var i = 0; i < this.INTERVAL_ORDER.length; i++)
         if (!this.isAtLeastA(this.INTERVAL_ORDER[i])) break;
-
-      this.maxInterval = this.INTERVAL_ORDER[i - 1];
-      this.idx = i - 1;
+      return i - 1;
     },
 
     // Return the calculated `maxInterval`.
@@ -257,7 +263,7 @@
     getDecade : function(date) {
       return (date.getFullYear() / 10 | 0) * 10;
     },
-  
+
     // Returns the first year of the five year "lustrum" a Date belongs to
     // as an integer. A lustrum is a fancy Roman word for a "five-year period."
     // You can read more about it [here](http://en.wikipedia.org/wiki/Lustrum). 
@@ -266,21 +272,21 @@
     getLustrum : function(date) {
       return (date.getFullYear() / 5 | 0) * 5;
     },
-    
+
     // Return a Date object rounded down to the previous Sunday, a.k.a. the first day of the week.
     getWeekFloor: function(date) {
       thisDate = new Date(date.getFullYear(), date.getMonth(), date.getDate());
       thisDate.setDate(date.getDate() - date.getDay());
       return thisDate;
     },
-    
+
     // Return a Date object rounded up to the next Sunday, a.k.a. the start of the next week.
     getWeekCeil: function(date) {
       thisDate = new Date(date.getFullYear(), date.getMonth(), date.getDate());
       thisDate.setDate(thisDate.getDate() + (7 - date.getDay()));
       return thisDate;
     },
-    
+
     // Zero out a date from the current interval down to seconds.
     floor : function(ts){
       var date  = new Date(ts);
@@ -288,7 +294,7 @@
       var idx   = this.idx > _.indexOf(this.INTERVAL_ORDER,'FullYear') ?
                   _.indexOf(this.INTERVAL_ORDER,'FullYear') :
                   idx;
-      
+
       // Zero the special extensions, and adjust as idx necessary.
       switch(intvl){
         case 'Decade':      
@@ -301,12 +307,13 @@
           date.setDate(this.getWeekFloor(date).getDate());
           idx = _.indexOf(this.INTERVAL_ORDER, 'Week');
       }
-      
+
       // Zero out the rest
       while(idx--){
         var intvl = this.INTERVAL_ORDER[idx];
         if(intvl !== 'Week') date["set" + intvl](intvl === "Date" ? 1 : 0);
       }
+
       return date.getTime();
     },
 
@@ -396,7 +403,7 @@
 
   // Every new `Series` gets new color. If there are too many series
   // the remaining series will be a simple gray.
-  
+
   // These colors can be styled like such in
   // timeline-setter.css, where the numbers 1-9 cycle through in that order:
   //
@@ -433,16 +440,16 @@
   // takes a json array of card representations and then builds series, calculates
   // intervals `sync`s the `Bar` and `CardContainer` objects and triggers the
   // `render` event.
-  var Timeline = TimelineSetter.Timeline = function(data) {    
+  var Timeline = TimelineSetter.Timeline = function(data, config) {
     data = data.sort(function(a, b){ return a.timestamp - b.timestamp; });
     this.bySid    = {};
     this.series   = [];
+    this.config   = (config || {});
     this.bounds   = new Bounds();
     this.bar      = new Bar(this);
     this.cardCont = new CardScroller(this);
     this.createSeries(data);
-
-    var range = new Intervals(this.bounds);
+    var range = new Intervals(this.bounds, config.interval);
     this.intervals = range.getRanges();
     this.bounds.extend(this.bounds.min - range.getMaxInterval() / 2);
     this.bounds.extend(this.bounds.max + range.getMaxInterval() / 2);
@@ -471,7 +478,7 @@
       }
       var series = this.bySid[card.series];
       series.add(card);
-      
+
       this.bounds.extend(series.max());
       this.bounds.extend(series.min());
     }
@@ -639,7 +646,7 @@
     this.timestamp = card.timestamp;
     this.attributes = card;
     this.attributes.topcolor = series.color;
-    
+
     this.template = template("#TS-card_tmpl");
     this.ntemplate = template("#TS-notch_tmpl");
     _.bindAll(this, "render", "activate", "flip", "setPermalink", "toggleNotch");
@@ -686,7 +693,7 @@
       var margin      = this.el.css("margin-left") === this.originalMargin;
       var flippable   = this.$(".TS-item").width() < $("#timeline_setter").width() / 2;
       var offTimeline = this.el.position().left - this.$(".TS-item").width() < 0;
-      
+
       // If the card's right edge is more than the timeline's right edge and 
       // it's never been flipped before and it won't go off the timeline when
       // flipped. We'll flip it.
@@ -721,14 +728,14 @@
       this.el.show().addClass(("TS-card_active"));
       this.notch.addClass("TS-notch_active");
       this.setWidth();
-      
+
       // In the case that the card is outside the bounds the wrong way when 
       // it's flipped, we'll take care of it here before we move the actual
-      // card. 
+      // card.
       this.flip($.Event("move"));
       this.move();
     },
-    
+
     // For Internet Explorer each card sets the width of` .TS-item_label` to
     // the maximum width of the card's children, or if that is less than the
     // `.TS-item_year` element's width, `.TS-item_label` gets `.TS-item_year`s
@@ -862,11 +869,10 @@
   // In the default install of TimelineSetter, Boot is called in the generated
   // HTML. We'll kick everything off by creating a `Timeline`, some `Controls`
   // and binding to `"keydown"`.
-  Timeline.boot = function(data) {
+  Timeline.boot = function(data, config) {
     $(function(){
-      
-      TimelineSetter.timeline = new Timeline(data);
-      
+
+      TimelineSetter.timeline = new Timeline(data, config || {});
       new Zoom("in");
       new Zoom("out");
       var chooseNext = new Chooser("next");
