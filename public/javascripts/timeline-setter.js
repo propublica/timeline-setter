@@ -644,6 +644,7 @@
     this.series = series;
     var card = _.clone(card);
     this.timestamp = card.timestamp;
+    this.endstamp = card.endstamp;
     this.attributes = card;
     this.attributes.topcolor = series.color;
 
@@ -675,9 +676,18 @@
     // is currently selected via `window.location.hash` it's activated.
     render : function(e){
       if (!e.type === "render") return;
+      var width = null;
+      var alpha = null;
       this.offset = this.series.timeline.bounds.project(this.timestamp, 100);
+      if (this.endstamp) {
+      	this.endOffset = this.series.timeline.bounds.project(this.endstamp, 100);
+      	this.endOffset -= this.offset;
+      	width = this.endOffset + "%";
+      	alpha = .5;
+      	console.log(this.endstamp, width);
+      }
       var html = this.ntemplate(this.attributes);
-      this.notch = $(html).css({"left": this.offset + "%"});
+      this.notch = $(html).css({"left": this.offset + "%", width: width, opacity: alpha});
       $(".TS-notchbar").append(this.notch);
       this.notch.click(this.activate);
       if (history.get() === this.id) this.activate();
