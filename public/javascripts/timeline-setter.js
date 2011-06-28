@@ -633,7 +633,9 @@
   // Proxy to underscore for `min` and `max`.
   _(["min", "max"]).each(function(key){
     Series.prototype[key] = function() {
-      return _[key].call(_, this.cards, this._comparator).get("timestamp");
+      var temptimeStamp = _[key].call(_, this.cards, this._comparator).get("timestamp");
+      var tempEndStamp = _[key].call(_, this.cards, this._comparator).get("endstamp");
+      return (tempEndStamp && (tempEndStamp > temptimeStamp)) ? tempEndStamp : temptimeStamp;
     };
   });
 
