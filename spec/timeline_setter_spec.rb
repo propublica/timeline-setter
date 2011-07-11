@@ -21,6 +21,15 @@ describe "TimelineSetter core" do
     html.should =~ /"timestamp":1045544400/
   end
   
+  it 'should create custom intervals' do
+    events = TimelineSetter::Parser.new(TEST_CSV)
+    html = TimelineSetter::Timeline.new({
+      :events => events.events,
+      :interval => "FullYear"
+    }).timeline.to_s
+    html.should =~ /"interval":"FullYear"/
+  end
+  
   it 'should create minified timelines' do
     events = TimelineSetter::Parser.new(TEST_CSV)
     html = TimelineSetter::Timeline.new({
