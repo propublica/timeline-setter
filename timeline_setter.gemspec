@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{timeline_setter}
-  s.version = "0.1.2"
+  s.version = "0.2.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Al Shaw", "Jeff Larson"]
-  s.date = %q{2011-04-08}
+  s.date = %q{2011-07-11}
   s.default_executable = %q{timeline-setter}
   s.description = %q{TimelineSetter is a tool to create HTML timelines from spreadsheets of events.}
   s.email = %q{almshaw@gmail.com}
@@ -71,10 +71,6 @@ Gem::Specification.new do |s|
   s.require_paths = ["lib"]
   s.rubygems_version = %q{1.3.7}
   s.summary = %q{TimelineSetter is a tool to create HTML timelines from spreadsheets of events.}
-  s.test_files = [
-    "spec/spec_helper.rb",
-    "spec/timeline_setter_spec.rb"
-  ]
 
   if s.respond_to? :specification_version then
     current_version = Gem::Specification::CURRENT_SPECIFICATION_VERSION
