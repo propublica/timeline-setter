@@ -7,19 +7,25 @@ describe "TimelineSetter core" do
   
   it 'should create json from an events hash' do
     events = TimelineSetter::Parser.new(TEST_CSV)
-    j = TimelineSetter::Timeline.new(events.events).to_json
+    j = TimelineSetter::Timeline.new({
+     :events => events.events
+    }).to_json
     JSON.parse(j)[0]['date'].should eql "Feb. 18, 2003"
   end
   
   it 'should create html from an events hash' do
     events = TimelineSetter::Parser.new(TEST_CSV)
-    html = TimelineSetter::Timeline.new(events.events).timeline.to_s
+    html = TimelineSetter::Timeline.new({
+      :events => events.events
+    }).timeline.to_s
     html.should =~ /"timestamp":1045544400/
   end
   
   it 'should create minified timelines' do
     events = TimelineSetter::Parser.new(TEST_CSV)
-    html = TimelineSetter::Timeline.new(events.events).timeline_min.to_s
+    html = TimelineSetter::Timeline.new({
+      :events => events.events
+    }).timeline_min.to_s
     
     # test to see we've compiled all the assets
     
