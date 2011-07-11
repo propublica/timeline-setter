@@ -54,7 +54,7 @@ end
 describe "TimelineSetter CLI" do
   it 'should drop just timeline.html into tmp' do
     `mkdir /tmp/ts_test_1`
-    %x[ #{TS_BINARY} -c #{TEST_CSV_PATH} -o /tmp/ts_test_1/ ]
+    %x[ #{TS_BINARY} -c #{TEST_CSV_PATH} -o /tmp/ts_test_1/ -a ]
     Dir.glob("/tmp/ts_test_1/*").should include("/tmp/ts_test_1/timeline.html")
     file = File.open("/tmp/ts_test_1/timeline.html").read
     file.should =~ /"timestamp":1045544400/ 
@@ -62,7 +62,7 @@ describe "TimelineSetter CLI" do
   
   it 'should drop timeline.html and associated assets into tmp' do
     `mkdir /tmp/ts_test_2`
-    %x[ #{TS_BINARY} -c #{TEST_CSV_PATH} -o /tmp/ts_test_2/ -a ]
+    %x[ #{TS_BINARY} -c #{TEST_CSV_PATH} -o /tmp/ts_test_2/ ]
     Dir.glob("/tmp/ts_test_2/*").should include("/tmp/ts_test_2/timeline.html")
     Dir.glob("/tmp/ts_test_2/javascripts/*").should include("/tmp/ts_test_2/javascripts/timeline-setter.js")
     Dir.glob("/tmp/ts_test_2/javascripts/vendor/*").should include("/tmp/ts_test_2/javascripts/vendor/jquery-min.js")
@@ -88,6 +88,9 @@ describe "TimelineSetter CLI" do
     file.should =~ /jQuery JavaScript Library/
     # test timeline-setter.js
     file.should =~ /INTERVAL_ORDER/
+    
+    # check to see that we DID NOT generate the assets
+    Dir.glob("/tmp/ts_test_3/*").should_not include("/tmp/ts_test_3/javascripts/timeline-setter.js")
   end
   
   after :all do

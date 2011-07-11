@@ -22,8 +22,8 @@ module TimelineSetter
         opts.on('-o', '--output OUTPUT', 'Output directory to install timeline into.') do |o|
           @options[:output] = o
         end
-        opts.on('-a', '--with-assets', 'Output timeline supporting assets as well') do |a|
-          @options[:assets] = a
+        opts.on('-a', '--without-assets', 'Output timeline without supporting assets') do |a|
+          @options[:no_assets] = a
         end
         opts.on('-O', '--open', 'Open generated timeline in a browser') do |o|
           @options[:open] = o
@@ -75,7 +75,7 @@ module TimelineSetter
     end
 
     def compile!
-      if @options[:assets]
+      if !@options[:no_assets] || !@options[:min]
         FileUtils.cp_r(Dir.glob("#{TimelineSetter::ROOT}/public/*"), outdir)
       end
 
