@@ -82,7 +82,7 @@
   </head>
   <body>
     <a href="http://www.propublica.org" class="propublica">&nbsp;</a>
-    <h1>TimelineSetter 0.1.2</h1>
+    <h1>TimelineSetter 0.2.0</h1>
 
 <p>TimelineSetter creates beautiful timelines.</p>
 
@@ -167,9 +167,10 @@ supporting assets if applicable) within the current directory.</p>
 <ul>
 <li><code>-c CSV</code> Path to your CSV file.</li>
 <li><code>-o OUTPUT_PATH</code> Path to output timeline and assets. If absent, timeline will be created in current directory.</li>
-<li><code>-a</code> Add the default supporting assets to the output directory, along with the timeline itself.</li>
+<li><code>-a</code> Do not output supporting assets such as CSS and JavaScript. This is useful if you&rsquo;re customizing those and don&rsquo;t want your versions clobbered.</li>
 <li><code>-m</code> Create a minified one-page version of your timeline with all supporting assets inline.</li>
 <li><code>-O</code> Open a browser to your new timeline after it is generated (currently Mac OS only).</li>
+<li><code>-i</code> Add a custom interval for background &ldquo;interval notches.&rdquo; These take the format of JavaScript date <a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Date#Methods">getter methods</a>. For example, year would be <code>FullYear.</code> All the options are available <a href="#interval_notch_options">below</a>. If absent, TimelineSetter will attempt to automatically create interval notches based on the first and last dates in your timeline.</li>
 <li><code>-h</code> Print help to standard output.</li>
 </ul>
 
@@ -310,6 +311,20 @@ hour/minute =&gt; 11:59
 second      =&gt; 11:59:22
 </code></pre>
 
+<p><a id="interval_notch_options"></a>
+The interval notches date spans themselves can be customized by using the <code>-i</code> flag when generating a timeline. The available parameters are</p>
+
+<pre><code>Decade
+Lustrum 
+FullYear
+Month
+Week  
+Date   
+Hours 
+Minutes
+Seconds
+</code></pre>
+
 <p>Event notches are templated through <code>#TS-card-tmpl</code> and contain individual
 classes corresponding to spreadsheet columns. <code>.TS-item-label</code> corresponds to
 <code>description</code>, <code>.TS-item_html</code> corresponds to <code>html</code>,
@@ -365,6 +380,16 @@ questions should go to <a href="mailto:opensource@propublica.org">opensource@pro
 <p><a id="changelog"></a></p>
 
 <h2>Change Log</h2>
+
+<p><a id="release-020"></a></p>
+
+<h3>0.2.0</h3>
+
+<ul>
+<li>New feature adds support for custom interval notch ranges.</li>
+<li>Change command line to output supporting assets by default unless <code>-a</code> is specified</li>
+</ul>
+
 
 <p><a id="release-012"></a></p>
 

@@ -329,12 +329,6 @@ A new instance of CLI
       <pre class="lines">
 
 
-72
-73
-74
-75
-76
-77
 78
 79
 80
@@ -344,13 +338,19 @@ A new instance of CLI
 84
 85
 86
-87</pre>
+87
+88
+89
+90
+91
+92
+93</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/timeline_setter/cli.rb', line 72</span>
+      <pre class="code"><span class="info file"># File 'lib/timeline_setter/cli.rb', line 78</span>
 
 <span class='def def kw'>def</span> <span class='compile! fid id'>compile!</span>
-  <span class='if if kw'>if</span> <span class='@options ivar id'>@options</span><span class='lbrack token'>[</span><span class='symbol val'>:assets</span><span class='rbrack token'>]</span>
+  <span class='if if kw'>if</span> <span class='notop op'>!</span><span class='@options ivar id'>@options</span><span class='lbrack token'>[</span><span class='symbol val'>:no_assets</span><span class='rbrack token'>]</span> <span class='orop op'>||</span> <span class='notop op'>!</span><span class='@options ivar id'>@options</span><span class='lbrack token'>[</span><span class='symbol val'>:min</span><span class='rbrack token'>]</span>
     <span class='FileUtils constant id'>FileUtils</span><span class='dot token'>.</span><span class='cp_r identifier id'>cp_r</span><span class='lparen token'>(</span><span class='Dir constant id'>Dir</span><span class='dot token'>.</span><span class='glob identifier id'>glob</span><span class='lparen token'>(</span><span class='dstring node'>&quot;#{TimelineSetter::ROOT}/public/*&quot;</span><span class='rparen token'>)</span><span class='comma token'>,</span> <span class='outdir identifier id'>outdir</span><span class='rparen token'>)</span>
   <span class='end end kw'>end</span>
 
@@ -384,12 +384,12 @@ A new instance of CLI
       <pre class="lines">
 
 
-56
-57
-58</pre>
+59
+60
+61</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/timeline_setter/cli.rb', line 56</span>
+      <pre class="code"><span class="info file"># File 'lib/timeline_setter/cli.rb', line 59</span>
 
 <span class='def def kw'>def</span> <span class='events identifier id'>events</span>
   <span class='TimelineSetter constant id'>TimelineSetter</span><span class='colon2 op'>::</span><span class='Parser constant id'>Parser</span><span class='dot token'>.</span><span class='new identifier id'>new</span> <span class='sheet identifier id'>sheet</span>
@@ -413,15 +413,21 @@ A new instance of CLI
       <pre class="lines">
 
 
-60
-61
-62</pre>
+63
+64
+65
+66
+67
+68</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/timeline_setter/cli.rb', line 60</span>
+      <pre class="code"><span class="info file"># File 'lib/timeline_setter/cli.rb', line 63</span>
 
 <span class='def def kw'>def</span> <span class='html identifier id'>html</span>
-  <span class='TimelineSetter constant id'>TimelineSetter</span><span class='colon2 op'>::</span><span class='Timeline constant id'>Timeline</span><span class='dot token'>.</span><span class='new identifier id'>new</span><span class='lparen token'>(</span><span class='events identifier id'>events</span><span class='dot token'>.</span><span class='events identifier id'>events</span><span class='rparen token'>)</span><span class='dot token'>.</span><span class='send identifier id'>send</span><span class='lparen token'>(</span><span class='@options ivar id'>@options</span><span class='lbrack token'>[</span><span class='symbol val'>:min</span><span class='rbrack token'>]</span> <span class='question op'>?</span> <span class='symbol val'>:timeline_min</span> <span class='colon op'>:</span> <span class='symbol val'>:timeline</span><span class='rparen token'>)</span>
+  <span class='TimelineSetter constant id'>TimelineSetter</span><span class='colon2 op'>::</span><span class='Timeline constant id'>Timeline</span><span class='dot token'>.</span><span class='new identifier id'>new</span><span class='lparen token'>(</span><span class='lbrace token'>{</span>
+    <span class='symbol val'>:events</span> <span class='assign token'>=</span><span class='gt op'>&gt;</span> <span class='events identifier id'>events</span><span class='dot token'>.</span><span class='events identifier id'>events</span><span class='comma token'>,</span>
+    <span class='symbol val'>:interval</span> <span class='assign token'>=</span><span class='gt op'>&gt;</span> <span class='@options ivar id'>@options</span><span class='lbrack token'>[</span><span class='symbol val'>:interval</span><span class='rbrack token'>]</span> <span class='orop op'>||</span> <span class='string val'>''</span>
+  <span class='rbrace token'>}</span><span class='rparen token'>)</span><span class='dot token'>.</span><span class='send identifier id'>send</span><span class='lparen token'>(</span><span class='@options ivar id'>@options</span><span class='lbrack token'>[</span><span class='symbol val'>:min</span><span class='rbrack token'>]</span> <span class='question op'>?</span> <span class='symbol val'>:timeline_min</span> <span class='colon op'>:</span> <span class='symbol val'>:timeline</span><span class='rparen token'>)</span>
 <span class='end end kw'>end</span>
 </pre>
     </td>
@@ -442,12 +448,12 @@ A new instance of CLI
       <pre class="lines">
 
 
-64
-65
-66</pre>
+70
+71
+72</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/timeline_setter/cli.rb', line 64</span>
+      <pre class="code"><span class="info file"># File 'lib/timeline_setter/cli.rb', line 70</span>
 
 <span class='def def kw'>def</span> <span class='outdir identifier id'>outdir</span>
   <span class='@options ivar id'>@options</span><span class='lbrack token'>[</span><span class='symbol val'>:output</span><span class='rbrack token'>]</span> <span class='question op'>?</span> <span class='@options ivar id'>@options</span><span class='lbrack token'>[</span><span class='symbol val'>:output</span><span class='rbrack token'>]</span> <span class='colon op'>:</span> <span class='dstring node'>&quot;#{`pwd`.strip}/&quot;</span>
@@ -506,7 +512,10 @@ A new instance of CLI
 42
 43
 44
-45</pre>
+45
+46
+47
+48</pre>
     </td>
     <td>
       <pre class="code"><span class="info file"># File 'lib/timeline_setter/cli.rb', line 10</span>
@@ -522,14 +531,17 @@ A new instance of CLI
     <span class='opts identifier id'>opts</span><span class='dot token'>.</span><span class='on identifier id'>on</span><span class='lparen token'>(</span><span class='string val'>'-o'</span><span class='comma token'>,</span> <span class='string val'>'--output OUTPUT'</span><span class='comma token'>,</span> <span class='string val'>'Output directory to install timeline into.'</span><span class='rparen token'>)</span> <span class='do do kw'>do</span> <span class='bitor op'>|</span><span class='o identifier id'>o</span><span class='bitor op'>|</span>
       <span class='@options ivar id'>@options</span><span class='lbrack token'>[</span><span class='symbol val'>:output</span><span class='rbrack token'>]</span> <span class='assign token'>=</span> <span class='o identifier id'>o</span>
     <span class='end end kw'>end</span>
-    <span class='opts identifier id'>opts</span><span class='dot token'>.</span><span class='on identifier id'>on</span><span class='lparen token'>(</span><span class='string val'>'-a'</span><span class='comma token'>,</span> <span class='string val'>'--with-assets'</span><span class='comma token'>,</span> <span class='string val'>'Output timeline supporting assets as well'</span><span class='rparen token'>)</span> <span class='do do kw'>do</span> <span class='bitor op'>|</span><span class='a identifier id'>a</span><span class='bitor op'>|</span>
-      <span class='@options ivar id'>@options</span><span class='lbrack token'>[</span><span class='symbol val'>:assets</span><span class='rbrack token'>]</span> <span class='assign token'>=</span> <span class='a identifier id'>a</span>
+    <span class='opts identifier id'>opts</span><span class='dot token'>.</span><span class='on identifier id'>on</span><span class='lparen token'>(</span><span class='string val'>'-a'</span><span class='comma token'>,</span> <span class='string val'>'--without-assets'</span><span class='comma token'>,</span> <span class='string val'>'Output timeline without supporting assets'</span><span class='rparen token'>)</span> <span class='do do kw'>do</span> <span class='bitor op'>|</span><span class='a identifier id'>a</span><span class='bitor op'>|</span>
+      <span class='@options ivar id'>@options</span><span class='lbrack token'>[</span><span class='symbol val'>:no_assets</span><span class='rbrack token'>]</span> <span class='assign token'>=</span> <span class='a identifier id'>a</span>
     <span class='end end kw'>end</span>
     <span class='opts identifier id'>opts</span><span class='dot token'>.</span><span class='on identifier id'>on</span><span class='lparen token'>(</span><span class='string val'>'-O'</span><span class='comma token'>,</span> <span class='string val'>'--open'</span><span class='comma token'>,</span> <span class='string val'>'Open generated timeline in a browser'</span><span class='rparen token'>)</span> <span class='do do kw'>do</span> <span class='bitor op'>|</span><span class='o identifier id'>o</span><span class='bitor op'>|</span>
       <span class='@options ivar id'>@options</span><span class='lbrack token'>[</span><span class='symbol val'>:open</span><span class='rbrack token'>]</span> <span class='assign token'>=</span> <span class='o identifier id'>o</span>
     <span class='end end kw'>end</span>
     <span class='opts identifier id'>opts</span><span class='dot token'>.</span><span class='on identifier id'>on</span><span class='lparen token'>(</span><span class='string val'>'-m'</span><span class='comma token'>,</span> <span class='string val'>'--min'</span><span class='comma token'>,</span> <span class='string val'>'Create a minified one-page version of the timeline'</span><span class='rparen token'>)</span> <span class='do do kw'>do</span> <span class='bitor op'>|</span><span class='m identifier id'>m</span><span class='bitor op'>|</span>
       <span class='@options ivar id'>@options</span><span class='lbrack token'>[</span><span class='symbol val'>:min</span><span class='rbrack token'>]</span> <span class='assign token'>=</span> <span class='m identifier id'>m</span>
+    <span class='end end kw'>end</span>
+    <span class='opts identifier id'>opts</span><span class='dot token'>.</span><span class='on identifier id'>on</span><span class='lparen token'>(</span><span class='string val'>'-i'</span><span class='comma token'>,</span> <span class='string val'>'--interval INTERVAL'</span><span class='comma token'>,</span> <span class='string val'>'Override automatic interval notches with a custom interval.'</span><span class='rparen token'>)</span> <span class='do do kw'>do</span> <span class='bitor op'>|</span><span class='i identifier id'>i</span><span class='bitor op'>|</span>
+      <span class='@options ivar id'>@options</span><span class='lbrack token'>[</span><span class='symbol val'>:interval</span><span class='rbrack token'>]</span> <span class='assign token'>=</span> <span class='i identifier id'>i</span>
     <span class='end end kw'>end</span>
 
 
@@ -566,12 +578,12 @@ A new instance of CLI
       <pre class="lines">
 
 
-52
-53
-54</pre>
+55
+56
+57</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/timeline_setter/cli.rb', line 52</span>
+      <pre class="code"><span class="info file"># File 'lib/timeline_setter/cli.rb', line 55</span>
 
 <span class='def def kw'>def</span> <span class='sheet identifier id'>sheet</span>
   <span class='File constant id'>File</span><span class='dot token'>.</span><span class='open identifier id'>open</span><span class='lparen token'>(</span><span class='@options ivar id'>@options</span><span class='lbrack token'>[</span><span class='symbol val'>:csv</span><span class='rbrack token'>]</span><span class='rparen token'>)</span><span class='dot token'>.</span><span class='read identifier id'>read</span>
@@ -595,12 +607,12 @@ A new instance of CLI
       <pre class="lines">
 
 
-68
-69
-70</pre>
+74
+75
+76</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/timeline_setter/cli.rb', line 68</span>
+      <pre class="code"><span class="info file"># File 'lib/timeline_setter/cli.rb', line 74</span>
 
 <span class='def def kw'>def</span> <span class='timeline_page_path identifier id'>timeline_page_path</span>
   <span class='File constant id'>File</span><span class='dot token'>.</span><span class='join identifier id'>join</span><span class='lparen token'>(</span><span class='outdir identifier id'>outdir</span><span class='comma token'>,</span> <span class='string val'>'timeline.html'</span><span class='rparen token'>)</span>
@@ -616,7 +628,7 @@ A new instance of CLI
 </div>
     
     <div id="footer">
-  Generated on Thu Apr 21 10:33:41 2011 by 
+  Generated on Mon Jul 11 15:31:24 2011 by 
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.6.5 (ruby-1.8.7).
 </div>
