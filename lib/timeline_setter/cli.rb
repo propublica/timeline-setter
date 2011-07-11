@@ -31,6 +31,9 @@ module TimelineSetter
         opts.on('-m', '--min', 'Create a minified one-page version of the timeline') do |m|
           @options[:min] = m
         end
+        opts.on('-i', '--interval INTERVAL', 'Override automatic interval notches with a custom interval.') do |i|
+          @options[:interval] = i
+        end
 
 
         opts.on_tail("-h", "--help", "Show this message") do
@@ -57,7 +60,10 @@ module TimelineSetter
     end
 
     def html
-      TimelineSetter::Timeline.new(events.events).send(@options[:min] ? :timeline_min : :timeline)
+      TimelineSetter::Timeline.new({
+        :events => events.events,
+        :interval => @options[:interval] || ''
+      }).send(@options[:min] ? :timeline_min : :timeline)
     end
 
     def outdir

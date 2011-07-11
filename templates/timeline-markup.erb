@@ -21,7 +21,7 @@
 </div>
 
 <script type="text/javascript">
-  TimelineSetter.Timeline.boot(<%= self.to_json %>);
+  TimelineSetter.Timeline.boot(<%= self.to_json %>, <%= self.interval_json %>);
 </script>
 <script id="TS-year_notch_tmpl" type="text/jst">
   <div class="TS-year_notch TS-year_notch_<%%= timestamp %>">

@@ -3,8 +3,9 @@ module TimelineSetter
     attr_reader :timeline
     # Instantiate a new timeline from an events
     # array created in Parser#initialize
-    def initialize(events)
-      @events = events
+    def initialize(opts = {})
+      @events   = opts[:events]
+      @interval = opts[:interval] || ''
     end
 
     # Convert human dates to timestamps, sort the hash by timestamp, and
@@ -12,6 +13,10 @@ module TimelineSetter
     def to_json
       @events.each {|r| r[:timestamp] = Time.parse(r[:date]).to_i * 1000 }
       @events.to_json
+    end
+    
+    def interval_json
+      {"interval" => "#{@interval}"}.to_json
     end
 
     def timeline_markup
