@@ -72,9 +72,10 @@ Full list of options:
 
 * `-c CSV` Path to your CSV file.
 * `-o OUTPUT_PATH` Path to output timeline and assets. If absent, timeline will be created in current directory.
-* `-a` Add the default supporting assets to the output directory, along with the timeline itself.
+* `-a` Do not output supporting assets such as CSS and JavaScript. This is useful if you're customizing those and don't want your versions clobbered.
 * `-m` Create a minified one-page version of your timeline with all supporting assets inline.
 * `-O` Open a browser to your new timeline after it is generated (currently Mac OS only).
+* `-i` Add a custom interval for background "interval notches." These take the format of JavaScript date [getter methods](https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Date#Methods). For example, year would be `FullYear.` All the options are available [below](#interval_notch_options). If absent, TimelineSetter will attempt to automatically create interval notches based on the longest range of dates in your timeline.
 * `-h` Print help to standard output.
 
 <a id="csv"></a>
@@ -199,6 +200,19 @@ interval notches:
     hour/minute => 11:59
     second      => 11:59:22
 
+<a id="interval_notch_options"></a>
+The interval notches date spans themselves can be customized by using the `-i` flag when generating a timeline. The available parameters are
+    
+    Decade
+    Lustrum 
+    FullYear
+    Month
+    Week  
+    Date   
+    Hours 
+    Minutes
+    Seconds
+
 Event notches are templated through `#TS-card-tmpl` and contain individual
 classes corresponding to spreadsheet columns. `.TS-item-label` corresponds to
 `description`, `.TS-item_html` corresponds to `html`,
@@ -243,6 +257,12 @@ questions should go to <a href="mailto:opensource@propublica.org">opensource@pro
 
 <a id="changelog"></a>
 ## Change Log
+
+<a id="release-020"></a>
+### 0.2.0
+
+* New feature adds support for custom intervals for interval notches.
+* Change command line to output supporting assets by default unless `-a` is specified
 
 <a id="release-012"></a>
 ### 0.1.2
