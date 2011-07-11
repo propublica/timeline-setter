@@ -75,7 +75,7 @@ Full list of options:
 * `-a` Do not output supporting assets such as CSS and JavaScript. This is useful if you're customizing those and don't want your versions clobbered.
 * `-m` Create a minified one-page version of your timeline with all supporting assets inline.
 * `-O` Open a browser to your new timeline after it is generated (currently Mac OS only).
-* `-i` Add a custom interval for background "interval notches." These take the format of JavaScript date [getter methods](https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Date#Methods). For example, year would be `FullYear.` All the options are available [below](#interval_notch_options). If absent, TimelineSetter will attempt to automatically create interval notches based on the longest range of dates in your timeline.
+* `-i` Add a custom interval for background "interval notches." These take the format of JavaScript date [getter methods](https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Date#Methods). For example, year would be `FullYear.` All the options are available [below](#interval_notch_options). If absent, TimelineSetter will attempt to automatically create interval notches based on the first and last dates in your timeline.
 * `-h` Print help to standard output.
 
 <a id="csv"></a>
@@ -261,7 +261,7 @@ questions should go to <a href="mailto:opensource@propublica.org">opensource@pro
 <a id="release-020"></a>
 ### 0.2.0
 
-* New feature adds support for custom intervals for interval notches.
+* New feature adds support for custom interval notch ranges.
 * Change command line to output supporting assets by default unless `-a` is specified
 
 <a id="release-012"></a>
