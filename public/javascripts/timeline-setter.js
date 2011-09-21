@@ -266,7 +266,7 @@
 
     // Returns the first year of the five year "lustrum" a Date belongs to
     // as an integer. A lustrum is a fancy Roman word for a "five-year period."
-    // You can read more about it [here](http://en.wikipedia.org/wiki/Lustrum). 
+    // You can read more about it [here](http://en.wikipedia.org/wiki/Lustrum).
     // This all means that if you pass in the year 2011 you'll get 2010 back.
     // And if you pass in the year 1997 you'll get 1995 back.
     getLustrum : function(date) {
@@ -297,7 +297,7 @@
 
       // Zero the special extensions, and adjust as idx necessary.
       switch(intvl){
-        case 'Decade':      
+        case 'Decade':
           date.setFullYear(this.getDecade(date));
           break;
         case 'Lustrum':
@@ -331,7 +331,7 @@
         case 'Week':
           date.setTime(this.getWeekCeil(date).getTime());
           break;
-        default: 
+        default:
           date["set" + intvl](date["get" + intvl]() + 1);
       }
       return date.getTime();
@@ -694,7 +694,7 @@
       var flippable   = this.$(".TS-item").width() < $("#timeline_setter").width() / 2;
       var offTimeline = this.el.position().left - this.$(".TS-item").width() < 0;
 
-      // If the card's right edge is more than the timeline's right edge and 
+      // If the card's right edge is more than the timeline's right edge and
       // it's never been flipped before and it won't go off the timeline when
       // flipped. We'll flip it.
       if (tRightEdge - rightEdge < 0 && margin && !offTimeline) {
@@ -729,7 +729,7 @@
       this.notch.addClass("TS-notch_active");
       this.setWidth();
 
-      // In the case that the card is outside the bounds the wrong way when 
+      // In the case that the card is outside the bounds the wrong way when
       // it's flipped, we'll take care of it here before we move the actual
       // card.
       this.flip($.Event("move"));
