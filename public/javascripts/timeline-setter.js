@@ -214,7 +214,7 @@
       case "FullYear":
         return s.dYear;
       case "Month":
-        return s.dMonth + ', ' + dYear;
+        return s.dMonth + ', ' + s.dYear;
       case "Week":
         return s.dDate;
       case "Date":
