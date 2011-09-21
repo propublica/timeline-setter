@@ -187,36 +187,44 @@
     months : ['Jan.', 'Feb.', 'March', 'April', 'May', 'June', 'July', 'Aug.', 'Sept.', 'Oct.', 'Nov.', 'Dec.']
   };
 
-  // A utility function to format dates in AP Style.
-  Intervals.dateStr = function(timestamp, interval) {
+  // A function overideable trough config, that only create datestings. dateStr
+  // still picks the right one based on interval. months passed in to be
+  // shareable.
+  Intervals.dateStrings = function(timestamp, months) {
+    var strings = {};
     var d                 = new Date(timestamp);
-    var dYear             = d.getFullYear();
-    var dMonth            = Intervals.HUMAN_DATES.months[d.getMonth()];
-    var dDate             = dMonth + " " + d.getDate() + ', ' + dYear;
+    strings.dYear             = d.getFullYear();
+    strings.dMonth            = months[d.getMonth()];
+    strings.dDate             = strings.dMonth + " " + d.getDate() + ', ' + strings.dYear;
     var bigHours          = d.getHours() > 12;
     var isPM              = d.getHours() >= 12;
-    var dHourWithMinutes  = (bigHours ? d.getHours() - 12 : (d.getHours() > 0 ? d.getHours() : "12")) + ":" + padNumber(d.getMinutes()) + " " + (isPM ? 'p.m.' : 'a.m.');
-    var dHourMinuteSecond = dHourWithMinutes + ":" + padNumber(d.getSeconds());
+    strings.dHourWithMinutes  = (bigHours ? d.getHours() - 12 : (d.getHours() > 0 ? d.getHours() : "12")) + ":" + padNumber(d.getMinutes()) + " " + (isPM ? 'p.m.' : 'a.m.');
+    strings.dHourMinuteSecond = strings.dHourWithMinutes + ":" + padNumber(d.getSeconds());
+    return strings;
+  };
 
+  // A utility function to format dates in AP Style.
+  Intervals.dateStr = function(timestamp, interval) {
+    var s = Intervals.dateStrings(timestamp, Intervals.HUMAN_DATES.months);
     switch (interval) {
       case "Decade":
-        return dYear;
+        return s.dYear;
       case "Lustrum":
-        return dYear;
+        return s.dYear;
       case "FullYear":
-        return dYear;
+        return s.dYear;
       case "Month":
-        return dMonth + ', ' + dYear;
+        return s.dMonth + ', ' + dYear;
       case "Week":
-        return dDate;
+        return s.dDate;
       case "Date":
-        return dDate;
+        return s.dDate;
       case "Hours":
-        return dHourWithMinutes;
+        return s.dHourWithMinutes;
       case "Minutes":
-        return dHourWithMinutes;
+        return s.dHourWithMinutes;
       case "Seconds":
-        return dHourMinuteSecond;
+        return s.dHourMinuteSecond;
     }
   };
 
@@ -442,6 +450,12 @@
   // `render` event.
   var Timeline = TimelineSetter.Timeline = function(data, config) {
     data = data.sort(function(a, b){ return a.timestamp - b.timestamp; });
+    if (typeof(config.dateStrings) == "function") {
+      Intervals.dateStrings = config.dateStrings;
+    }
+    if (typeof(config.humanMonths) != "undefined") {
+      Intervals.HUMAN_DATES.months = config.humanMonths;
+    }
     this.bySid    = {};
     this.series   = [];
     this.config   = (config || {});
