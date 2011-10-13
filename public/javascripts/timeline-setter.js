@@ -187,36 +187,44 @@
     months : ['Jan.', 'Feb.', 'March', 'April', 'May', 'June', 'July', 'Aug.', 'Sept.', 'Oct.', 'Nov.', 'Dec.']
   };
 
-  // A utility function to format dates in AP Style.
-  Intervals.dateStr = function(timestamp, interval) {
+  // A function overideable trough config, that only create datestings. dateStr
+  // still picks the right one based on interval. months passed in to be
+  // shareable.
+  Intervals.dateStrings = function(timestamp, months) {
+    var strings = {};
     var d                 = new Date(timestamp);
-    var dYear             = d.getFullYear();
-    var dMonth            = Intervals.HUMAN_DATES.months[d.getMonth()];
-    var dDate             = dMonth + " " + d.getDate() + ', ' + dYear;
+    strings.dYear             = d.getFullYear();
+    strings.dMonth            = months[d.getMonth()];
+    strings.dDate             = strings.dMonth + " " + d.getDate() + ', ' + strings.dYear;
     var bigHours          = d.getHours() > 12;
     var isPM              = d.getHours() >= 12;
-    var dHourWithMinutes  = (bigHours ? d.getHours() - 12 : (d.getHours() > 0 ? d.getHours() : "12")) + ":" + padNumber(d.getMinutes()) + " " + (isPM ? 'p.m.' : 'a.m.');
-    var dHourMinuteSecond = dHourWithMinutes + ":" + padNumber(d.getSeconds());
+    strings.dHourWithMinutes  = (bigHours ? d.getHours() - 12 : (d.getHours() > 0 ? d.getHours() : "12")) + ":" + padNumber(d.getMinutes()) + " " + (isPM ? 'p.m.' : 'a.m.');
+    strings.dHourMinuteSecond = strings.dHourWithMinutes + ":" + padNumber(d.getSeconds());
+    return strings;
+  };
 
+  // A utility function to format dates in AP Style.
+  Intervals.dateStr = function(timestamp, interval) {
+    var s = Intervals.dateStrings(timestamp, Intervals.HUMAN_DATES.months);
     switch (interval) {
       case "Decade":
-        return dYear;
+        return s.dYear;
       case "Lustrum":
-        return dYear;
+        return s.dYear;
       case "FullYear":
-        return dYear;
+        return s.dYear;
       case "Month":
-        return dMonth + ', ' + dYear;
+        return s.dMonth + ', ' + s.dYear;
       case "Week":
-        return dDate;
+        return s.dDate;
       case "Date":
-        return dDate;
+        return s.dDate;
       case "Hours":
-        return dHourWithMinutes;
+        return s.dHourWithMinutes;
       case "Minutes":
-        return dHourWithMinutes;
+        return s.dHourWithMinutes;
       case "Seconds":
-        return dHourMinuteSecond;
+        return s.dHourMinuteSecond;
     }
   };
 
@@ -266,7 +274,7 @@
 
     // Returns the first year of the five year "lustrum" a Date belongs to
     // as an integer. A lustrum is a fancy Roman word for a "five-year period."
-    // You can read more about it [here](http://en.wikipedia.org/wiki/Lustrum). 
+    // You can read more about it [here](http://en.wikipedia.org/wiki/Lustrum).
     // This all means that if you pass in the year 2011 you'll get 2010 back.
     // And if you pass in the year 1997 you'll get 1995 back.
     getLustrum : function(date) {
@@ -297,7 +305,7 @@
 
       // Zero the special extensions, and adjust as idx necessary.
       switch(intvl){
-        case 'Decade':      
+        case 'Decade':
           date.setFullYear(this.getDecade(date));
           break;
         case 'Lustrum':
@@ -331,7 +339,7 @@
         case 'Week':
           date.setTime(this.getWeekCeil(date).getTime());
           break;
-        default: 
+        default:
           date["set" + intvl](date["get" + intvl]() + 1);
       }
       return date.getTime();
@@ -442,6 +450,12 @@
   // `render` event.
   var Timeline = TimelineSetter.Timeline = function(data, config) {
     data = data.sort(function(a, b){ return a.timestamp - b.timestamp; });
+    if (typeof(config.dateStrings) == "function") {
+      Intervals.dateStrings = config.dateStrings;
+    }
+    if (typeof(config.humanMonths) != "undefined") {
+      Intervals.HUMAN_DATES.months = config.humanMonths;
+    }
     this.bySid    = {};
     this.series   = [];
     this.config   = (config || {});
@@ -694,7 +708,7 @@
       var flippable   = this.$(".TS-item").width() < $("#timeline_setter").width() / 2;
       var offTimeline = this.el.position().left - this.$(".TS-item").width() < 0;
 
-      // If the card's right edge is more than the timeline's right edge and 
+      // If the card's right edge is more than the timeline's right edge and
       // it's never been flipped before and it won't go off the timeline when
       // flipped. We'll flip it.
       if (tRightEdge - rightEdge < 0 && margin && !offTimeline) {
@@ -729,7 +743,7 @@
       this.notch.addClass("TS-notch_active");
       this.setWidth();
 
-      // In the case that the card is outside the bounds the wrong way when 
+      // In the case that the card is outside the bounds the wrong way when
       // it's flipped, we'll take care of it here before we move the actual
       // card.
       this.flip($.Event("move"));
