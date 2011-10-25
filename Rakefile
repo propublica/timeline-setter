@@ -24,7 +24,6 @@ task :gh_pages do
   `rake docs`
   `rake yard`
   `rake docco`
-  `rake sample`
 
   `git branch` =~ /^\* (.+)?\n/
   current_branch = $1
