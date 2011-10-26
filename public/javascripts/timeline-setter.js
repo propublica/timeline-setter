@@ -437,6 +437,7 @@
     _.bindAll(this, 'render');
     this.data = data.sort(function(a, b){ return a.timestamp - b.timestamp; });
     this.bySid    = {};
+    this.cards    = [];
     this.series   = [];
     this.config   = (config || {});
   };
@@ -672,6 +673,7 @@
       this.get('timestamp'),
       this.get('description').split(/ /)[0].replace(/[^a-zA-Z\-]/g,"")
     ].join("-");
+    this.series.timeline.cards.push(this);
   };
 
   Card.prototype = _.extend(Card.prototype, {
@@ -791,7 +793,7 @@
       $(".TS-notch_active").removeClass("TS-notch_active");
     },
 
-    // An event listener to toggle this notche on and off via `Series`.
+    // An event listener to toggle this notch on and off via `Series`.
     toggleNotch : function(e){
       switch (e) {
         case "hideNotch":
@@ -911,8 +913,10 @@
       this.timeline.bind('move', cb);
     },
     
+    // Show the card matching a given timestamp
+    // Right now, timelines only support one card per timestamp
     activateCard : function(timestamp) {
-      // To implement
+      _(this.timeline.cards).detect(function(card) { return card.timestamp === timestamp; }).activate();
     }
   });
 
