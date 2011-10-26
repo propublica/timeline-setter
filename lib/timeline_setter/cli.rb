@@ -77,6 +77,7 @@ module TimelineSetter
     def compile!
       if !@options[:no_assets] || !@options[:min]
         FileUtils.cp_r(Dir.glob("#{TimelineSetter::ROOT}/public/*"), outdir)
+        `mv #{outdir}/assets/* #{outdir}/javascripts/ && rm -rf #{outdir}/assets`
       end
 
       File.open(timeline_page_path, 'w+') do |doc|

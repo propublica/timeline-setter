@@ -57,7 +57,7 @@ begin
     gem.add_dependency "json"
     gem.add_dependency "table_fu"
     gem.add_dependency "kompress", ">= 0.0.2"
-    gem.add_dependency "closure-compiler"
+    gem.add_dependency "jammit"
     gem.add_development_dependency "rspec", ">= 2.0.0"
     gem.version = TimelineSetter::VERSION
   end

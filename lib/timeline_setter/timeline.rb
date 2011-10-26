@@ -15,8 +15,11 @@ module TimelineSetter
       @events.to_json
     end
     
-    def interval_json
-      {"interval" => "#{@interval}"}.to_json
+    def config_json
+      {
+        "interval"  => "#{@interval}",
+        "container" => "#timeline"
+      }.to_json
     end
 
     def timeline_markup

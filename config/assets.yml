@@ -1,0 +1,8 @@
+embed_assets :on
+template_function: _.template
+
+javascripts:
+  main:
+    - public/javascripts/timeline-setter.js
+  templates:
+    - public/javascripts/templates/*.jst

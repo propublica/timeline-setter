@@ -1,4 +1,4 @@
-(function(){
+(function($, undefined){
 
   // Expose `TimelineSetter` globally, so we can call `Timeline.Timeline.boot()`
   // to kick off at any point.
@@ -56,7 +56,7 @@
 
   // Check to see if we're on a mobile device.
   var touchInit = 'ontouchstart' in document;
-  if (touchInit) jQuery.event.props.push("touches");
+  if (touchInit) $.event.props.push("touches");
 
   // The `draggable` plugin tracks changes in X offsets due to mouse movement
   // or finger gestures and proxies associated events on a particular element.
@@ -366,11 +366,6 @@
     });
   };
 
-  // Get a template from the DOM and return a compiled function.
-  var template = function(query) {
-    return _.template($(query).html());
-  };
-
   // Simple function to strip suffixes like `"px"` and return a clean integer for
   // use.
   var cleanNumber = function(str){
@@ -439,12 +434,23 @@
     this.bySid    = {};
     this.cards    = [];
     this.series   = [];
-    this.config   = (config || {});
+    this.config   = (config || {'container' : '#timeline'});
   };
   observable(Timeline.prototype);
 
   Timeline.prototype = _.extend(Timeline.prototype, {
+    // A version of jQuery scoped to the container of the timeline
+    // specified in the config object. If there is no container specified,
+    // use window's jQuery.
+    $ : function(query) {
+      return window.$(query, this.config.container);
+    },
+    
     render : function() {
+      // stick the barebones HTML structure in the dom, 
+      // so we can play with it
+      $(this.config.container).html(JST.timeline());
+      
       this.bounds   = new Bounds();
       this.bar      = new Bar(this);
       this.cardCont = new CardScroller(this);
@@ -457,11 +463,11 @@
       sync(this.bar, this.cardCont, "move", "zoom");
       this.trigger('render');
       
-      new Zoom("in");
-      new Zoom("out");
-      var chooseNext = new Chooser("next");
-      var choosePrev = new Chooser("prev");
-      if (!$(".TS-card_active").is("*")) chooseNext.click();
+      new Zoom("in", this);
+      new Zoom("out", this);
+      var chooseNext = new Chooser("next", this);
+      var choosePrev = new Chooser("prev", this);
+      if (!this.$(".TS-card_active").is("*")) chooseNext.click();
 
       $(document).bind('keydown', function(e) {
         if (e.keyCode === 39) {
@@ -510,18 +516,18 @@
   // and `wheel` plugins.
   var Bar = function(timeline) {
     var that = this;
-    this.el = $(".TS-notchbar");
-    this.el.css({ "left": 0 });
     this.timeline = timeline;
+    
+    this.el = this.timeline.$(".TS-notchbar");
+    this.el.css({ "left": 0 });
     draggable(this);
     wheel(this);
     _.bindAll(this, "moving", "doZoom");
     this.el.bind("dragging scrolled", this.moving);
     this.el.bind("doZoom", this.doZoom);
-    this.template = template("#TS-year_notch_tmpl");
     this.el.bind("dblclick doubletap", function(e){
       e.preventDefault();
-      $(".TS-zoom_in").click();
+      that.timeline.$(".TS-zoom_in").click();
     });
   };
   observable(Bar.prototype);
@@ -554,7 +560,7 @@
     // bar to correct for this behaviour, and in future versions we'll fix this.
     doZoom : function(e, width){
       var that = this;
-      var notch = $(".TS-notch_active");
+      var notch = this.timeline.$(".TS-notch_active");
       var getCur = function() {
         return notch.length > 0 ? notch.position().left : 0;
       };
@@ -581,7 +587,7 @@
       var bounds    = this.timeline.bounds;
 
       for (var i = 0; i < intervals.length; i++) {
-        var html = this.template({'timestamp' : intervals[i].timestamp, 'human' : intervals[i].human });
+        var html = JST.year_notch({'timestamp' : intervals[i].timestamp, 'human' : intervals[i].human });
         this.el.append($(html).css("left", bounds.project(intervals[i].timestamp, 100) + "%"));
       }
     }
@@ -591,7 +597,7 @@
   // The `CardScroller` mirrors the moving and zooming of the `Bar` and is the
   // canvas where individual cards are rendered.
   var CardScroller = function(timeline){
-    this.el = $("#TS-card_scroller_inner");
+    this.el = timeline.$("#TS-card_scroller_inner");
   };
   observable(CardScroller.prototype);
   transformable(CardScroller.prototype);
@@ -604,7 +610,6 @@
     this.color    = this.name.length > 0 ? color() : "default";
     this.cards    = [];
     _.bindAll(this, "render", "showNotches", "hideNotches");
-    this.template = template("#TS-series_legend_tmpl");
     this.timeline.bind("render", this.render);
   };
   observable(Series.prototype);
@@ -639,8 +644,8 @@
     // `hideNotches` and `showNotches`.
     render : function(e){
       if (this.name.length === 0) return;
-      this.el = $(this.template(this));
-      $(".TS-series_nav_container").append(this.el);
+      this.el = $(JST.series_legend(this));
+      this.timeline.$(".TS-series_nav_container").append(this.el);
       this.el.toggle(this.hideNotches, this.showNotches);
     }
   });
@@ -657,23 +662,21 @@
   // and a `.TS-card_container` which is lazily rendered.
   var Card = function(card, series) {
     this.series = series;
+    this.timeline = this.series.timeline;
     card = _.clone(card);
     this.timestamp = card.timestamp;
     this.attributes = card;
     this.attributes.topcolor = series.color;
-
-    this.template = template("#TS-card_tmpl");
-    this.ntemplate = template("#TS-notch_tmpl");
     _.bindAll(this, "render", "activate", "flip", "setPermalink", "toggleNotch");
     this.series.bind("hideNotch", this.toggleNotch);
     this.series.bind("showNotch", this.toggleNotch);
-    this.series.timeline.bind("render", this.render);
-    this.series.timeline.bar.bind("flip", this.flip);
+    this.timeline.bind("render", this.render);
+    this.timeline.bar.bind("flip", this.flip);
     this.id = [
       this.get('timestamp'),
       this.get('description').split(/ /)[0].replace(/[^a-zA-Z\-]/g,"")
     ].join("-");
-    this.series.timeline.cards.push(this);
+    this.timeline.cards.push(this);
   };
 
   Card.prototype = _.extend(Card.prototype, {
@@ -682,19 +685,14 @@
       return this.attributes[key];
     },
 
-    // A version of `jQuery` scoped to the `Card`'s element.
-    $ : function(query){
-      return $(query, this.el);
-    },
-
     // When each `Card` is rendered via a render event, it appends a notch to the
     // `Bar` and binds a click handler so it can be activated. if the `Card`'s id
     // is currently selected via `window.location.hash` it's activated.
     render : function(){
-      this.offset = this.series.timeline.bounds.project(this.timestamp, 100);
-      var html = this.ntemplate(this.attributes);
+      this.offset = this.timeline.bounds.project(this.timestamp, 100);
+      var html = JST.notch(this.attributes);
       this.notch = $(html).css({"left": this.offset + "%"});
-      $(".TS-notchbar").append(this.notch);
+      this.timeline.$(".TS-notchbar").append(this.notch);
       this.notch.click(this.activate);
       if (history.get() === this.id) this.activate();
     },
@@ -704,24 +702,24 @@
     // of time. The magic number here (7) is half the width of the css arrow.
     flip : function() {
       if (!this.el || !this.el.is(":visible")) return;
-      var rightEdge   = this.$(".TS-item").offset().left + this.$(".TS-item").width();
+      var rightEdge   = this.timeline.$(".TS-item").offset().left + this.timeline.$(".TS-item").width();
       var tRightEdge  = $("#timeline_setter").offset().left + $("#timeline_setter").width();
       var margin      = this.el.css("margin-left") === this.originalMargin;
-      var flippable   = this.$(".TS-item").width() < $("#timeline_setter").width() / 2;
-      var offTimeline = this.el.position().left - this.$(".TS-item").width() < 0;
+      var flippable   = this.timeline.$(".TS-item").width() < $("#timeline_setter").width() / 2;
+      var offTimeline = this.el.position().left - this.timeline.$(".TS-item").width() < 0;
 
       // If the card's right edge is more than the timeline's right edge and 
       // it's never been flipped before and it won't go off the timeline when
       // flipped. We'll flip it.
       if (tRightEdge - rightEdge < 0 && margin && !offTimeline) {
-        this.el.css({"margin-left": -(this.$(".TS-item").width() + 7)});
-        this.$(".TS-css_arrow").css({"left" : this.$(".TS-item").width()});
+        this.el.css({"margin-left": -(this.timeline.$(".TS-item").width() + 7)});
+        this.timeline.$(".TS-css_arrow").css({"left" : this.timeline.$(".TS-item").width()});
         // Otherwise, if the card is off the left side of the timeline and we have
         // flipped it before and the card's width is less than half of the width
         // of the whole timeline, we'll flip it to the default position.
-      } else if (this.el.offset().left - $("#timeline_setter").offset().left < 0 && !margin && flippable) {
+      } else if (this.el.offset().left - this.timeline.$("#timeline_setter").offset().left < 0 && !margin && flippable) {
         this.el.css({"margin-left": this.originalMargin});
-        this.$(".TS-css_arrow").css({"left": 0});
+        this.timeline.$(".TS-css_arrow").css({"left": 0});
       }
     },
 
@@ -733,14 +731,14 @@
       var that = this;
       this.hideActiveCard();
       if (!this.el) {
-        this.el = $(this.template({card: this}));
+        this.el = $(JST.card({card: this}));
         this.el.css({"left": this.offset + "%"});
-        $("#TS-card_scroller_inner").append(this.el);
+        this.timeline.$("#TS-card_scroller_inner").append(this.el);
         this.originalMargin = this.el.css("margin-left");
         this.el.delegate(".TS-permalink", "click", this.setPermalink);
         // Reactivate if there are images in the html so we can recalculate
         // widths and position accordingly.
-        this.$("img").load(this.activate);
+        this.timeline.$("img").load(this.activate);
       }
       this.el.show().addClass(("TS-card_active"));
       this.notch.addClass("TS-notch_active");
@@ -760,25 +758,26 @@
     // width. Which is a funny way of saying, if you'd like to set the width of
     // the card as a whole, fiddle with `.TS-item_year`s width.
     setWidth : function(){
-      var max = _.max(_.toArray(this.$(".TS-item_user_html").children()), function(el){ return $(el).width(); });
-      if ($(max).width() > this.$(".TS-item_year").width()) {
-        this.$(".TS-item_label").css("width", $(max).width());
+      var that = this;
+      var max = _.max(_.toArray(this.timeline.$(".TS-item_user_html").children()), function(el){ return that.timeline.$(el).width(); });
+      if (this.timeline.$(max).width() > this.timeline.$(".TS-item_year").width()) {
+        this.timeline.$(".TS-item_label").css("width", $(max).width());
       } else {
-        this.$(".TS-item_label").css("width", this.$(".TS-item_year").width());
+        this.timeline.$(".TS-item_label").css("width", this.$(".TS-item_year").width());
       }
     },
 
     // Move the `Bar` if the card is outside the visible region on activation.
     move : function() {
       var e = $.Event('moving');
-      var offset  = this.$(".TS-item").offset();
-      var toffset = $("#timeline_setter").offset();
+      var offset  = this.timeline.$(".TS-item").offset();
+      var toffset = this.timeline.$("#timeline_setter").offset();
       if (offset.left < toffset.left) {
-        e.deltaX = toffset.left - offset.left + cleanNumber(this.$(".TS-item").css("padding-left"));
-        this.series.timeline.bar.moving(e);
-      } else if (offset.left + this.$(".TS-item").outerWidth() > toffset.left + $("#timeline_setter").width()) {
-        e.deltaX = toffset.left + $("#timeline_setter").width() - (offset.left + this.$(".TS-item").outerWidth());
-        this.series.timeline.bar.moving(e);
+        e.deltaX = toffset.left - offset.left + cleanNumber(this.timeline.$(".TS-item").css("padding-left"));
+        this.timeline.bar.moving(e);
+      } else if (offset.left + this.timeline.$(".TS-item").outerWidth() > toffset.left + this.timeline.$("#timeline_setter").width()) {
+        e.deltaX = toffset.left + this.timeline.$("#timeline_setter").width() - (offset.left + this.timeline.$(".TS-item").outerWidth());
+        this.timeline.bar.moving(e);
       }
     },
 
@@ -789,8 +788,8 @@
 
     // Globally hide any cards with `TS-card_active`.
     hideActiveCard : function() {
-      $(".TS-card_active").removeClass("TS-card_active").hide();
-      $(".TS-notch_active").removeClass("TS-notch_active");
+      this.timeline.$(".TS-card_active").removeClass("TS-card_active").hide();
+      this.timeline.$(".TS-notch_active").removeClass("TS-notch_active");
     },
 
     // An event listener to toggle this notch on and off via `Series`.
@@ -820,16 +819,17 @@
   // --------
 
   // Each control is basically a callback wrapper for a given DOM element.
-  var Control = function(direction){
+  var Control = function(direction, timeline){
+    this.timeline = timeline;
     this.direction = direction;
-    this.el = $(this.prefix + direction);
+    this.el = this.timeline.$(this.prefix + direction);
     var that = this;
     this.el.bind('click', function(e) { e.preventDefault(); that.click(e);});
   };
 
   // Each `Zoom` control adjusts the `curZoom` when clicked.
   var curZoom = 100;
-  var Zoom = function(direction) {
+  var Zoom = function(direction, timeline) {
     Control.apply(this, arguments);
   };
   inherits(Zoom, Control);
@@ -842,7 +842,7 @@
     click : function() {
       curZoom += (this.direction === "in" ? +100 : -100);
       if (curZoom >= 100) {
-        $(".TS-notchbar").trigger('doZoom', [curZoom]);
+        this.timeline.$(".TS-notchbar").trigger('doZoom', [curZoom]);
       } else {
         curZoom = 100;
       }
@@ -851,9 +851,9 @@
 
 
   // Each `Chooser` activates the next or previous notch.
-  var Chooser = function(direction) {
+  var Chooser = function(direction, timeline) {
     Control.apply(this, arguments);
-    this.notches = $(".TS-notch");
+    this.notches = this.timeline.$(".TS-notch");
   };
   inherits(Chooser, Control);
 
@@ -865,7 +865,7 @@
     click: function(e){
       var el;
       var notches    = this.notches.not(".TS-series_inactive");
-      var curCardIdx = notches.index($(".TS-notch_active"));
+      var curCardIdx = notches.index(this.timeline.$(".TS-notch_active"));
       var numOfCards = notches.length;
       if (this.direction === "next") {
         el = (curCardIdx < numOfCards ? notches.eq(curCardIdx + 1) : false);
@@ -920,7 +920,6 @@
     }
   });
 
-
   // Finally, let's create the whole timeline. Boot is exposed globally via
   // `TimelineSetter.Timeline.boot()` which takes the JSON generated by
   // the timeline-setter binary as an argument. This is handy if you want
@@ -934,7 +933,7 @@
     var timeline = TimelineSetter.timeline = new Timeline(data, config || {});
     var api      = new TimelineSetter.Api(timeline);
     
-    jQuery(timeline.render);
+    $(timeline.render);
     
     return {
       timeline : timeline,
@@ -942,4 +941,4 @@
     };
   };
 
-})();
+})(jQuery);

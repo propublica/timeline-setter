@@ -1,0 +1,21 @@
+<div class="TS-card_container TS-card_container_<%= (card.get("series") || "").replace(/\W/g, "") %>">
+<div class="TS-css_arrow TS-css_arrow_up TS-css_arrow_color_<%= card.get("topcolor") %>"></div>
+  <div class="TS-item TS-item_color_<%= card.get("topcolor") %>" data-timestamp="<%= card.get("timestamp") %>">
+    <div class="TS-item_label">
+      <% if (!_.isEmpty(card.get("html"))){ %>
+        <div class="TS-item_user_html">
+          <%= card.get("html") %>
+        </div>
+      <% } %>
+      <%= card.get("description") %>
+    </div>
+      <% if (!_.isEmpty(card.get("link"))){ %>
+          <a class="TS-read_btn" target="_blank" href="<%= card.get("link") %>">Read More</a>
+      <% } %>
+
+    <div class="TS-item_year">
+      <span class="TS-item_year_text"><%= (card.get("display_date") || "").length > 0 ? card.get("display_date") : card.get("date") %></span>
+      <div class="TS-permalink">&#8734;</div>
+    </div>
+  </div>
+</div>
