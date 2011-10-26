@@ -543,6 +543,7 @@
         e.deltaX = pOffset - offset;
 
       this.trigger("move", e);
+      this.timeline.trigger("move", e); // for API
       this.move("move", e);
     },
 
@@ -881,7 +882,7 @@
     this.timeline = timeline;
   };
   
-  TimelineSetter.Api.prototype = {
+  TimelineSetter.Api.prototype = _.extend(TimelineSetter.Api.prototype, {
     // Register a callback for when the timeline is loaded
     onLoad : function(cb) {
       this.timeline.bind('load', cb);
@@ -899,14 +900,21 @@
       this.timeline.bind('cardActivate', cb);
     },
     
+    // Register a callback for when the bar is moved or zoomed.
+    // Be careful with this one: Bar move events can be fast
+    // and furious, especially with scroll wheels in Safari.
     onBarMove : function(cb) {
-      // To implement 
+      // Bind a 'move' event to the timeline, because
+      // at this point, timeline.bar isn't available yet.
+      // To get around this, we'll trigger the bar's 
+      // timeline's move event when the bar is moved.
+      this.timeline.bind('move', cb);
     },
     
     activateCard : function(timestamp) {
       // To implement
     }
-  };
+  });
 
 
   // Finally, let's create the whole timeline. Boot is exposed globally via
