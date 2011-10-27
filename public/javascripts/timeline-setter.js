@@ -48,6 +48,14 @@
       this.el.css({ "width": e.width });
     };
   };
+  
+  // The `queryable` mixin scopes jQuery to 
+  // a given container.
+  var queryable = function(obj, container) {
+    obj.$ = function(query) {
+      return window.$(query, container);
+    };
+  }
 
 
   // Plugins
@@ -439,14 +447,10 @@
   observable(Timeline.prototype);
 
   Timeline.prototype = _.extend(Timeline.prototype, {
-    // A version of jQuery scoped to the container of the timeline
-    // specified in the config object. If there is no container specified,
-    // use window's jQuery.
-    $ : function(query) {
-      return window.$(query, this.config.container);
-    },
-    
     render : function() {
+      // create this.$ from queryable mixin.
+      queryable(this, this.config.container);
+
       // stick the barebones HTML structure in the dom, 
       // so we can play with it
       $(this.config.container).html(JST.timeline());
@@ -702,24 +706,24 @@
     // of time. The magic number here (7) is half the width of the css arrow.
     flip : function() {
       if (!this.el || !this.el.is(":visible")) return;
-      var rightEdge   = this.timeline.$(".TS-item").offset().left + this.timeline.$(".TS-item").width();
-      var tRightEdge  = $("#timeline_setter").offset().left + $("#timeline_setter").width();
+      var rightEdge   = this.$(".TS-item").offset().left + this.$(".TS-item").width();
+      var tRightEdge  = this.timeline.$("#timeline_setter").offset().left + this.timeline.$("#timeline_setter").width();
       var margin      = this.el.css("margin-left") === this.originalMargin;
-      var flippable   = this.timeline.$(".TS-item").width() < $("#timeline_setter").width() / 2;
-      var offTimeline = this.el.position().left - this.timeline.$(".TS-item").width() < 0;
+      var flippable   = this.$(".TS-item").width() < this.timeline.$("#timeline_setter").width() / 2;
+      var offTimeline = this.el.position().left - this.$(".TS-item").width() < 0;
 
       // If the card's right edge is more than the timeline's right edge and 
       // it's never been flipped before and it won't go off the timeline when
       // flipped. We'll flip it.
       if (tRightEdge - rightEdge < 0 && margin && !offTimeline) {
-        this.el.css({"margin-left": -(this.timeline.$(".TS-item").width() + 7)});
-        this.timeline.$(".TS-css_arrow").css({"left" : this.timeline.$(".TS-item").width()});
+        this.el.css({"margin-left": -(this.$(".TS-item").width() + 7)});
+        this.$(".TS-css_arrow").css({"left" : this.$(".TS-item").width()});
         // Otherwise, if the card is off the left side of the timeline and we have
         // flipped it before and the card's width is less than half of the width
         // of the whole timeline, we'll flip it to the default position.
       } else if (this.el.offset().left - this.timeline.$("#timeline_setter").offset().left < 0 && !margin && flippable) {
         this.el.css({"margin-left": this.originalMargin});
-        this.timeline.$(".TS-css_arrow").css({"left": 0});
+        this.$(".TS-css_arrow").css({"left": 0});
       }
     },
 
@@ -732,14 +736,19 @@
       this.hideActiveCard();
       if (!this.el) {
         this.el = $(JST.card({card: this}));
+        
+        // create a `this.$` scoped to its card.
+        queryable(this, this.el);
+        
         this.el.css({"left": this.offset + "%"});
-        this.timeline.$("#TS-card_scroller_inner").append(this.el);
+        this.timeline.$("#TS-card_scroller_inner").append(this.el);        
         this.originalMargin = this.el.css("margin-left");
         this.el.delegate(".TS-permalink", "click", this.setPermalink);
         // Reactivate if there are images in the html so we can recalculate
         // widths and position accordingly.
         this.timeline.$("img").load(this.activate);
       }
+      
       this.el.show().addClass(("TS-card_active"));
       this.notch.addClass("TS-notch_active");
       this.setWidth();
@@ -759,24 +768,24 @@
     // the card as a whole, fiddle with `.TS-item_year`s width.
     setWidth : function(){
       var that = this;
-      var max = _.max(_.toArray(this.timeline.$(".TS-item_user_html").children()), function(el){ return that.timeline.$(el).width(); });
-      if (this.timeline.$(max).width() > this.timeline.$(".TS-item_year").width()) {
-        this.timeline.$(".TS-item_label").css("width", $(max).width());
+      var max = _.max(_.toArray(this.$(".TS-item_user_html").children()), function(el){ return that.$(el).width(); });
+      if (this.$(max).width() > this.$(".TS-item_year").width()) {
+        this.$(".TS-item_label").css("width", this.$(max).width());
       } else {
-        this.timeline.$(".TS-item_label").css("width", this.$(".TS-item_year").width());
+        this.$(".TS-item_label").css("width", this.$(".TS-item_year").width());
       }
     },
 
     // Move the `Bar` if the card is outside the visible region on activation.
     move : function() {
       var e = $.Event('moving');
-      var offset  = this.timeline.$(".TS-item").offset();
+      var offset  = this.$(".TS-item").offset();
       var toffset = this.timeline.$("#timeline_setter").offset();
       if (offset.left < toffset.left) {
-        e.deltaX = toffset.left - offset.left + cleanNumber(this.timeline.$(".TS-item").css("padding-left"));
+        e.deltaX = toffset.left - offset.left + cleanNumber(this.$(".TS-item").css("padding-left"));
         this.timeline.bar.moving(e);
-      } else if (offset.left + this.timeline.$(".TS-item").outerWidth() > toffset.left + this.timeline.$("#timeline_setter").width()) {
-        e.deltaX = toffset.left + this.timeline.$("#timeline_setter").width() - (offset.left + this.timeline.$(".TS-item").outerWidth());
+      } else if (offset.left + this.$(".TS-item").outerWidth() > toffset.left + this.timeline.$("#timeline_setter").width()) {
+        e.deltaX = toffset.left + this.timeline.$("#timeline_setter").width() - (offset.left + this.$(".TS-item").outerWidth());
         this.timeline.bar.moving(e);
       }
     },
