@@ -601,7 +601,7 @@
   // The `CardScroller` mirrors the moving and zooming of the `Bar` and is the
   // canvas where individual cards are rendered.
   var CardScroller = function(timeline){
-    this.el = timeline.$("#TS-card_scroller_inner");
+    this.el = timeline.$(".TS-card_scroller_inner");
   };
   observable(CardScroller.prototype);
   transformable(CardScroller.prototype);
@@ -707,9 +707,9 @@
     flip : function() {
       if (!this.el || !this.el.is(":visible")) return;
       var rightEdge   = this.$(".TS-item").offset().left + this.$(".TS-item").width();
-      var tRightEdge  = this.timeline.$("#timeline_setter").offset().left + this.timeline.$("#timeline_setter").width();
+      var tRightEdge  = this.timeline.$(".timeline_setter").offset().left + this.timeline.$(".timeline_setter").width();
       var margin      = this.el.css("margin-left") === this.originalMargin;
-      var flippable   = this.$(".TS-item").width() < this.timeline.$("#timeline_setter").width() / 2;
+      var flippable   = this.$(".TS-item").width() < this.timeline.$(".timeline_setter").width() / 2;
       var offTimeline = this.el.position().left - this.$(".TS-item").width() < 0;
 
       // If the card's right edge is more than the timeline's right edge and 
@@ -721,7 +721,7 @@
         // Otherwise, if the card is off the left side of the timeline and we have
         // flipped it before and the card's width is less than half of the width
         // of the whole timeline, we'll flip it to the default position.
-      } else if (this.el.offset().left - this.timeline.$("#timeline_setter").offset().left < 0 && !margin && flippable) {
+      } else if (this.el.offset().left - this.timeline.$(".timeline_setter").offset().left < 0 && !margin && flippable) {
         this.el.css({"margin-left": this.originalMargin});
         this.$(".TS-css_arrow").css({"left": 0});
       }
@@ -741,7 +741,7 @@
         queryable(this, this.el);
         
         this.el.css({"left": this.offset + "%"});
-        this.timeline.$("#TS-card_scroller_inner").append(this.el);        
+        this.timeline.$(".TS-card_scroller_inner").append(this.el);        
         this.originalMargin = this.el.css("margin-left");
         this.el.delegate(".TS-permalink", "click", this.setPermalink);
         // Reactivate if there are images in the html so we can recalculate
@@ -780,12 +780,12 @@
     move : function() {
       var e = $.Event('moving');
       var offset  = this.$(".TS-item").offset();
-      var toffset = this.timeline.$("#timeline_setter").offset();
+      var toffset = this.timeline.$(".timeline_setter").offset();
       if (offset.left < toffset.left) {
         e.deltaX = toffset.left - offset.left + cleanNumber(this.$(".TS-item").css("padding-left"));
         this.timeline.bar.moving(e);
-      } else if (offset.left + this.$(".TS-item").outerWidth() > toffset.left + this.timeline.$("#timeline_setter").width()) {
-        e.deltaX = toffset.left + this.timeline.$("#timeline_setter").width() - (offset.left + this.$(".TS-item").outerWidth());
+      } else if (offset.left + this.$(".TS-item").outerWidth() > toffset.left + this.timeline.$(".timeline_setter").width()) {
+        e.deltaX = toffset.left + this.timeline.$(".timeline_setter").width() - (offset.left + this.$(".TS-item").outerWidth());
         this.timeline.bar.moving(e);
       }
     },

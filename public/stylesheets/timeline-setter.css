@@ -1,4 +1,4 @@
-    #timeline_setter {
+    .timeline_setter {
       width:85%;
       margin:0 auto;
       padding:10px;
@@ -77,12 +77,12 @@
     .TS-read_btn:hover {
       color:black;cursor:pointer;text-decoration:none;background:#cecece;
     }
-    #timeline_setter a {
+    .timeline_setter a {
       text-decoration:none;
       color:#333;
     }
     
-    #TS-top_matter_container {
+    .TS-top_matter_container {
       -webkit-user-select: none;
       -khtml-user-select: none;
       -moz-user-select: none;
@@ -108,13 +108,13 @@
       user-select: none;
       cursor: col-resize;
     }
-    #TS-card_scroller {
+    .TS-card_scroller {
       width:100%;
       position:relative;
       overflow:hidden;
       height:800px; /* FIX THIS!!! */
     }
-    #TS-card_scroller_inner {
+    .TS-card_scroller_inner {
       width:100%;
       position:relative;
     }
