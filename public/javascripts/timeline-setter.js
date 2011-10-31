@@ -4,6 +4,9 @@
   // to kick off at any point.
   var TimelineSetter = window.TimelineSetter = (window.TimelineSetter || {});
 
+  // Current version of `TimelineSetter`
+  TimelineSetter.VERSION = "0.2.0";
+
   // Mixins
   // ------
   // Each mixin operates on an object's `prototype`.
@@ -48,14 +51,14 @@
       this.el.css({ "width": e.width });
     };
   };
-  
-  // The `queryable` mixin scopes jQuery to 
+
+  // The `queryable` mixin scopes jQuery to
   // a given container.
   var queryable = function(obj, container) {
     obj.$ = function(query) {
       return window.$(query, container);
     };
-  }
+  };
 
 
   // Plugins
@@ -185,7 +188,7 @@
       this.idx = _.indexOf(this.INTERVAL_ORDER, interval);
     }
   };
-  
+
   // Format dates based for AP style.
   // Pass an override function in the config object to override.
   Intervals.dateFormats = function(timestamp) {
@@ -193,20 +196,27 @@
     var defaults = {};
     var months   = ['Jan.', 'Feb.', 'March', 'April', 'May', 'June', 'July', 'Aug.', 'Sept.', 'Oct.', 'Nov.', 'Dec.'];
     var bigHours = d.getHours() > 12;
-    var isPM     = d.getHours() >= 12;
-    
-    defaults.month    = months[d.getMonth()];
-    defaults.year     = d.getFullYear();
-    defaults.date     = defaults.month + " " + d.getDate() + ', ' + defaults.year;
-    defaults.hourWithMinutes = (bigHours ? d.getHours() - 12 : (d.getHours() > 0 ? d.getHours() : "12")) 
-                       + ":" + padNumber(d.getMinutes()) 
-                       + " " + (isPM ? 'p.m.' : 'a.m.');
-    defaults.hourWithMinutesAndSeconds = defaults.hourWithMinutes + ":" + padNumber(d.getSeconds());
-    
+    var ampm     = " " + (d.getHours() >= 12 ? 'p.m.' : 'a.m.');
+
+
+    defaults.month = months[d.getMonth()];
+    defaults.year  = d.getFullYear();
+    defaults.date  = defaults.month + " " + d.getDate() + ', ' + defaults.year;
+
+    var hours;
+    if(bigHours) {
+      hours = d.getHours() - 12;
+    } else {
+      hours = d.getHours() > 0 ? d.getHours() : "12";
+    }
+
+    hours += ":" + padNumber(d.getMinutes());
+    defaults.hourWithMinutes = hours + ampm;
+    defaults.hourWithMinutesAndSeconds = hours + ":" + padNumber(d.getSeconds()) + ampm;
     // If we have user overrides, set them to defaults here
     return Intervals.formatter(d, defaults) || defaults;
-  }
-  
+  };
+
   // A utility function to format dates in AP Style.
   Intervals.dateStr = function(timestamp, interval) {
     var d = new Intervals.dateFormats(timestamp);
@@ -445,14 +455,14 @@
   // takes a json array of card representations and then builds series, calculates
   // intervals `sync`s the `Bar` and `CardContainer` objects.
   var Timeline = TimelineSetter.Timeline = function(data, config) {
-    _.bindAll(this, 'render');
+    _.bindAll(this, 'render', 'setCurrentTimeline');
     this.data = data.sort(function(a, b){ return a.timestamp - b.timestamp; });
     this.bySid    = {};
     this.cards    = [];
     this.series   = [];
     this.config   = config;
     this.config.container = this.config.container || "#timeline";
- 
+
     // Override default date formats
     // by writing a `formatter` function that returns
     // an object containing all the formats
@@ -474,10 +484,10 @@
       // create this.$ from queryable mixin.
       queryable(this, this.config.container);
 
-      // stick the barebones HTML structure in the dom, 
+      // stick the barebones HTML structure in the dom,
       // so we can play with it
       $(this.config.container).html(JST.timeline());
-      
+
       this.bounds   = new Bounds();
       this.bar      = new Bar(this);
       this.cardCont = new CardScroller(this);
@@ -489,26 +499,26 @@
       this.bar.render();
       sync(this.bar, this.cardCont, "move", "zoom");
       this.trigger('render');
-      
+
       new Zoom("in", this);
       new Zoom("out", this);
       this.chooseNext = new Chooser("next", this);
       this.choosePrev = new Chooser("prev", this);
       if (!this.$(".TS-card_active").is("*")) this.chooseNext.click();
-      
+
       // bind a click handler to this timeline container
       // that sets it as as the GLOBAL current timeline
       // for key presses.
-      $(this.config.container).bind('click', _.bind(this.setGlobalCurrentTimeline, this));
-      
+      $(this.config.container).bind('click', this.setCurrentTimeline);
+
       this.trigger('load');
     },
-    
+
     // Set a global with the current timeline, mostly for key presses.
-    setGlobalCurrentTimeline : function() {
+    setCurrentTimeline : function() {
       TimelineSetter.currentTimeline = this;
     },
-    
+
     // Loop through the JSON and add each element to a series.
     createSeries : function(series){
       for(var i = 0; i < series.length; i++)
@@ -528,7 +538,7 @@
 
       this.bounds.extend(series.max());
       this.bounds.extend(series.min());
-      
+
       this.trigger('cardAdd', card);
     }
   });
@@ -545,7 +555,7 @@
   var Bar = function(timeline) {
     var that = this;
     this.timeline = timeline;
-    
+
     this.el = this.timeline.$(".TS-notchbar");
     this.el.css({ "left": 0 });
     draggable(this);
@@ -760,19 +770,19 @@
       this.hideActiveCard();
       if (!this.el) {
         this.el = $(JST.card({card: this}));
-        
+
         // create a `this.$` scoped to its card.
         queryable(this, this.el);
-        
+
         this.el.css({"left": this.offset + "%"});
-        this.timeline.$(".TS-card_scroller_inner").append(this.el);        
+        this.timeline.$(".TS-card_scroller_inner").append(this.el);
         this.originalMargin = this.el.css("margin-left");
         this.el.delegate(".TS-permalink", "click", this.setPermalink);
         // Reactivate if there are images in the html so we can recalculate
         // widths and position accordingly.
         this.timeline.$("img").load(this.activate);
       }
-      
+
       this.el.show().addClass(("TS-card_active"));
       this.notch.addClass("TS-notch_active");
       this.setWidth();
@@ -909,64 +919,64 @@
       el.trigger("click");
     }
   });
-  
+
   // JS API
   // ------
-  
+
   TimelineSetter.Api = function(timeline) {
     this.timeline = timeline;
   };
-  
+
   TimelineSetter.Api.prototype = _.extend(TimelineSetter.Api.prototype, {
     // Register a callback for when the timeline is loaded
     onLoad : function(cb) {
       this.timeline.bind('load', cb);
     },
-    
+
     // Register a callback for when a card
     // Callback has access to the event name and the card object
     onCardAdd : function(cb) {
       this.timeline.bind('cardAdd', cb);
     },
-    
+
     // Register a callback for when a card is activated.
     // Callback has access to the event name and the card object
     onCardActivate : function(cb) {
       this.timeline.bind('cardActivate', cb);
     },
-    
+
     // Register a callback for when the bar is moved or zoomed.
     // Be careful with this one: Bar move events can be fast
     // and furious, especially with scroll wheels in Safari.
     onBarMove : function(cb) {
       // Bind a 'move' event to the timeline, because
       // at this point, timeline.bar isn't available yet.
-      // To get around this, we'll trigger the bar's 
+      // To get around this, we'll trigger the bar's
       // timeline's move event when the bar is moved.
       this.timeline.bind('move', cb);
     },
-    
+
     // Show the card matching a given timestamp
     // Right now, timelines only support one card per timestamp
     activateCard : function(timestamp) {
       _(this.timeline.cards).detect(function(card) { return card.timestamp === timestamp; }).activate();
     }
   });
-  
+
   // global TS keydown function to bind key events to the
   // current global currentTimeline.
   TimelineSetter.bindKeydowns = function() {
     $(document).bind('keydown', function(e) {
-      if (TimelineSetter.currentTimeline && e.keyCode === 39) {
+      if (e.keyCode === 39) {
          TimelineSetter.currentTimeline.chooseNext.click();
-      } else if (TimelineSetter.currentTimeline && e.keyCode === 37) {
+      } else if (e.keyCode === 37) {
         TimelineSetter.currentTimeline.choosePrev.click();
       } else {
         return;
       }
     });
-    
-  }
+  };
+
 
   // Finally, let's create the whole timeline. Boot is exposed globally via
   // `TimelineSetter.Timeline.boot()` which takes the JSON generated by
@@ -976,16 +986,16 @@
   Timeline.boot = function(data, config) {
     var timeline = TimelineSetter.timeline = new Timeline(data, config || {});
     var api      = new TimelineSetter.Api(timeline);
-        
-    if (!TimelineSetter.pageTimelines) { 
+
+    if (!TimelineSetter.pageTimelines) {
       TimelineSetter.currentTimeline = timeline;
       TimelineSetter.bindKeydowns();
     }
+
     TimelineSetter.pageTimelines = TimelineSetter.pageTimelines ? TimelineSetter.pageTimelines += 1 : 1;
-    
-    
+
     $(timeline.render);
-    
+
     return {
       timeline : timeline,
       api      : api
