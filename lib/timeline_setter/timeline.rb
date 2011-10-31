@@ -41,7 +41,7 @@ module TimelineSetter
       libs = Dir.glob("#{TimelineSetter::ROOT}/public/javascripts/vendor/**")
       libs.each { |lib| @js << File.open(lib,'r').read }
       @min_html = Kompress::HTML.new(timeline_markup).html
-      @js << Closure::Compiler.new.compile(File.open("#{TimelineSetter::ROOT}/public/javascripts/timeline-setter.js", 'r'))
+      @js << File.open("#{TimelineSetter::ROOT}/public/javascripts/timeline-setter.min.js", 'r').read
       @timeline = tmpl("timeline-min.erb")
     end
     

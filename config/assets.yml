@@ -4,5 +4,6 @@ template_function: _.template
 javascripts:
   main:
     - public/javascripts/timeline-setter.js
+    - public/javascripts/templates/*.jst
   templates:
     - public/javascripts/templates/*.jst
