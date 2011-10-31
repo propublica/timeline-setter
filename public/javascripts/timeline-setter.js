@@ -185,42 +185,50 @@
       this.idx = _.indexOf(this.INTERVAL_ORDER, interval);
     }
   };
-
-  // An object containing human translations for date indexes.
-  Intervals.HUMAN_DATES = {
-    months : ['Jan.', 'Feb.', 'March', 'April', 'May', 'June', 'July', 'Aug.', 'Sept.', 'Oct.', 'Nov.', 'Dec.']
-  };
-
+  
+  // Format dates based for AP style.
+  // Pass an override function in the config object to override.
+  Intervals.dateFormats = function(timestamp) {
+    var d = new Date(timestamp);
+    var defaults = {};
+    var months   = ['Jan.', 'Feb.', 'March', 'April', 'May', 'June', 'July', 'Aug.', 'Sept.', 'Oct.', 'Nov.', 'Dec.'];
+    var bigHours = d.getHours() > 12;
+    var isPM     = d.getHours() >= 12;
+    
+    defaults.month    = months[d.getMonth()];
+    defaults.year     = d.getFullYear();
+    defaults.date     = defaults.month + " " + d.getDate() + ', ' + defaults.year;
+    defaults.hourWithMinutes = (bigHours ? d.getHours() - 12 : (d.getHours() > 0 ? d.getHours() : "12")) 
+                       + ":" + padNumber(d.getMinutes()) 
+                       + " " + (isPM ? 'p.m.' : 'a.m.');
+    defaults.hourWithMinutesAndSeconds = defaults.hourWithMinutes + ":" + padNumber(d.getSeconds());
+    
+    // If we have user overrides, set them to defaults here
+    return Intervals.formatter(d, defaults) || defaults;
+  }
+  
   // A utility function to format dates in AP Style.
   Intervals.dateStr = function(timestamp, interval) {
-    var d                 = new Date(timestamp);
-    var dYear             = d.getFullYear();
-    var dMonth            = Intervals.HUMAN_DATES.months[d.getMonth()];
-    var dDate             = dMonth + " " + d.getDate() + ', ' + dYear;
-    var bigHours          = d.getHours() > 12;
-    var isPM              = d.getHours() >= 12;
-    var dHourWithMinutes  = (bigHours ? d.getHours() - 12 : (d.getHours() > 0 ? d.getHours() : "12")) + ":" + padNumber(d.getMinutes()) + " " + (isPM ? 'p.m.' : 'a.m.');
-    var dHourMinuteSecond = dHourWithMinutes + ":" + padNumber(d.getSeconds());
-
+    var d = new Intervals.dateFormats(timestamp);
     switch (interval) {
       case "Decade":
-        return dYear;
+        return d.year;
       case "Lustrum":
-        return dYear;
+        return d.year;
       case "FullYear":
-        return dYear;
+        return d.year;
       case "Month":
-        return dMonth + ', ' + dYear;
+        return d.month + ', ' + d.year;
       case "Week":
-        return dDate;
+        return d.date;
       case "Date":
-        return dDate;
+        return d.date;
       case "Hours":
-        return dHourWithMinutes;
+        return d.hourWithMinutes;
       case "Minutes":
-        return dHourWithMinutes;
+        return d.hourWithMinutes;
       case "Seconds":
-        return dHourMinuteSecond;
+        return d.hourWithMinutesAndSeconds;
     }
   };
 
@@ -271,7 +279,7 @@
 
     // Returns the first year of the five year "lustrum" a Date belongs to
     // as an integer. A lustrum is a fancy Roman word for a "five-year period."
-    // You can read more about it [here](http://en.wikipedia.org/wiki/Lustrum). 
+    // You can read more about it [here](http://en.wikipedia.org/wiki/Lustrum).
     // This all means that if you pass in the year 2011 you'll get 2010 back.
     // And if you pass in the year 1997 you'll get 1995 back.
     getLustrum : function(date) {
@@ -302,7 +310,7 @@
 
       // Zero the special extensions, and adjust as idx necessary.
       switch(intvl){
-        case 'Decade':      
+        case 'Decade':
           date.setFullYear(this.getDecade(date));
           break;
         case 'Lustrum':
@@ -336,7 +344,7 @@
         case 'Week':
           date.setTime(this.getWeekCeil(date).getTime());
           break;
-        default: 
+        default:
           date["set" + intvl](date["get" + intvl]() + 1);
       }
       return date.getTime();
@@ -444,6 +452,18 @@
     this.series   = [];
     this.config   = config;
     this.config.container = this.config.container || "#timeline";
+ 
+    // Override default date formats
+    // by writing a `formatter` function that returns
+    // an object containing all the formats
+    // you'd like to override. Pass in `d`
+    // which is a date object, and `defaults`, which
+    // are the formatters we override.
+    //     formatter : function(d, defaults) {
+    //       defaults.months = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
+    //       return defaults;
+    //     }
+    Intervals.formatter = this.config.formatter || function(d, defaults) { return defaults; };
   };
   observable(Timeline.prototype);
 
@@ -716,7 +736,7 @@
       var flippable   = this.$(".TS-item").width() < this.timeline.$(".timeline_setter").width() / 2;
       var offTimeline = this.el.position().left - this.$(".TS-item").width() < 0;
 
-      // If the card's right edge is more than the timeline's right edge and 
+      // If the card's right edge is more than the timeline's right edge and
       // it's never been flipped before and it won't go off the timeline when
       // flipped. We'll flip it.
       if (tRightEdge - rightEdge < 0 && margin && !offTimeline) {
@@ -757,7 +777,7 @@
       this.notch.addClass("TS-notch_active");
       this.setWidth();
 
-      // In the case that the card is outside the bounds the wrong way when 
+      // In the case that the card is outside the bounds the wrong way when
       // it's flipped, we'll take care of it here before we move the actual
       // card.
       this.flip();
