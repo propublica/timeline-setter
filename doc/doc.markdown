@@ -158,6 +158,22 @@ The timeline is made up of non-clickable *interval notches* used to denote
 periods of time, and *event notches*, which, when clicked, reveal their
 associated *event cards*.
 
+<a id="configuring"></a>
+## Configuring The Timeline JavaScript Embed
+
+The `timeline-setter` command generates a JavaScript embed that prepopulates your data. You can also create this yourself without the command line application by filling in object JSON manually. It all gets stuffed into the `TimelineSetter.timeline.boot` function, which takes an array of data, and a config object. 
+
+The config object looks for `interval`, `container`, and `formatter` options. 
+
+The `interval` option is prepopulated with a given [interval](#interval_notch_options) if you generate this file using the `-i` option in the CLI, otherwise specify it here manually. The `container` option allows you to inject the entire timeline into an element with the given selector. (By default this is `#timeline`). Finally, `formatter` is a way to format dates on the timeline's interval notches. Write a formatter like so:
+
+    formatter : function(d, defaults) {
+      defaults.months = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
+      return defaults;     
+    }
+
+
+
 <a name="styling"></a>
 ## Styling Your Timeline
 
@@ -169,17 +185,14 @@ replace it completely. Here's a guide to do that.
 <a id="styling-container"></a>
 ### Overview and Styling the Container and Top Matter
 
-All TimelineSetter CSS is scoped within a namespace starting with `TS.` The
-outermost container is `#timeline_setter.`
+All TimelineSetter CSS is scoped within a namespace starting with `TS` except for the outermost container (by default `#timeline`.) The container is configurable with the `container` argument in the TimelineSetter boot function's config object.
 
 Upon first glance, it may not seem like there is much markup at all. That's
 because we make extensive use of JavaScript (ERB-style) templating via
-[Underscore.js](http://documentcloud.github.com/underscore/#template) -- so
-templates for each part of the timeline reside in the DOM. The controls (zoom
-in/out, previous/next buttons) are available within `#TS-top_matter_container .TS-controls`.
+[Underscore.js](http://documentcloud.github.com/underscore/#template) --
+templates for each part of the timeline reside in a JST object at the end of timeline-setter.js.
 
-Series checkboxes are injected into `.TS-series_nav_container` and templated
-via `script#TS-notch_tmpl`. Currently, series colors are hard coded in the
+Currently, series colors are hard coded in the
 JavaScript. We support a maximum of nine series colors (assigned in this order:
 ``#065718, #EDC047, #91ADD1, #929E5E, #9E5E23, #C44846, #465363, #EDD4A5, #CECECE``,
 they can be overridden in the "color priority" section of `timeline-setter.css`). Technically
@@ -189,10 +202,7 @@ to the default charcoal notch color.
 <a id="styling-bar"></a>
 ### Styling the bar, notches and cards
 
-Interval notches are templated within `script#TS-year_notch_tmpl`. Their
-position is based on the interval of time between events as automatically
-determined by the JavaScript. Here's a sampling of what you might see in
-interval notches:
+The position of interval notches is based on the interval of time between events as automatically determined by the JavaScript. Here's a sampling of what you might see in interval notches:
 
     year        => 2001
     month       => June, 2004
@@ -213,12 +223,41 @@ The interval notches date spans themselves can be customized by using the `-i` f
     Minutes
     Seconds
 
-Event notches are templated through `#TS-card-tmpl` and contain individual
-classes corresponding to spreadsheet columns. `.TS-item-label` corresponds to
-`description`, `.TS-item_html` corresponds to `html`,
-`.TS-read_btn` is linked to `link` and `.TS-item_year` corresponds to
-`display_date` falling through to `date`. Finally, `TS-permalink`
-is a fragment link which will show the active card on page load if used.
+<a id="js_api"></a>
+## The JavaScript API
+
+As of TimelineSetter 0.3.0, TimelineSetter has a JavaScript API that allows programmatic access to certain events, and the ability to activate cards. To use the API, assign the `TimelineSetter.Timeline.boot()` function to a variable, and then use methods in the `api` object like so:
+
+    var currentTimeline = TimelineSetter.Timeline.boot(options);
+    currentTimeline.api.onLoad(function() { 
+      console.log("I'm ready")
+    });
+
+Here are the API methods:
+
+### onLoad
+
+Register a callback for when the timeline is loaded
+
+### onCardAdd
+
+Register a callback for when a card is added to the timeline. This method has access to the event name and the card object
+
+    currentTimeline.api.onCardAdd(function(evtName, obj) {
+      console.log(obj);
+    })
+
+### onCardActivate
+
+Register a callback for when a card is activated (i.e. shown). This method has access to the event name and the card object.
+
+### onBarMove
+
+Register a callback for when the bar is moved or zoomed. Be careful with this one: Bar move events can be fast and furious, especially with scroll wheels in Safari.
+
+### activateCard
+
+Show the card matching a given timestamp. Right now, timelines only support one card per timestamp
 
 <a id="roadmap"></a>
 ## Roadmap
@@ -257,6 +296,13 @@ questions should go to <a href="mailto:opensource@propublica.org">opensource@pro
 
 <a id="changelog"></a>
 ## Change Log
+
+<a id="release-030"></a>
+### 0.3.0
+
+* Add JavaScript API
+* Scope timeline to a given element to support multiple timelines on a page
+* Add date formatter config option. _Thanks [@omega](https://github.com/propublica/timeline-setter/pull/26)_
 
 <a id="release-020"></a>
 ### 0.2.0

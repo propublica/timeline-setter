@@ -265,6 +265,22 @@ to point to their appropriate destinations.</p>
 periods of time, and <em>event notches</em>, which, when clicked, reveal their
 associated <em>event cards</em>.</p>
 
+<p><a id="configuring"></a></p>
+
+<h2>Configuring The Timeline JavaScript Embed</h2>
+
+<p>The <code>timeline-setter</code> command generates a JavaScript embed that prepopulates your data. You can also create this yourself without the command line application by filling in object JSON manually. It all gets stuffed into the <code>TimelineSetter.timeline.boot</code> function, which takes an array of data, and a config object.</p>
+
+<p>The config object looks for <code>interval</code>, <code>container</code>, and <code>formatter</code> options.</p>
+
+<p>The <code>interval</code> option is prepopulated with a given <a href="#interval_notch_options">interval</a> if you generate this file using the <code>-i</code> option in the CLI, otherwise specify it here manually. The <code>container</code> option allows you to inject the entire timeline into an element with the given selector. (By default this is <code>#timeline</code>). Finally, <code>formatter</code> is a way to format dates on the timeline&rsquo;s interval notches. Write a formatter like so:</p>
+
+<pre><code>formatter : function(d, defaults) {
+  defaults.months = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
+  return defaults;     
+}
+</code></pre>
+
 <p><a name="styling"></a></p>
 
 <h2>Styling Your Timeline</h2>
@@ -278,17 +294,14 @@ replace it completely. Here&rsquo;s a guide to do that.</p>
 
 <h3>Overview and Styling the Container and Top Matter</h3>
 
-<p>All TimelineSetter CSS is scoped within a namespace starting with <code>TS.</code> The
-outermost container is <code>#timeline_setter.</code></p>
+<p>All TimelineSetter CSS is scoped within a namespace starting with <code>TS</code> except for the outermost container (by default <code>#timeline</code>.) The container is configurable with the <code>container</code> argument in the TimelineSetter boot function&rsquo;s config object.</p>
 
 <p>Upon first glance, it may not seem like there is much markup at all. That&rsquo;s
 because we make extensive use of JavaScript (ERB-style) templating via
-<a href="http://documentcloud.github.com/underscore/#template">Underscore.js</a> &mdash; so
-templates for each part of the timeline reside in the DOM. The controls (zoom
-in/out, previous/next buttons) are available within <code>#TS-top_matter_container .TS-controls</code>.</p>
+<a href="http://documentcloud.github.com/underscore/#template">Underscore.js</a> &mdash;
+templates for each part of the timeline reside in a JST object at the end of timeline-setter.js.</p>
 
-<p>Series checkboxes are injected into <code>.TS-series_nav_container</code> and templated
-via <code>script#TS-notch_tmpl</code>. Currently, series colors are hard coded in the
+<p>Currently, series colors are hard coded in the
 JavaScript. We support a maximum of nine series colors (assigned in this order:
 <code>#065718, #EDC047, #91ADD1, #929E5E, #9E5E23, #C44846, #465363, #EDD4A5, #CECECE</code>,
 they can be overridden in the &ldquo;color priority&rdquo; section of <code>timeline-setter.css</code>). Technically
@@ -299,10 +312,7 @@ to the default charcoal notch color.</p>
 
 <h3>Styling the bar, notches and cards</h3>
 
-<p>Interval notches are templated within <code>script#TS-year_notch_tmpl</code>. Their
-position is based on the interval of time between events as automatically
-determined by the JavaScript. Here&rsquo;s a sampling of what you might see in
-interval notches:</p>
+<p>The position of interval notches is based on the interval of time between events as automatically determined by the JavaScript. Here&rsquo;s a sampling of what you might see in interval notches:</p>
 
 <pre><code>year        =&gt; 2001
 month       =&gt; June, 2004
@@ -325,12 +335,44 @@ Minutes
 Seconds
 </code></pre>
 
-<p>Event notches are templated through <code>#TS-card-tmpl</code> and contain individual
-classes corresponding to spreadsheet columns. <code>.TS-item-label</code> corresponds to
-<code>description</code>, <code>.TS-item_html</code> corresponds to <code>html</code>,
-<code>.TS-read_btn</code> is linked to <code>link</code> and <code>.TS-item_year</code> corresponds to
-<code>display_date</code> falling through to <code>date</code>. Finally, <code>TS-permalink</code>
-is a fragment link which will show the active card on page load if used.</p>
+<p><a id="js_api"></a></p>
+
+<h2>The JavaScript API</h2>
+
+<p>As of TimelineSetter 0.3.0, TimelineSetter has a JavaScript API that allows programmatic access to certain events, and the ability to activate cards. To use the API, assign the <code>TimelineSetter.Timeline.boot()</code> function to a variable, and then use methods in the <code>api</code> object like so:</p>
+
+<pre><code>var currentTimeline = TimelineSetter.Timeline.boot(options);
+currentTimeline.api.onLoad(function() { 
+  console.log("I'm ready")
+});
+</code></pre>
+
+<p>Here are the API methods:</p>
+
+<h3>onLoad</h3>
+
+<p>Register a callback for when the timeline is loaded</p>
+
+<h3>onCardAdd</h3>
+
+<p>Register a callback for when a card is added to the timeline. This method has access to the event name and the card object</p>
+
+<pre><code>currentTimeline.api.onCardAdd(function(evtName, obj) {
+  console.log(obj);
+})
+</code></pre>
+
+<h3>onCardActivate</h3>
+
+<p>Register a callback for when a card is activated (i.e. shown). This method has access to the event name and the card object.</p>
+
+<h3>onBarMove</h3>
+
+<p>Register a callback for when the bar is moved or zoomed. Be careful with this one: Bar move events can be fast and furious, especially with scroll wheels in Safari.</p>
+
+<h3>activateCard</h3>
+
+<p>Show the card matching a given timestamp. Right now, timelines only support one card per timestamp</p>
 
 <p><a id="roadmap"></a></p>
 
@@ -380,6 +422,17 @@ questions should go to <a href="mailto:opensource@propublica.org">opensource@pro
 <p><a id="changelog"></a></p>
 
 <h2>Change Log</h2>
+
+<p><a id="release-030"></a></p>
+
+<h3>0.3.0</h3>
+
+<ul>
+<li>Add JavaScript API</li>
+<li>Scope timeline to a given element to support multiple timelines on a page</li>
+<li>Add date formatter config option. <em>Thanks <a href="https://github.com/propublica/timeline-setter/pull/26">@omega</a></em></li>
+</ul>
+
 
 <p><a id="release-020"></a></p>
 
