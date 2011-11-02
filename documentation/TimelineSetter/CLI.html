@@ -3,16 +3,26 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Class: TimelineSetter::CLI</title>
-<link rel="stylesheet" href="../css/style.css" type="text/css" media="screen" charset="utf-8" />
-<link rel="stylesheet" href="../css/common.css" type="text/css" media="screen" charset="utf-8" />
+<title>
+  Class: TimelineSetter::CLI
+  
+    &mdash; Documentation by YARD 0.7.2
+  
+</title>
+
+  <link rel="stylesheet" href="../css/style.css" type="text/css" media="screen" charset="utf-8" />
+
+  <link rel="stylesheet" href="../css/common.css" type="text/css" media="screen" charset="utf-8" />
 
 <script type="text/javascript" charset="utf-8">
   relpath = '..';
   if (relpath != '') relpath += '/';
 </script>
-<script type="text/javascript" charset="utf-8" src="../js/jquery.js"></script>
-<script type="text/javascript" charset="utf-8" src="../js/app.js"></script>
+
+  <script type="text/javascript" charset="utf-8" src="../js/jquery.js"></script>
+
+  <script type="text/javascript" charset="utf-8" src="../js/app.js"></script>
+
 
   </head>
   <body>
@@ -33,11 +43,14 @@
 </div>
 
       <div id="search">
-  <a id="class_list_link" href="#">Class List</a>
-  <a id="method_list_link" href="#">Method List</a>
-  <a id ="file_list_link" href="#">File List</a>
+  
+    <a id="class_list_link" href="#">Class List</a>
+  
+    <a id="method_list_link" href="#">Method List</a>
+  
+    <a id="file_list_link" href="#">File List</a>
+  
 </div>
-
       <div class="clear"></div>
     </div>
     
@@ -78,6 +91,8 @@
   
 </dl>
 <div class="clear"></div>
+
+
 
 
 
@@ -171,10 +186,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'><p>
-A new instance of CLI.
-</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'>A new instance of CLI.</div></span>
   
 </li>
 
@@ -278,10 +290,7 @@ A new instance of CLI.
   
 </p><div class="docstring">
   <div class="discussion">
-    <p>
-A new instance of CLI
-</p>
-
+    A new instance of CLI
 
   </div>
 </div>
@@ -344,7 +353,9 @@ A new instance of CLI
 90
 91
 92
-93</pre>
+93
+94
+95</pre>
     </td>
     <td>
       <pre class="code"><span class="info file"># File 'lib/timeline_setter/cli.rb', line 78</span>
@@ -352,6 +363,8 @@ A new instance of CLI
 <span class='def def kw'>def</span> <span class='compile! fid id'>compile!</span>
   <span class='if if kw'>if</span> <span class='notop op'>!</span><span class='@options ivar id'>@options</span><span class='lbrack token'>[</span><span class='symbol val'>:no_assets</span><span class='rbrack token'>]</span> <span class='orop op'>||</span> <span class='notop op'>!</span><span class='@options ivar id'>@options</span><span class='lbrack token'>[</span><span class='symbol val'>:min</span><span class='rbrack token'>]</span>
     <span class='FileUtils constant id'>FileUtils</span><span class='dot token'>.</span><span class='cp_r identifier id'>cp_r</span><span class='lparen token'>(</span><span class='Dir constant id'>Dir</span><span class='dot token'>.</span><span class='glob identifier id'>glob</span><span class='lparen token'>(</span><span class='dstring node'>&quot;#{TimelineSetter::ROOT}/public/*&quot;</span><span class='rparen token'>)</span><span class='comma token'>,</span> <span class='outdir identifier id'>outdir</span><span class='rparen token'>)</span>
+    <span class='comment val'># Concatenate JSTs to timeline-setter.js and remove templates.js</span>
+    <span class='dxstring node'>`cat #{outdir}/javascripts/templates.js &gt;&gt; #{outdir}/javascripts/timeline-setter.js &amp;&amp; rm -rf #{outdir}/javascripts/templates*`</span>
   <span class='end end kw'>end</span>
 
   <span class='File constant id'>File</span><span class='dot token'>.</span><span class='open identifier id'>open</span><span class='lparen token'>(</span><span class='timeline_page_path identifier id'>timeline_page_path</span><span class='comma token'>,</span> <span class='string val'>'w+'</span><span class='rparen token'>)</span> <span class='do do kw'>do</span> <span class='bitor op'>|</span><span class='doc identifier id'>doc</span><span class='bitor op'>|</span>
@@ -628,9 +641,9 @@ A new instance of CLI
 </div>
     
     <div id="footer">
-  Generated on Mon Jul 11 15:31:24 2011 by 
+  Generated on Wed Nov  2 15:20:08 2011 by 
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.6.5 (ruby-1.8.7).
+  0.7.2 (ruby-1.8.7).
 </div>
 
   </body>

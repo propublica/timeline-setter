@@ -3,16 +3,26 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Class: TimelineSetter::Timeline</title>
-<link rel="stylesheet" href="../css/style.css" type="text/css" media="screen" charset="utf-8" />
-<link rel="stylesheet" href="../css/common.css" type="text/css" media="screen" charset="utf-8" />
+<title>
+  Class: TimelineSetter::Timeline
+  
+    &mdash; Documentation by YARD 0.7.2
+  
+</title>
+
+  <link rel="stylesheet" href="../css/style.css" type="text/css" media="screen" charset="utf-8" />
+
+  <link rel="stylesheet" href="../css/common.css" type="text/css" media="screen" charset="utf-8" />
 
 <script type="text/javascript" charset="utf-8">
   relpath = '..';
   if (relpath != '') relpath += '/';
 </script>
-<script type="text/javascript" charset="utf-8" src="../js/jquery.js"></script>
-<script type="text/javascript" charset="utf-8" src="../js/app.js"></script>
+
+  <script type="text/javascript" charset="utf-8" src="../js/jquery.js"></script>
+
+  <script type="text/javascript" charset="utf-8" src="../js/app.js"></script>
+
 
   </head>
   <body>
@@ -33,11 +43,14 @@
 </div>
 
       <div id="search">
-  <a id="class_list_link" href="#">Class List</a>
-  <a id="method_list_link" href="#">Method List</a>
-  <a id ="file_list_link" href="#">File List</a>
+  
+    <a id="class_list_link" href="#">Class List</a>
+  
+    <a id="method_list_link" href="#">Method List</a>
+  
+    <a id="file_list_link" href="#">File List</a>
+  
 </div>
-
       <div class="clear"></div>
     </div>
     
@@ -103,15 +116,14 @@
   
 
   
-    <span class="summary_desc"><div class='inline'><p>
-Create timeline HTML by interpolating events hash into an ERB template.
-</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'>Create timeline HTML by interpolating events hash into an ERB template.</div></span>
   
 </li>
 
     
   </ul>
+
+
 
 
   
@@ -121,6 +133,27 @@ Create timeline HTML by interpolating events hash into an ERB template.
     </h2>
 
     <ul class="summary">
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#config_json-instance_method" title="#config_json (instance method)">- (Object) <strong>config_json</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
       
         <li class="public ">
   <span class="summary_signature">
@@ -140,32 +173,8 @@ Create timeline HTML by interpolating events hash into an ERB template.
   
 
   
-    <span class="summary_desc"><div class='inline'><p>
-Instantiate a new timeline from an events array created in
-Parser#initialize.
-</p>
-</div></span>
-  
-</li>
-
-      
-        <li class="public ">
-  <span class="summary_signature">
-    
-      <a href="#interval_json-instance_method" title="#interval_json (instance method)">- (Object) <strong>interval_json</strong> </a>
-    
-
-    
-  </span>
-  
-  
-  
-  
-  
-  
-
-  
-    <span class="summary_desc"><div class='inline'></div></span>
+    <span class="summary_desc"><div class='inline'>Instantiate a new timeline from an events
+array created in Parser#initialize.</div></span>
   
 </li>
 
@@ -207,11 +216,8 @@ Parser#initialize.
   
 
   
-    <span class="summary_desc"><div class='inline'><p>
-Create a minified one-page version of a timeline by minifying CSS and JS
-and embedding all assets into our ERB template.
-</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'>Create a minified one-page version of a timeline by minifying CSS and JS and embedding all assets
+into our ERB template.</div></span>
   
 </li>
 
@@ -253,11 +259,8 @@ and embedding all assets into our ERB template.
   
 
   
-    <span class="summary_desc"><div class='inline'><p>
-Convert human dates to timestamps, sort the hash by timestamp, and convert
-the events hash to JSON to stick into our HTML.
-</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'>Convert human dates to timestamps, sort the hash by timestamp, and
+convert the events hash to JSON to stick into our HTML.</div></span>
   
 </li>
 
@@ -277,11 +280,8 @@ the events hash to JSON to stick into our HTML.
   
 </p><div class="docstring">
   <div class="discussion">
-    <p>
-Instantiate a new timeline from an events array created in
-Parser#initialize
-</p>
-
+    Instantiate a new timeline from an events
+array created in Parser#initialize
 
   </div>
 </div>
@@ -328,12 +328,9 @@ Parser#initialize
   
 </p><div class="docstring">
   <div class="discussion">
-    <p>
-Create timeline HTML by interpolating events hash into an ERB template.
-Re-template timeline by editing ../templates/timeline.erb This version
-preserves external links to CSS and JS.
-</p>
-
+    Create timeline HTML by interpolating events hash into an ERB template.
+Re-template timeline by editing ../templates/timeline.erb
+This version preserves external links to CSS and JS.
 
   </div>
 </div>
@@ -345,12 +342,12 @@ preserves external links to CSS and JS.
       <pre class="lines">
 
 
-29
-30
-31</pre>
+32
+33
+34</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/timeline_setter/timeline.rb', line 29</span>
+      <pre class="code"><span class="info file"># File 'lib/timeline_setter/timeline.rb', line 32</span>
 
 <span class='def def kw'>def</span> <span class='timeline identifier id'>timeline</span>
   <span class='@timeline ivar id'>@timeline</span> <span class='assign token'>=</span> <span class='tmpl identifier id'>tmpl</span><span class='lparen token'>(</span><span class='string val'>&quot;timeline.erb&quot;</span><span class='rparen token'>)</span>
@@ -369,9 +366,9 @@ preserves external links to CSS and JS.
     
     
       <div class="method_details first">
-  <p class="signature first" id="interval_json-instance_method">
+  <p class="signature first" id="config_json-instance_method">
   
-    - (<tt>Object</tt>) <strong>interval_json</strong> 
+    - (<tt>Object</tt>) <strong>config_json</strong> 
   
 
   
@@ -383,13 +380,19 @@ preserves external links to CSS and JS.
 
 18
 19
-20</pre>
+20
+21
+22
+23</pre>
     </td>
     <td>
       <pre class="code"><span class="info file"># File 'lib/timeline_setter/timeline.rb', line 18</span>
 
-<span class='def def kw'>def</span> <span class='interval_json identifier id'>interval_json</span>
-  <span class='lbrace token'>{</span><span class='string val'>&quot;interval&quot;</span> <span class='assign token'>=</span><span class='gt op'>&gt;</span> <span class='dstring node'>&quot;#{@interval}&quot;</span><span class='rbrace token'>}</span><span class='dot token'>.</span><span class='to_json identifier id'>to_json</span>
+<span class='def def kw'>def</span> <span class='config_json identifier id'>config_json</span>
+  <span class='lbrace token'>{</span>
+    <span class='string val'>&quot;interval&quot;</span>  <span class='assign token'>=</span><span class='gt op'>&gt;</span> <span class='dstring node'>&quot;#{@interval}&quot;</span><span class='comma token'>,</span>
+    <span class='string val'>&quot;container&quot;</span> <span class='assign token'>=</span><span class='gt op'>&gt;</span> <span class='string val'>&quot;#timeline&quot;</span>
+  <span class='rbrace token'>}</span><span class='dot token'>.</span><span class='to_json identifier id'>to_json</span>
 <span class='end end kw'>end</span>
 </pre>
     </td>
@@ -410,12 +413,12 @@ preserves external links to CSS and JS.
       <pre class="lines">
 
 
-22
-23
-24</pre>
+25
+26
+27</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/timeline_setter/timeline.rb', line 22</span>
+      <pre class="code"><span class="info file"># File 'lib/timeline_setter/timeline.rb', line 25</span>
 
 <span class='def def kw'>def</span> <span class='timeline_markup identifier id'>timeline_markup</span>
   <span class='tmpl identifier id'>tmpl</span><span class='lparen token'>(</span><span class='string val'>&quot;timeline-markup.erb&quot;</span><span class='rparen token'>)</span>
@@ -435,11 +438,8 @@ preserves external links to CSS and JS.
   
 </p><div class="docstring">
   <div class="discussion">
-    <p>
-Create a minified one-page version of a timeline by minifying CSS and JS
-and embedding all assets into our ERB template.
-</p>
-
+    Create a minified one-page version of a timeline by minifying CSS and JS and embedding all assets
+into our ERB template.
 
   </div>
 </div>
@@ -451,18 +451,18 @@ and embedding all assets into our ERB template.
       <pre class="lines">
 
 
-35
-36
-37
 38
 39
 40
 41
 42
-43</pre>
+43
+44
+45
+46</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/timeline_setter/timeline.rb', line 35</span>
+      <pre class="code"><span class="info file"># File 'lib/timeline_setter/timeline.rb', line 38</span>
 
 <span class='def def kw'>def</span> <span class='timeline_min identifier id'>timeline_min</span>
   <span class='@js ivar id'>@js</span> <span class='assign token'>=</span> <span class='string val'>&quot;&quot;</span>
@@ -470,7 +470,7 @@ and embedding all assets into our ERB template.
   <span class='libs identifier id'>libs</span> <span class='assign token'>=</span> <span class='Dir constant id'>Dir</span><span class='dot token'>.</span><span class='glob identifier id'>glob</span><span class='lparen token'>(</span><span class='dstring node'>&quot;#{TimelineSetter::ROOT}/public/javascripts/vendor/**&quot;</span><span class='rparen token'>)</span>
   <span class='libs identifier id'>libs</span><span class='dot token'>.</span><span class='each identifier id'>each</span> <span class='lbrace token'>{</span> <span class='bitor op'>|</span><span class='lib identifier id'>lib</span><span class='bitor op'>|</span> <span class='@js ivar id'>@js</span> <span class='lshft op'>&lt;&lt;</span> <span class='File constant id'>File</span><span class='dot token'>.</span><span class='open identifier id'>open</span><span class='lparen token'>(</span><span class='lib identifier id'>lib</span><span class='comma token'>,</span><span class='string val'>'r'</span><span class='rparen token'>)</span><span class='dot token'>.</span><span class='read identifier id'>read</span> <span class='rbrace token'>}</span>
   <span class='@min_html ivar id'>@min_html</span> <span class='assign token'>=</span> <span class='Kompress constant id'>Kompress</span><span class='colon2 op'>::</span><span class='HTML constant id'>HTML</span><span class='dot token'>.</span><span class='new identifier id'>new</span><span class='lparen token'>(</span><span class='timeline_markup identifier id'>timeline_markup</span><span class='rparen token'>)</span><span class='dot token'>.</span><span class='html identifier id'>html</span>
-  <span class='@js ivar id'>@js</span> <span class='lshft op'>&lt;&lt;</span> <span class='Closure constant id'>Closure</span><span class='colon2 op'>::</span><span class='Compiler constant id'>Compiler</span><span class='dot token'>.</span><span class='new identifier id'>new</span><span class='dot token'>.</span><span class='compile identifier id'>compile</span><span class='lparen token'>(</span><span class='File constant id'>File</span><span class='dot token'>.</span><span class='open identifier id'>open</span><span class='lparen token'>(</span><span class='dstring node'>&quot;#{TimelineSetter::ROOT}/public/javascripts/timeline-setter.js&quot;</span><span class='comma token'>,</span> <span class='string val'>'r'</span><span class='rparen token'>)</span><span class='rparen token'>)</span>
+  <span class='@js ivar id'>@js</span> <span class='lshft op'>&lt;&lt;</span> <span class='File constant id'>File</span><span class='dot token'>.</span><span class='open identifier id'>open</span><span class='lparen token'>(</span><span class='dstring node'>&quot;#{TimelineSetter::ROOT}/public/javascripts/timeline-setter.min.js&quot;</span><span class='comma token'>,</span> <span class='string val'>'r'</span><span class='rparen token'>)</span><span class='dot token'>.</span><span class='read identifier id'>read</span>
   <span class='@timeline ivar id'>@timeline</span> <span class='assign token'>=</span> <span class='tmpl identifier id'>tmpl</span><span class='lparen token'>(</span><span class='string val'>&quot;timeline-min.erb&quot;</span><span class='rparen token'>)</span>
 <span class='end end kw'>end</span>
 </pre>
@@ -492,12 +492,12 @@ and embedding all assets into our ERB template.
       <pre class="lines">
 
 
-45
-46
-47</pre>
+48
+49
+50</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/timeline_setter/timeline.rb', line 45</span>
+      <pre class="code"><span class="info file"># File 'lib/timeline_setter/timeline.rb', line 48</span>
 
 <span class='def def kw'>def</span> <span class='tmpl identifier id'>tmpl</span><span class='lparen token'>(</span><span class='tmpl_file identifier id'>tmpl_file</span><span class='rparen token'>)</span>
   <span class='ERB constant id'>ERB</span><span class='dot token'>.</span><span class='new identifier id'>new</span><span class='lparen token'>(</span><span class='File constant id'>File</span><span class='dot token'>.</span><span class='open identifier id'>open</span><span class='lparen token'>(</span><span class='dstring node'>&quot;#{TimelineSetter::ROOT}/templates/#{tmpl_file}&quot;</span><span class='rparen token'>)</span><span class='dot token'>.</span><span class='read identifier id'>read</span><span class='rparen token'>)</span><span class='dot token'>.</span><span class='result identifier id'>result</span><span class='lparen token'>(</span><span class='binding identifier id'>binding</span><span class='rparen token'>)</span>
@@ -517,11 +517,8 @@ and embedding all assets into our ERB template.
   
 </p><div class="docstring">
   <div class="discussion">
-    <p>
-Convert human dates to timestamps, sort the hash by timestamp, and convert
-the events hash to JSON to stick into our HTML.
-</p>
-
+    Convert human dates to timestamps, sort the hash by timestamp, and
+convert the events hash to JSON to stick into our HTML.
 
   </div>
 </div>
@@ -556,9 +553,9 @@ the events hash to JSON to stick into our HTML.
 </div>
     
     <div id="footer">
-  Generated on Mon Jul 11 15:31:26 2011 by 
+  Generated on Wed Nov  2 15:20:07 2011 by 
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.6.5 (ruby-1.8.7).
+  0.7.2 (ruby-1.8.7).
 </div>
 
   </body>
