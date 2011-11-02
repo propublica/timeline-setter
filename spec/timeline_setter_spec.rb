@@ -39,7 +39,7 @@ describe "TimelineSetter core" do
     # test to see we've compiled all the assets
     
     # test CSS
-    html.should =~ /#timeline_setter/
+    html.should =~ /#timeline/
     # test timeline
     html.should =~ /"timestamp":1045544400/
     # test underscore
@@ -79,7 +79,7 @@ describe "TimelineSetter CLI" do
     # test to see we've compiled all the assets
     
     # test CSS
-    file.should =~ /#timeline_setter/
+    file.should =~ /#timeline/
     # test timeline
     file.should =~ /"timestamp":1045544400/
     # test underscore
