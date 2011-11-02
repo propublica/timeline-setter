@@ -5,7 +5,7 @@
   var TimelineSetter = window.TimelineSetter = (window.TimelineSetter || {});
 
   // Current version of `TimelineSetter`
-  TimelineSetter.VERSION = "0.2.0";
+  TimelineSetter.VERSION = "0.3.0";
 
   // Mixins
   // ------
@@ -213,7 +213,7 @@
     hours += ":" + padNumber(d.getMinutes());
     defaults.hourWithMinutes = hours + ampm;
     defaults.hourWithMinutesAndSeconds = hours + ":" + padNumber(d.getSeconds()) + ampm;
-    // If we have user overrides, set them to defaults here
+    // If we have user overrides, set them to defaults.
     return Intervals.formatter(d, defaults) || defaults;
   };
 
@@ -468,26 +468,30 @@
     // you'd like to override. Pass in `d`
     // which is a date object, and `defaults`, which
     // are the formatters we override.
-    //     formatter : function(d, defaults) {
-    //       defaults.months = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
-    //       return defaults;
-    //     }
+    //
+    //      formatter : function(d, defaults) {
+    //        defaults.months = ['enero', 'febrero', 'marzo', 
+    //                          'abril', 'mayo', 'junio', 'julio', 
+    //                          'agosto', 'septiembre', 'octubre', 
+    //                          'noviembre', 'diciembre'];
+    //        return defaults;
+    //      }
     Intervals.formatter = this.config.formatter || function(d, defaults) { return defaults; };
   };
   observable(Timeline.prototype);
 
   Timeline.prototype = _.extend(Timeline.prototype, {
     // The main kickoff point for rendering the timeline. The `Timeline` constructor
-    // takes a json array of card representations and then builds series, calculates
+    // takes a JSON array of card representations and then builds series, calculates
     // intervals `sync`s the `Bar` and `CardContainer` objects.
     render : function() {
       var that = this;
 
-      // create this.$ from queryable mixin.
+      // create `this.$` from queryable mixin.
       queryable(this, this.config.container);
 
-      // stick the barebones HTML structure in the dom,
-      // so we can play with it
+      // Stick the barebones HTML structure in the dom,
+      // so we can play with it.
       $(this.config.container).html(JST.timeline());
 
       this.bounds   = new Bounds();
@@ -508,8 +512,8 @@
       this.choosePrev = new Chooser("prev", this);
       if (!this.$(".TS-card_active").is("*")) this.chooseNext.click();
 
-      // bind a click handler to this timeline container
-      // that sets it as as the GLOBAL current timeline
+      // Bind a click handler to this timeline container
+      // that sets it as as the global current timeline
       // for key presses.
       $(this.config.container).bind('click', this.setCurrentTimeline);
 
@@ -929,9 +933,17 @@
   // timeline events, and activate cards programmatically.
   // To take advantage of it, assign the timeline boot function to a variable 
   // like so:
-  //     var currentTimeline = TimelineSetter.Timeline.boot([data], {config})
+  //
+  //     var currentTimeline = TimelineSetter.Timeline.boot(
+  //       [data], {config}
+  //     );
+  //
   // then call methods on the `currentTimeline.api` object
-  //    currentTimeline.api.onLoad(function() { console.log("I'm ready")})
+  //
+  //     currentTimeline.api.onLoad(function() { 
+  //       console.log("I'm ready");
+  //     });
+  //
   TimelineSetter.Api = function(timeline) {
     this.timeline = timeline;
   };
@@ -959,7 +971,7 @@
     // and furious, especially with scroll wheels in Safari.
     onBarMove : function(cb) {
       // Bind a 'move' event to the timeline, because
-      // at this point, timeline.bar isn't available yet.
+      // at this point, `timeline.bar` isn't available yet.
       // To get around this, we'll trigger the bar's
       // timeline's move event when the bar is moved.
       this.timeline.bind('move', cb);
@@ -972,7 +984,7 @@
     }
   });
 
-  // global TS keydown function to bind key events to the
+  // Global TS keydown function to bind key events to the
   // current global currentTimeline.
   TimelineSetter.bindKeydowns = function() {
     $(document).bind('keydown', function(e) {

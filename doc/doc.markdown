@@ -159,13 +159,15 @@ periods of time, and *event notches*, which, when clicked, reveal their
 associated *event cards*.
 
 <a id="configuring"></a>
-## Configuring The Timeline JavaScript Embed
+## Configuring the Timeline JavaScript Embed
 
-The `timeline-setter` command generates a JavaScript embed that prepopulates your data. You can also create this yourself without the command line application by filling in object JSON manually. It all gets stuffed into the `TimelineSetter.timeline.boot` function, which takes an array of data, and a config object. 
+Although the `timeline-setter` command generates a JavaScript embed that prepopulates your data, you can also create this yourself by calling `TimelineSetter.timeline.boot` with an array of card objects, and a config object.
+
+    var myTimeline = TimelineSetter.Timeline.boot([{card}...], {config})
 
 The config object looks for `interval`, `container`, and `formatter` options. 
 
-The `interval` option is prepopulated with a given [interval](#interval_notch_options) if you generate this file using the `-i` option in the CLI, otherwise specify it here manually. The `container` option allows you to inject the entire timeline into an element with the given selector. (By default this is `#timeline`). Finally, `formatter` is a way to format dates on the timeline's interval notches. Write a formatter like so:
+The `interval` option takes an [interval](#interval_notch_options) in the form of a JavaScript date getter. The `container` option allows you to inject the entire timeline into an element with the given selector. (By default this is `#timeline`). Finally, `formatter` is a way to format dates on the timeline's interval notches. Write a formatter like so:
 
     formatter : function(d, defaults) {
       defaults.months = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
@@ -226,7 +228,7 @@ The interval notches date spans themselves can be customized by using the `-i` f
 <a id="js_api"></a>
 ## The JavaScript API
 
-As of TimelineSetter 0.3.0, TimelineSetter has a JavaScript API that allows programmatic access to certain events, and the ability to activate cards. To use the API, assign the `TimelineSetter.Timeline.boot()` function to a variable, and then use methods in the `api` object like so:
+As of version 0.3.0, TimelineSetter has a JavaScript API that allows programmatic access to certain events, and the ability to activate cards. To use the API, assign the `TimelineSetter.Timeline.boot()` function to a variable, and then use methods in the `api` object like so:
 
     var currentTimeline = TimelineSetter.Timeline.boot(options);
     currentTimeline.api.onLoad(function() { 
@@ -237,15 +239,15 @@ Here are the API methods:
 
 ### onLoad
 
-Register a callback for when the timeline is loaded
+Register a callback for when the timeline is loaded.
 
 ### onCardAdd
 
-Register a callback for when a card is added to the timeline. This method has access to the event name and the card object
+Register a callback for when a card is added to the timeline. This method has access to the event name and the card object.
 
     currentTimeline.api.onCardAdd(function(evtName, obj) {
       console.log(obj);
-    })
+    });
 
 ### onCardActivate
 
@@ -257,7 +259,7 @@ Register a callback for when the bar is moved or zoomed. Be careful with this on
 
 ### activateCard
 
-Show the card matching a given timestamp. Right now, timelines only support one card per timestamp
+Show the card matching a given timestamp. Right now, timelines only support one card per timestamp.
 
 <a id="roadmap"></a>
 ## Roadmap
