@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{timeline_setter}
-  s.version = "0.2.0"
+  s.version = "0.3.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Al Shaw", "Jeff Larson"]
-  s.date = %q{2011-07-11}
+  s.date = %q{2011-11-02}
   s.default_executable = %q{timeline-setter}
   s.description = %q{TimelineSetter is a tool to create HTML timelines from spreadsheets of events.}
   s.email = %q{almshaw@gmail.com}
@@ -24,10 +24,13 @@ Gem::Specification.new do |s|
     "README",
     "Rakefile",
     "bin/timeline-setter",
+    "config/assets.yml",
     "doc/doc.markdown",
     "doc/doc_wrapper.erb",
     "doc/docco.css",
+    "doc/templates.html",
     "doc/timeline-setter.html",
+    "doc/timeline-setter.min.html",
     "doc/todo.markdown",
     "doc/twitter-demo.html",
     "documentation/TimelineSetter.html",
@@ -55,7 +58,14 @@ Gem::Specification.new do |s|
     "lib/timeline_setter/parser.rb",
     "lib/timeline_setter/timeline.rb",
     "lib/timeline_setter/version.rb",
+    "public/javascripts/templates.js",
+    "public/javascripts/templates/card.jst",
+    "public/javascripts/templates/notch.jst",
+    "public/javascripts/templates/series_legend.jst",
+    "public/javascripts/templates/timeline.jst",
+    "public/javascripts/templates/year_notch.jst",
     "public/javascripts/timeline-setter.js",
+    "public/javascripts/timeline-setter.min.js",
     "public/javascripts/vendor/jquery-min.js",
     "public/javascripts/vendor/underscore-min.js",
     "public/stylesheets/timeline-setter.css",
@@ -80,20 +90,20 @@ Gem::Specification.new do |s|
       s.add_runtime_dependency(%q<json>, [">= 0"])
       s.add_runtime_dependency(%q<table_fu>, [">= 0"])
       s.add_runtime_dependency(%q<kompress>, [">= 0.0.2"])
-      s.add_runtime_dependency(%q<closure-compiler>, [">= 0"])
+      s.add_runtime_dependency(%q<jammit>, [">= 0"])
       s.add_development_dependency(%q<rspec>, [">= 2.0.0"])
     else
       s.add_dependency(%q<json>, [">= 0"])
       s.add_dependency(%q<table_fu>, [">= 0"])
       s.add_dependency(%q<kompress>, [">= 0.0.2"])
-      s.add_dependency(%q<closure-compiler>, [">= 0"])
+      s.add_dependency(%q<jammit>, [">= 0"])
       s.add_dependency(%q<rspec>, [">= 2.0.0"])
     end
   else
     s.add_dependency(%q<json>, [">= 0"])
     s.add_dependency(%q<table_fu>, [">= 0"])
     s.add_dependency(%q<kompress>, [">= 0.0.2"])
-    s.add_dependency(%q<closure-compiler>, [">= 0"])
+    s.add_dependency(%q<jammit>, [">= 0"])
     s.add_dependency(%q<rspec>, [">= 2.0.0"])
   end
 end
