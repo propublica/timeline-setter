@@ -170,7 +170,8 @@ The config object looks for `interval`, `container`, and `formatter` options.
 The `interval` option takes an [interval](#interval_notch_options) in the form of a JavaScript date getter. The `container` option allows you to inject the entire timeline into an element with the given selector. (By default this is `#timeline`). Finally, `formatter` is a way to format dates on the timeline's interval notches. Write a formatter like so:
 
     formatter : function(d, defaults) {
-      defaults.months = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
+      var months = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
+      defaults.month = months[d.getMonth()];
       return defaults;     
     }
 
