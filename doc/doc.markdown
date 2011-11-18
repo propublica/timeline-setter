@@ -291,6 +291,8 @@ On the client side, there are a number of features we plan to add, including:
 * [WNYC](http://www.wnyc.org/articles/its-free-country/2011/may/20/timeline-gay-marriage-nystate/)
 * [ArtInfo](http://www.artinfo.com/news/story/37506/getting-to-know-ai-weiwei-a-multimedia-biographical-timeline/)
 * [Global TV News (Canada)](http://www.globalnews.ca/afghanistan/timeline/index.html?utm_source=facebook-twitter&utm_medium=link&utm_campaign=community)
+* [PBS Newshour](http://www.pbs.org/newshour/timeline/uprising/)
+* [American Public Media: Marketplace](http://www.marketplace.org/topics/economy/raising-debt-ceiling)
 
 <a id="credits"></a>
 ## Credits
