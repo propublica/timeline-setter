@@ -278,12 +278,19 @@ On the client side, there are a number of features we plan to add, including:
 * Embed code
 * JavaScript tests
 
-<a id="links"></a>
-## Links
+<a id="orgs"></a>
+## Media Organizations Using TimelineSetter
 
-* In the Wild: [ProPublica: How One Blast Affected Five Soldiers](http://www.propublica.org/special/tbi-psycho-platoon-timeline)
-* In the Wild: [TPM: The Wisconsin Union Struggle Timeline](http://www.talkingpointsmemo.com/interactive/2011/04/the-wisconsin-union-struggle-timeline.php)
-* In the Wild: [Los Angeles Times: Bell: 'Corruption on Steroids'](http://timelines.latimes.com/bell/)
+* [ProPublica](http://www.propublica.org/special/tbi-psycho-platoon-timeline)
+* [Los Angeles Times](http://timelines.latimes.com/bell/)
+* [Chicago Tribune](http://www.chicagotribune.com/news/local/chi-taxi-ts-docs-20111118,0,3641202.htmlstory)
+* [Huffington Post](http://www.huffingtonpost.com/2011/09/09/ground-zero-world-trade-center-freedom-tower_n_955845.html)
+* [Talking Points Memo](http://www.talkingpointsmemo.com/interactive/2011/04/the-wisconsin-union-struggle-timeline.php)
+* [MinnPost](http://www.minnpost.com/bachmanntimeline/)
+* [Milwaukee Journal-Sentinel](http://www.jsonline.com/news/129159038.html)
+* [WNYC](http://www.wnyc.org/articles/its-free-country/2011/may/20/timeline-gay-marriage-nystate/)
+* [ArtInfo](http://www.artinfo.com/news/story/37506/getting-to-know-ai-weiwei-a-multimedia-biographical-timeline/)
+* [Global TV News (Canada)](http://www.globalnews.ca/afghanistan/timeline/index.html?utm_source=facebook-twitter&utm_medium=link&utm_campaign=community)
 
 <a id="credits"></a>
 ## Credits
