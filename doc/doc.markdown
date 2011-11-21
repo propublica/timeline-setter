@@ -293,6 +293,7 @@ On the client side, there are a number of features we plan to add, including:
 * [Global TV News (Canada)](http://www.globalnews.ca/afghanistan/timeline/index.html?utm_source=facebook-twitter&utm_medium=link&utm_campaign=community)
 * [PBS Newshour](http://www.pbs.org/newshour/timeline/uprising/)
 * [American Public Media: Marketplace](http://www.marketplace.org/topics/economy/raising-debt-ceiling)
+* [San Antonio Express-News](http://blog.chron.com/rickperry/timeline-the-rise-of-rick-perry/)
 
 <a id="credits"></a>
 ## Credits
