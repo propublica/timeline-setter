@@ -221,6 +221,12 @@
   Intervals.dateStr = function(timestamp, interval) {
     var d = new Intervals.dateFormats(timestamp);
     switch (interval) {
+      case "Quincentenary":
+        return d.year;
+      case "Century":
+        return d.year;
+      case "HalfCentury":
+        return d.year;
       case "Decade":
         return d.year;
       case "Lustrum":
@@ -245,19 +251,35 @@
   Intervals.prototype = {
     // Sane estimates of date ranges for the `isAtLeastA` test.
     INTERVALS : {
-      Decade   : 315360000000,
-      Lustrum  : 157680000000,
-      FullYear : 31536000000,
-      Month    : 2592000000,
-      Week     : 604800000,
-      Date     : 86400000,
-      Hours    : 3600000,
-      Minutes  : 60000,
-      Seconds  : 1000
+      Quincentenary : 34689600000000, // 1100 years is the trigger
+      Century       : 9460800000000,  // 300 years is the trigger
+      HalfCentury   : 3153600000000,  // 100 year range is the trigger
+      Decade        : 315360000000,
+      Lustrum       : 157680000000,
+      FullYear      : 31536000000,
+      Month         : 2592000000,
+      Week          : 604800000,
+      Date          : 86400000,
+      Hours         : 3600000,
+      Minutes       : 60000,
+      Seconds       : 1000 // 1,000 millliseconds equals on second
     },
 
     // The order used when testing where exactly a timespan falls.
-    INTERVAL_ORDER : ['Seconds','Minutes','Hours','Date','Week','Month','FullYear','Lustrum','Decade'],
+    INTERVAL_ORDER : [
+        'Seconds',
+        'Minutes',
+        'Hours',
+        'Date',
+        'Week',
+        'Month',
+        'FullYear',
+        'Lustrum',
+        'Decade',
+        'HalfCentury',
+        'Century',
+        'Quincentenary'
+    ],
 
     // A test to find the appropriate range of intervals, for example if a range of
     // timestamps only spans hours this will return true when called with `"Hours"`.
@@ -276,6 +298,21 @@
     // Return the calculated `maxInterval`.
     getMaxInterval : function() {
       return this.INTERVALS[this.INTERVAL_ORDER[this.idx]];
+    },
+
+    // Return the first year of the quincentenary a Date belongs to as an integer.
+    getQuincentenary : function(date) {
+        return (date.getFullYear() / 500 | 0) * 500;
+    },
+
+    // Return the first year of the century a Date belongs to as an integer.
+    getCentury : function(date) {
+      return (date.getFullYear() / 100 | 0) * 100;
+    },
+
+    // Return the first year of the half-century a Date belongs to as an integer.
+    getHalfCentury : function(date) {
+      return (date.getFullYear() / 50 | 0) * 50;
     },
 
     // Return the first year of the decade a Date belongs to as an integer.
@@ -320,6 +357,15 @@
 
       // Zero the special extensions, and adjust as idx necessary.
       switch(intvl){
+        case 'Quincentenary':
+          date.setFullYear(this.getQuincentenary(date));
+          break;
+        case 'Century':
+          date.setFullYear(this.getCentury(date));
+          break;
+        case 'HalfCentury':
+          date.setFullYear(this.getHalfCentury(date));
+          break;
         case 'Decade':
           date.setFullYear(this.getDecade(date));
           break;
@@ -345,6 +391,15 @@
       var date = new Date(this.floor(ts));
       var intvl = this.INTERVAL_ORDER[this.idx];
       switch(intvl){
+        case 'Quincentenary':
+          date.setFullYear(this.getQuincentenary(date) + 500);
+          break;
+        case 'Century':
+          date.setFullYear(this.getCentury(date) + 100);
+          break;
+        case 'HalfCentury':
+          date.setFullYear(this.getHalfCentury(date) + 50);
+          break;
         case 'Decade':
           date.setFullYear(this.getDecade(date) + 10);
           break;
