@@ -253,7 +253,7 @@
     INTERVALS : {
       Quincentenary : 34689600000000, // 1100 years is the trigger
       Century       : 9460800000000,  // 300 years is the trigger
-      HalfCentury   : 3153600000000,  // 100 year range is the trigger
+      HalfCentury   : 3153600000000,  // 100 years is the trigger
       Decade        : 315360000000,
       Lustrum       : 157680000000,
       FullYear      : 31536000000,
