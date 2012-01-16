@@ -243,6 +243,8 @@
         return d.hourWithMinutes;
       case "HalfHour":
         return d.hourWithMinutes;
+      case "QuarterHour":
+        return d.hourWithMinutes;
       case "Minutes":
         return d.hourWithMinutes;
       case "Seconds":
@@ -264,6 +266,7 @@
       Date          : 86400000,
       Hours         : 3600000,
       HalfHour      : 1800000,
+      QuarterHour   : 900000,
       Minutes       : 60000,
       Seconds       : 1000 // 1,000 millliseconds equals on second
     },
@@ -272,6 +275,7 @@
     INTERVAL_ORDER : [
         'Seconds',
         'Minutes',
+        'QuarterHour',
         'HalfHour',
         'Hours',
         'Date',
@@ -357,6 +361,17 @@
       return date.getMinutes() > 30 ? 30 : 0;
     },
 
+    // Return the quarter of the hour this date belongs to. Anything before 15 min.
+    // past the hour comes back as zero; 15-30 comes back as 15; 30-45 as 30;
+    // 45-60 as 45.
+    getQuarterHour: function(date) {
+      var minutes = date.getMinutes();
+      if (minutes < 15) return 0;
+      if (minutes < 30) return 15;
+      if (minutes < 45) return 30;
+      return 45;
+    },
+
     // Zero out a date from the current interval down to seconds.
     floor : function(ts){
       var date  = new Date(ts);
@@ -387,12 +402,16 @@
           idx = _.indexOf(this.INTERVAL_ORDER, 'Week');
         case 'HalfHour':
           date.setMinutes(this.getHalfHour(date));
+        case 'QuarterHour':
+          date.setMinutes(this.getQuarterHour(date));
       }
 
       // Zero out the rest
       while(idx--){
         intvl = this.INTERVAL_ORDER[idx];
-        if( !(_.include(['Week', 'HalfHour'], intvl)) ) date["set" + intvl](intvl === "Date" ? 1 : 0);
+        if (!(_.include(['Week', 'HalfHour', 'QuarterHour'], intvl))) {
+            date["set" + intvl](intvl === "Date" ? 1 : 0);
+        }
       }
 
       return date.getTime();
@@ -423,6 +442,9 @@
           break;
         case 'HalfHour':
           date.setMinutes(this.getHalfHour(date) + 30);
+          break;
+        case 'QuarterHour':
+          date.setMinutes(this.getQuarterHour(date) + 15);
           break;
         default:
           date["set" + intvl](date["get" + intvl]() + 1);
