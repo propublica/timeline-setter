@@ -241,6 +241,8 @@
         return d.date;
       case "Hours":
         return d.hourWithMinutes;
+      case "HalfHour":
+        return d.hourWithMinutes;
       case "Minutes":
         return d.hourWithMinutes;
       case "Seconds":
@@ -261,6 +263,7 @@
       Week          : 604800000,
       Date          : 86400000,
       Hours         : 3600000,
+      HalfHour      : 1800000,
       Minutes       : 60000,
       Seconds       : 1000 // 1,000 millliseconds equals on second
     },
@@ -269,6 +272,7 @@
     INTERVAL_ORDER : [
         'Seconds',
         'Minutes',
+        'HalfHour',
         'Hours',
         'Date',
         'Week',
@@ -347,6 +351,12 @@
       return thisDate;
     },
 
+    // Return the half of the hour this date belongs to. Anything before 30 min.
+    // past the hour comes back as zero. Anything after comes back as 30.
+    getHalfHour: function(date) {
+      return date.getMinutes() > 30 ? 30 : 0;
+    },
+
     // Zero out a date from the current interval down to seconds.
     floor : function(ts){
       var date  = new Date(ts);
@@ -354,7 +364,7 @@
       var idx   = this.idx > _.indexOf(this.INTERVAL_ORDER,'FullYear') ?
                   _.indexOf(this.INTERVAL_ORDER,'FullYear') :
                   idx;
-
+      console.log(intvl);
       // Zero the special extensions, and adjust as idx necessary.
       switch(intvl){
         case 'Quincentenary':
@@ -375,12 +385,14 @@
         case 'Week':
           date.setDate(this.getWeekFloor(date).getDate());
           idx = _.indexOf(this.INTERVAL_ORDER, 'Week');
+        case 'HalfHour':
+          date.setMinutes(this.getHalfHour(date));
       }
 
       // Zero out the rest
       while(idx--){
         intvl = this.INTERVAL_ORDER[idx];
-        if(intvl !== 'Week') date["set" + intvl](intvl === "Date" ? 1 : 0);
+        if( !(_.include(['Week', 'HalfHour'], intvl)) ) date["set" + intvl](intvl === "Date" ? 1 : 0);
       }
 
       return date.getTime();
@@ -408,6 +420,9 @@
           break;
         case 'Week':
           date.setTime(this.getWeekCeil(date).getTime());
+          break;
+        case 'HalfHour':
+          date.setMinutes(this.getHalfHour(date) + 30);
           break;
         default:
           date["set" + intvl](date["get" + intvl]() + 1);
