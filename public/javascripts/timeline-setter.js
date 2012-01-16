@@ -379,7 +379,7 @@
       var idx   = this.idx > _.indexOf(this.INTERVAL_ORDER,'FullYear') ?
                   _.indexOf(this.INTERVAL_ORDER,'FullYear') :
                   idx;
-      console.log(intvl);
+
       // Zero the special extensions, and adjust as idx necessary.
       switch(intvl){
         case 'Quincentenary':
