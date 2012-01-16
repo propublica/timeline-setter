@@ -221,6 +221,14 @@
   Intervals.dateStr = function(timestamp, interval) {
     var d = new Intervals.dateFormats(timestamp);
     switch (interval) {
+      case "Millennium":
+        return d.year;
+      case "Quincentenary":
+        return d.year;
+      case "Century":
+        return d.year;
+      case "HalfCentury":
+        return d.year;
       case "Decade":
         return d.year;
       case "Lustrum":
@@ -235,6 +243,10 @@
         return d.date;
       case "Hours":
         return d.hourWithMinutes;
+      case "HalfHour":
+        return d.hourWithMinutes;
+      case "QuarterHour":
+        return d.hourWithMinutes;
       case "Minutes":
         return d.hourWithMinutes;
       case "Seconds":
@@ -245,19 +257,41 @@
   Intervals.prototype = {
     // Sane estimates of date ranges for the `isAtLeastA` test.
     INTERVALS : {
-      Decade   : 315360000000,
-      Lustrum  : 157680000000,
-      FullYear : 31536000000,
-      Month    : 2592000000,
-      Week     : 604800000,
-      Date     : 86400000,
-      Hours    : 3600000,
-      Minutes  : 60000,
-      Seconds  : 1000
+      Millennium    : 69379200000000,  // 2200 years is the trigger
+      Quincentenary : 34689600000000, // 1100 years is the trigger
+      Century       : 9460800000000,  // 300 years is the trigger
+      HalfCentury   : 3153600000000,  // 100 years is the trigger
+      Decade        : 315360000000,
+      Lustrum       : 157680000000,
+      FullYear      : 31536000000,
+      Month         : 2592000000,
+      Week          : 604800000,
+      Date          : 86400000,
+      Hours         : 3600000,
+      HalfHour      : 1800000,
+      QuarterHour   : 900000,
+      Minutes       : 60000,
+      Seconds       : 1000 // 1,000 millliseconds equals on second
     },
 
     // The order used when testing where exactly a timespan falls.
-    INTERVAL_ORDER : ['Seconds','Minutes','Hours','Date','Week','Month','FullYear','Lustrum','Decade'],
+    INTERVAL_ORDER : [
+        'Seconds',
+        'Minutes',
+        'QuarterHour',
+        'HalfHour',
+        'Hours',
+        'Date',
+        'Week',
+        'Month',
+        'FullYear',
+        'Lustrum',
+        'Decade',
+        'HalfCentury',
+        'Century',
+        'Quincentenary',
+        'Millennium'
+    ],
 
     // A test to find the appropriate range of intervals, for example if a range of
     // timestamps only spans hours this will return true when called with `"Hours"`.
@@ -276,6 +310,26 @@
     // Return the calculated `maxInterval`.
     getMaxInterval : function() {
       return this.INTERVALS[this.INTERVAL_ORDER[this.idx]];
+    },
+
+    // Return the first year of the millennium a Date belongs to as an integer.
+    getMillennium : function(date) {
+        return (date.getFullYear() / 1000 | 0) * 1000;
+    },
+
+    // Return the first year of the quincentenary a Date belongs to as an integer.
+    getQuincentenary : function(date) {
+        return (date.getFullYear() / 500 | 0) * 500;
+    },
+
+    // Return the first year of the century a Date belongs to as an integer.
+    getCentury : function(date) {
+      return (date.getFullYear() / 100 | 0) * 100;
+    },
+
+    // Return the first year of the half-century a Date belongs to as an integer.
+    getHalfCentury : function(date) {
+      return (date.getFullYear() / 50 | 0) * 50;
     },
 
     // Return the first year of the decade a Date belongs to as an integer.
@@ -310,6 +364,23 @@
       return thisDate;
     },
 
+    // Return the half of the hour this date belongs to. Anything before 30 min.
+    // past the hour comes back as zero. Anything after comes back as 30.
+    getHalfHour: function(date) {
+      return date.getMinutes() > 30 ? 30 : 0;
+    },
+
+    // Return the quarter of the hour this date belongs to. Anything before 15 min.
+    // past the hour comes back as zero; 15-30 comes back as 15; 30-45 as 30;
+    // 45-60 as 45.
+    getQuarterHour: function(date) {
+      var minutes = date.getMinutes();
+      if (minutes < 15) return 0;
+      if (minutes < 30) return 15;
+      if (minutes < 45) return 30;
+      return 45;
+    },
+
     // Zero out a date from the current interval down to seconds.
     floor : function(ts){
       var date  = new Date(ts);
@@ -320,6 +391,18 @@
 
       // Zero the special extensions, and adjust as idx necessary.
       switch(intvl){
+        case 'Millennium':
+          date.setFullYear(this.getMillennium(date));
+          break;
+        case 'Quincentenary':
+          date.setFullYear(this.getQuincentenary(date));
+          break;
+        case 'Century':
+          date.setFullYear(this.getCentury(date));
+          break;
+        case 'HalfCentury':
+          date.setFullYear(this.getHalfCentury(date));
+          break;
         case 'Decade':
           date.setFullYear(this.getDecade(date));
           break;
@@ -329,12 +412,18 @@
         case 'Week':
           date.setDate(this.getWeekFloor(date).getDate());
           idx = _.indexOf(this.INTERVAL_ORDER, 'Week');
+        case 'HalfHour':
+          date.setMinutes(this.getHalfHour(date));
+        case 'QuarterHour':
+          date.setMinutes(this.getQuarterHour(date));
       }
 
       // Zero out the rest
       while(idx--){
         intvl = this.INTERVAL_ORDER[idx];
-        if(intvl !== 'Week') date["set" + intvl](intvl === "Date" ? 1 : 0);
+        if (!(_.include(['Week', 'HalfHour', 'QuarterHour'], intvl))) {
+            date["set" + intvl](intvl === "Date" ? 1 : 0);
+        }
       }
 
       return date.getTime();
@@ -345,6 +434,18 @@
       var date = new Date(this.floor(ts));
       var intvl = this.INTERVAL_ORDER[this.idx];
       switch(intvl){
+        case 'Millennium':
+          date.setFullYear(this.getMillennium(date) + 1000);
+          break;
+        case 'Quincentenary':
+          date.setFullYear(this.getQuincentenary(date) + 500);
+          break;
+        case 'Century':
+          date.setFullYear(this.getCentury(date) + 100);
+          break;
+        case 'HalfCentury':
+          date.setFullYear(this.getHalfCentury(date) + 50);
+          break;
         case 'Decade':
           date.setFullYear(this.getDecade(date) + 10);
           break;
@@ -353,6 +454,12 @@
           break;
         case 'Week':
           date.setTime(this.getWeekCeil(date).getTime());
+          break;
+        case 'HalfHour':
+          date.setMinutes(this.getHalfHour(date) + 30);
+          break;
+        case 'QuarterHour':
+          date.setMinutes(this.getQuarterHour(date) + 15);
           break;
         default:
           date["set" + intvl](date["get" + intvl]() + 1);
