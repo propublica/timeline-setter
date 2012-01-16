@@ -221,6 +221,8 @@
   Intervals.dateStr = function(timestamp, interval) {
     var d = new Intervals.dateFormats(timestamp);
     switch (interval) {
+      case "Millennium":
+        return d.year;
       case "Quincentenary":
         return d.year;
       case "Century":
@@ -255,6 +257,7 @@
   Intervals.prototype = {
     // Sane estimates of date ranges for the `isAtLeastA` test.
     INTERVALS : {
+      Millennium    : 69379200000000,  // 2200 years is the trigger
       Quincentenary : 34689600000000, // 1100 years is the trigger
       Century       : 9460800000000,  // 300 years is the trigger
       HalfCentury   : 3153600000000,  // 100 years is the trigger
@@ -286,7 +289,8 @@
         'Decade',
         'HalfCentury',
         'Century',
-        'Quincentenary'
+        'Quincentenary',
+        'Millennium'
     ],
 
     // A test to find the appropriate range of intervals, for example if a range of
@@ -306,6 +310,11 @@
     // Return the calculated `maxInterval`.
     getMaxInterval : function() {
       return this.INTERVALS[this.INTERVAL_ORDER[this.idx]];
+    },
+
+    // Return the first year of the millennium a Date belongs to as an integer.
+    getMillennium : function(date) {
+        return (date.getFullYear() / 1000 | 0) * 1000;
     },
 
     // Return the first year of the quincentenary a Date belongs to as an integer.
@@ -382,6 +391,9 @@
 
       // Zero the special extensions, and adjust as idx necessary.
       switch(intvl){
+        case 'Millennium':
+          date.setFullYear(this.getMillennium(date));
+          break;
         case 'Quincentenary':
           date.setFullYear(this.getQuincentenary(date));
           break;
@@ -422,6 +434,9 @@
       var date = new Date(this.floor(ts));
       var intvl = this.INTERVAL_ORDER[this.idx];
       switch(intvl){
+        case 'Millennium':
+          date.setFullYear(this.getMillennium(date) + 1000);
+          break;
         case 'Quincentenary':
           date.setFullYear(this.getQuincentenary(date) + 500);
           break;
