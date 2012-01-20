@@ -81,7 +81,7 @@
       drag = {x: e.pageX};
       e.type = "dragstart";
       obj.el.trigger(e);
-    };
+    }
 
     // The user is interacting; capture the offset and trigger a `dragging` event.
     function mousemove(e){
@@ -93,7 +93,7 @@
       });
       drag = { x: (e.pageX || e.touches[0].pageX) };
       obj.el.trigger(e);
-    };
+    }
 
     // We're done tracking the movement set drag back to `null` for the next event.
     function mouseup(e){
@@ -101,7 +101,7 @@
       drag = null;
       e.type = "dragend";
       obj.el.trigger(e);
-    };
+    }
 
     if (!touchInit) {
       // Bind on mouse events if we have a mouse...
@@ -123,7 +123,7 @@
 
       obj.el.bind("touchmove", mousemove);
       obj.el.bind("touchend", mouseup);
-    };
+    }
   };
 
 
@@ -140,11 +140,11 @@
       if (safari){
         var negative = delta < 0 ? -1 : 1;
         delta = Math.log(Math.abs(delta)) * negative * 2;
-      };
+      }
       e.type = "scrolled";
       e.deltaX = delta;
       obj.el.trigger(e);
-    };
+    }
 
     obj.el.bind("mousewheel DOMMouseScroll", mousewheel);
   };
@@ -293,6 +293,16 @@
         'Millennium'
     ],
 
+    // The year adjustment used for supra-year intervals.
+    YEAR_FRACTIONS : {
+      Millenium     : 1000,
+      Quincentenary : 500,
+      Century       : 100,
+      HalfCentury   : 50,
+      Decade        : 10,
+      Lustrum       : 5
+    },
+
     // A test to find the appropriate range of intervals, for example if a range of
     // timestamps only spans hours this will return true when called with `"Hours"`.
     isAtLeastA : function(interval) {
@@ -312,42 +322,16 @@
       return this.INTERVALS[this.INTERVAL_ORDER[this.idx]];
     },
 
-    // Return the first year of the millennium a Date belongs to as an integer.
-    getMillennium : function(date) {
-        return (date.getFullYear() / 1000 | 0) * 1000;
+    // Floor the year to a given epoch.
+    getYearFloor : function(date, intvl){
+      var fudge = this.YEAR_FRACTIONS[intvl] || 1;
+      return (date.getFullYear() / fudge | 0) * fudge;
     },
 
-    // Return the first year of the quincentenary a Date belongs to as an integer.
-    getQuincentenary : function(date) {
-        return (date.getFullYear() / 500 | 0) * 500;
-    },
-
-    // Return the first year of the century a Date belongs to as an integer.
-    getCentury : function(date) {
-      return (date.getFullYear() / 100 | 0) * 100;
-    },
-
-    // Return the first year of the half-century a Date belongs to as an integer.
-    getHalfCentury : function(date) {
-      return (date.getFullYear() / 50 | 0) * 50;
-    },
-
-    // Return the first year of the decade a Date belongs to as an integer.
-    // Decades are defined in the conventional (ie. 60s) sense,
-    // instead of the more precise mathematical method that starts
-    // with year one. For example, the current decade runs from 2010-2019.
-    // And if you pass in the year 2010 or 2015 you'll get 2010 back.
-    getDecade : function(date) {
-      return (date.getFullYear() / 10 | 0) * 10;
-    },
-
-    // Returns the first year of the five year "lustrum" a Date belongs to
-    // as an integer. A lustrum is a fancy Roman word for a "five-year period."
-    // You can read more about it [here](http://en.wikipedia.org/wiki/Lustrum).
-    // This all means that if you pass in the year 2011 you'll get 2010 back.
-    // And if you pass in the year 1997 you'll get 1995 back.
-    getLustrum : function(date) {
-      return (date.getFullYear() / 5 | 0) * 5;
+    // Return a date with the year set to the next interval in a given epoch.
+    getYearCeil : function(date, intvl){
+      if(this.YEAR_FRACTIONS[intvl]) return this.getYearFloor(date, intvl) + this.YEAR_FRACTIONS[intvl];
+      return date.getFullYear();
     },
 
     // Return a Date object rounded down to the previous Sunday, a.k.a. the first day of the week.
@@ -390,25 +374,8 @@
                   idx;
 
       // Zero the special extensions, and adjust as idx necessary.
+      date.setFullYear(this.getYearFloor(date, itvl));
       switch(intvl){
-        case 'Millennium':
-          date.setFullYear(this.getMillennium(date));
-          break;
-        case 'Quincentenary':
-          date.setFullYear(this.getQuincentenary(date));
-          break;
-        case 'Century':
-          date.setFullYear(this.getCentury(date));
-          break;
-        case 'HalfCentury':
-          date.setFullYear(this.getHalfCentury(date));
-          break;
-        case 'Decade':
-          date.setFullYear(this.getDecade(date));
-          break;
-        case 'Lustrum':
-          date.setFullYear(this.getLustrum(date));
-          break;
         case 'Week':
           date.setDate(this.getWeekFloor(date).getDate());
           idx = _.indexOf(this.INTERVAL_ORDER, 'Week');
@@ -421,9 +388,8 @@
       // Zero out the rest
       while(idx--){
         intvl = this.INTERVAL_ORDER[idx];
-        if (!(_.include(['Week', 'HalfHour', 'QuarterHour'], intvl))) {
-            date["set" + intvl](intvl === "Date" ? 1 : 0);
-        }
+        if (!(_.include(['Week', 'HalfHour', 'QuarterHour'], intvl)))
+          date["set" + intvl](intvl === "Date" ? 1 : 0);
       }
 
       return date.getTime();
@@ -433,25 +399,9 @@
     ceil : function(ts){
       var date = new Date(this.floor(ts));
       var intvl = this.INTERVAL_ORDER[this.idx];
+
+      date.setFullYear(this.getYearCeil());
       switch(intvl){
-        case 'Millennium':
-          date.setFullYear(this.getMillennium(date) + 1000);
-          break;
-        case 'Quincentenary':
-          date.setFullYear(this.getQuincentenary(date) + 500);
-          break;
-        case 'Century':
-          date.setFullYear(this.getCentury(date) + 100);
-          break;
-        case 'HalfCentury':
-          date.setFullYear(this.getHalfCentury(date) + 50);
-          break;
-        case 'Decade':
-          date.setFullYear(this.getDecade(date) + 10);
-          break;
-        case 'Lustrum':
-          date.setFullYear(this.getLustrum(date) + 5);
-          break;
         case 'Week':
           date.setTime(this.getWeekCeil(date).getTime());
           break;
@@ -577,9 +527,9 @@
     // are the formatters we override.
     //
     //      formatter : function(d, defaults) {
-    //        defaults.months = ['enero', 'febrero', 'marzo', 
-    //                          'abril', 'mayo', 'junio', 'julio', 
-    //                          'agosto', 'septiembre', 'octubre', 
+    //        defaults.months = ['enero', 'febrero', 'marzo',
+    //                          'abril', 'mayo', 'junio', 'julio',
+    //                          'agosto', 'septiembre', 'octubre',
     //                          'noviembre', 'diciembre'];
     //        return defaults;
     //      }
@@ -1038,7 +988,7 @@
 
   // The TimelineSetter JS API allows you to listen to certain
   // timeline events, and activate cards programmatically.
-  // To take advantage of it, assign the timeline boot function to a variable 
+  // To take advantage of it, assign the timeline boot function to a variable
   // like so:
   //
   //     var currentTimeline = TimelineSetter.Timeline.boot(
@@ -1047,7 +997,7 @@
   //
   // then call methods on the `currentTimeline.api` object
   //
-  //     currentTimeline.api.onLoad(function() { 
+  //     currentTimeline.api.onLoad(function() {
   //       console.log("I'm ready");
   //     });
   //
@@ -1113,8 +1063,8 @@
   // and a formatter function for dates. All of these are optional.
   //
   // We also initialize a new API object for each timeline, accessible via the
-  // timeline variable's `api` method (e.g. `currentTimeline.api`) and look for 
-  // how many timelines are globally on the page for keydown purposes. We'll only 
+  // timeline variable's `api` method (e.g. `currentTimeline.api`) and look for
+  // how many timelines are globally on the page for keydown purposes. We'll only
   // bind keydowns globally if there's only one timeline on the page.
   Timeline.boot = function(data, config) {
     var timeline = TimelineSetter.timeline = new Timeline(data, config || {});
