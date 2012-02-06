@@ -294,6 +294,7 @@ On the client side, there are a number of features we plan to add, including:
 * [PBS Newshour](http://www.pbs.org/newshour/timeline/uprising/)
 * [American Public Media: Marketplace](http://www.marketplace.org/topics/economy/raising-debt-ceiling)
 * [San Antonio Express-News](http://blog.chron.com/rickperry/timeline-the-rise-of-rick-perry/)
+* [Voice of America](http://www.voanews.com/english/news/asia/southeast/Burma-Timeline-134760588.html#1183262400000-)
 
 <a id="credits"></a>
 ## Credits
