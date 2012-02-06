@@ -5,3 +5,27 @@
     <%= self.config_json %>
   );
 </script>
+<noscript>
+  <table>
+    <thead>
+      <tr>
+        <th>date</th>
+        <th>series</th>
+        <th>description</th>
+        <th>link</th>
+        <th>html</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% for @event in @events %>
+        <tr>
+          <td><%= @event[:date] %></td>
+          <td><%= @event[:series] %></td>
+          <td><%= @event[:description] %></td>
+          <td><%= @event[:link] %></td>
+          <td><%= @event[:html] %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</noscript>
