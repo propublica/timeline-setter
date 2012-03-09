@@ -30,7 +30,7 @@ generating the assets, and the HTML, CSS and JavaScript for the timeline
 itself. TimelineSetter will create a unique HTML page that embeds a JSON
 object with your data. The CSS and JavaScript are identical for every timeline
 created, so you can host those centrally and simply point to them when you
-deploy a timeline, or (with the minified option) you can package them up with your HTML 
+deploy a timeline, or (with the minified option) you can package them up with your HTML
 and paste it into your CMS all at once. You can [customize the CSS](#styling) to match the look
 and feel of your site.
 
@@ -41,7 +41,7 @@ TimelineSetter relies on [TableFu](http://propublica.github.com/table-fu/), as
 well as the JavaScript libraries
 [Underscore](http://documentcloud.github.com/underscore/) and
 [jQuery](http://jquery.com/). All of these are either installed along with
-TableSetter, or packaged with the source. It has been tested with jQuery 1.5.1 
+TableSetter, or packaged with the source. It has been tested with jQuery 1.5.1
 and Underscore 1.1.5.
 
 <a id="install"></a>
@@ -50,7 +50,7 @@ and Underscore 1.1.5.
 Install TimelineSetter through RubyGems on Unix-like OSes:
 
     gem install timeline_setter
-    
+
 (Note: We haven't tested using the TimelineSetter tools on Windows even once,
 though the timelines themselves have been tested in modern browsers on
 Windows, Mac and Linux.)
@@ -65,7 +65,7 @@ without any arguments, or by adding the `-h` flag. Run the command like so:
 
     timeline-setter -c /path/to/data.csv -o /path/to/output/directory
 
-Running `timeline-setter` with no `-o` option will generate the timeline (and 
+Running `timeline-setter` with no `-o` option will generate the timeline (and
 supporting assets if applicable) within the current directory.
 
 Full list of options:
@@ -141,10 +141,10 @@ should see a structure much like this where you've specified your output:
       |-----timeline-setter.js
       |-----vendor
       |-------underscore-min.js
-      |-------jquery-min.js      
+      |-------jquery-min.js
       |---stylesheets
       |-----timeline-setter.css
-      
+
 Dropping the whole folder onto your server or an asset host like S3 will allow
 the app to run self-contained. It requires no server-side processing at all.
 To drop into your CMS, simply copy the relevant bits of `timeline.html` and
@@ -165,14 +165,14 @@ Although the `timeline-setter` command generates a JavaScript embed that prepopu
 
     var myTimeline = TimelineSetter.Timeline.boot([{card}...], {config})
 
-The config object looks for `interval`, `container`, and `formatter` options. 
+The config object looks for `interval`, `container`, and `formatter` options.
 
 The `interval` option takes an [interval](#interval_notch_options) in the form of a JavaScript date getter. The `container` option allows you to inject the entire timeline into an element with the given selector. (By default this is `#timeline`). Finally, `formatter` is a way to format dates on the timeline's interval notches. Write a formatter like so:
 
     formatter : function(d, defaults) {
       var months = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
       defaults.month = months[d.getMonth()];
-      return defaults;     
+      return defaults;
     }
 
 
@@ -215,14 +215,14 @@ The position of interval notches is based on the interval of time between events
 
 <a id="interval_notch_options"></a>
 The interval notches date spans themselves can be customized by using the `-i` flag when generating a timeline. The available parameters are
-    
+
     Decade
-    Lustrum 
+    Lustrum
     FullYear
     Month
-    Week  
-    Date   
-    Hours 
+    Week
+    Date
+    Hours
     Minutes
     Seconds
 
@@ -232,7 +232,7 @@ The interval notches date spans themselves can be customized by using the `-i` f
 As of version 0.3.0, TimelineSetter has a JavaScript API that allows programmatic access to certain events, and the ability to activate cards. To use the API, assign the `TimelineSetter.Timeline.boot()` function to a variable, and then use methods in the `api` object like so:
 
     var currentTimeline = TimelineSetter.Timeline.boot(options);
-    currentTimeline.api.onLoad(function() { 
+    currentTimeline.api.onLoad(function() {
       console.log("I'm ready")
     });
 
@@ -246,9 +246,12 @@ Register a callback for when the timeline is loaded.
 
 Register a callback for when a card is added to the timeline. This method has access to the event name and the card object.
 
-    currentTimeline.api.onCardAdd(function(evtName, obj) {
+    currentTimeline.api.onCardAdd(function(evtName, obj, card) {
       console.log(obj);
+      console.log(card);
     });
+
+If you want to customize the card's template, set `card.template` to an undescore template function.
 
 ### onCardActivate
 
@@ -273,7 +276,7 @@ On the client side, there are a number of features we plan to add, including:
 * More iOS gestures such as "pinching"
 * Zooming to fit a series when the series is activated
 * Ranges of events (e.g. Elizabeth Taylor was married to Michael Wilding between
-  Feb. 21, 1952 and Jan. 26, 1957, as shown 
+  Feb. 21, 1952 and Jan. 26, 1957, as shown
   [here](http://www.nytimes.com/interactive/2011/03/23/movies/20110323-ELIZABETH-TAYLOR-TIMELINE.html))
 * Embed code
 * JavaScript tests
@@ -304,8 +307,8 @@ On the client side, there are a number of features we plan to add, including:
 <a id="contact"></a>
 ## Contact
 
-For issues with TimelineSetter, use the 
-[Issue Tracker](https://github.com/propublica/timeline-setter/issues). General 
+For issues with TimelineSetter, use the
+[Issue Tracker](https://github.com/propublica/timeline-setter/issues). General
 questions should go to <a href="mailto:opensource@propublica.org">opensource@propublica.org</a>.
 
 <a id="changelog"></a>
@@ -348,6 +351,6 @@ _Thanks to [Ben Welsh](http://github.com/palewire) for pointing out most of thes
 Initial release
 
 <a id="license"></a>
-## License 
+## License
 
 <%= license %>
