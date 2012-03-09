@@ -69,12 +69,13 @@ module TimelineSetter
     def outdir
       @options[:output] ? @options[:output] : "#{`pwd`.strip}/"
     end
-    
+
     def timeline_page_path
       File.join(outdir, 'timeline.html')
     end
 
     def compile!
+      FileUtils.mkdir_p outdir unless File.exists? outdir
       if !@options[:no_assets] || !@options[:min]
         FileUtils.cp_r(Dir.glob("#{TimelineSetter::ROOT}/public/*"), outdir)
         # Concatenate JSTs to timeline-setter.js and remove templates.js

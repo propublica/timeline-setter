@@ -374,7 +374,7 @@
                   idx;
 
       // Zero the special extensions, and adjust as idx necessary.
-      date.setFullYear(this.getYearFloor(date, itvl));
+      date.setFullYear(this.getYearFloor(date, intvl));
       switch(intvl){
         case 'Week':
           date.setDate(this.getWeekFloor(date).getDate());
@@ -400,7 +400,7 @@
       var date = new Date(this.floor(ts));
       var intvl = this.INTERVAL_ORDER[this.idx];
 
-      date.setFullYear(this.getYearCeil());
+      date.setFullYear(this.getYearCeil(date, intvl));
       switch(intvl){
         case 'Week':
           date.setTime(this.getWeekCeil(date).getTime());
@@ -597,12 +597,12 @@
         this.series.push(this.bySid[card.series]);
       }
       var series = this.bySid[card.series];
-      series.add(card);
+      var crd = series.add(card);
 
       this.bounds.extend(series.max());
       this.bounds.extend(series.min());
 
-      this.trigger('cardAdd', card);
+      this.trigger('cardAdd', card, crd);
     }
   });
 
@@ -720,6 +720,7 @@
     add : function(card){
       var crd = new Card(card, this);
       this.cards.push(crd);
+      return crd;
     },
 
     // The comparing function for `max` and `min`.
@@ -778,6 +779,7 @@
       this.get('description').split(/ /)[0].replace(/[^a-zA-Z\-]/g,"")
     ].join("-");
     this.timeline.cards.push(this);
+    this.template = window.JST.card;
   };
 
   Card.prototype = _.extend(Card.prototype, {
@@ -832,7 +834,7 @@
       var that = this;
       this.hideActiveCard();
       if (!this.el) {
-        this.el = $(JST.card({card: this}));
+        this.el = $(this.template({card: this}));
 
         // create a `this.$` scoped to its card.
         queryable(this, this.el);
