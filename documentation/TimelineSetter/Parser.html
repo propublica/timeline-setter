@@ -6,7 +6,7 @@
 <title>
   Class: TimelineSetter::Parser
   
-    &mdash; Documentation by YARD 0.7.2
+    &mdash; Documentation by YARD 0.7.5
   
 </title>
 
@@ -94,6 +94,8 @@
 
 
 
+
+
   <h2>Instance Attribute Summary <small>(<a href="#" class="summary_toggle">collapse</a>)</small></h2>
   <ul class="summary">
     
@@ -116,7 +118,9 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>Returns the value of attribute events.</div></span>
+    <span class="summary_desc"><div class='inline'>
+<p>Returns the value of attribute events.</p>
+</div></span>
   
 </li>
 
@@ -152,8 +156,10 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>Initialize a new timeline from a CSV file via TableFu,
-add a hash for each row (event) in the sheet to an events array.</div></span>
+    <span class="summary_desc"><div class='inline'>
+<p>Initialize a new timeline from a CSV file via TableFu, add a hash for each
+row (event) in the sheet to an events array.</p>
+</div></span>
   
 </li>
 
@@ -173,21 +179,26 @@ add a hash for each row (event) in the sheet to an events array.</div></span>
   
 </p><div class="docstring">
   <div class="discussion">
-    Initialize a new timeline from a CSV file via TableFu,
-add a hash for each row (event) in the sheet to an events array.
-Sheet should contain columns for
- * date
- * display_date
- * description
- * link
- * thumbnail
- * series
- * html
+    
+<p>Initialize a new timeline from a CSV file via TableFu, add a hash for each
+row (event) in the sheet to an events array. Sheet should contain columns
+for</p>
+
+<pre class="code ruby"><code><span class='mult op'>*</span> <span class='rubyid_date identifier id'>date</span>
+<span class='mult op'>*</span> <span class='rubyid_display_date identifier id'>display_date</span>
+<span class='mult op'>*</span> <span class='rubyid_description identifier id'>description</span>
+<span class='mult op'>*</span> <span class='rubyid_link identifier id'>link</span>
+<span class='mult op'>*</span> <span class='rubyid_thumbnail identifier id'>thumbnail</span>
+<span class='mult op'>*</span> <span class='rubyid_series identifier id'>series</span>
+<span class='mult op'>*</span> <span class='rubyid_html identifier id'>html</span>
+</code></pre>
+
 
   </div>
 </div>
 <div class="tags">
   
+
 </div><table class="source_code">
   <tr>
     <td>
@@ -209,17 +220,17 @@ Sheet should contain columns for
     <td>
       <pre class="code"><span class="info file"># File 'lib/timeline_setter/parser.rb', line 16</span>
 
-<span class='def def kw'>def</span> <span class='initialize identifier id'>initialize</span><span class='lparen token'>(</span><span class='sheet identifier id'>sheet</span><span class='rparen token'>)</span>
-  <span class='@events ivar id'>@events</span> <span class='assign token'>=</span> <span class='lbrack token'>[</span><span class='rbrack token'>]</span>
-  <span class='spreadsheet identifier id'>spreadsheet</span> <span class='assign token'>=</span> <span class='TableFu constant id'>TableFu</span><span class='dot token'>.</span><span class='new identifier id'>new</span><span class='lparen token'>(</span><span class='sheet identifier id'>sheet</span><span class='rparen token'>)</span> <span class='do do kw'>do</span> <span class='bitor op'>|</span><span class='s identifier id'>s</span><span class='bitor op'>|</span>
-    <span class='s identifier id'>s</span><span class='dot token'>.</span><span class='columns identifier id'>columns</span> <span class='assign token'>=</span> <span class='dstring node'>%w[date display_date description link series html]</span>
-  <span class='end end kw'>end</span>
+<span class='rubyid_def def kw'>def</span> <span class='rubyid_initialize identifier id'>initialize</span><span class='lparen token'>(</span><span class='rubyid_sheet identifier id'>sheet</span><span class='rparen token'>)</span>
+  <span class='rubyid_@events ivar id'>@events</span> <span class='assign token'>=</span> <span class='lbrack token'>[</span><span class='rbrack token'>]</span>
+  <span class='rubyid_spreadsheet identifier id'>spreadsheet</span> <span class='assign token'>=</span> <span class='rubyid_TableFu constant id'>TableFu</span><span class='dot token'>.</span><span class='rubyid_new identifier id'>new</span><span class='lparen token'>(</span><span class='rubyid_sheet identifier id'>sheet</span><span class='rparen token'>)</span> <span class='rubyid_do do kw'>do</span> <span class='bitor op'>|</span><span class='rubyid_s identifier id'>s</span><span class='bitor op'>|</span>
+    <span class='rubyid_s identifier id'>s</span><span class='dot token'>.</span><span class='rubyid_columns identifier id'>columns</span> <span class='assign token'>=</span> <span class='dstring node'>%w[date display_date description link series html]</span>
+  <span class='rubyid_end end kw'>end</span>
 
-  <span class='spreadsheet identifier id'>spreadsheet</span><span class='dot token'>.</span><span class='rows identifier id'>rows</span><span class='dot token'>.</span><span class='each identifier id'>each</span> <span class='do do kw'>do</span> <span class='bitor op'>|</span><span class='row identifier id'>row</span><span class='bitor op'>|</span>
-    <span class='hash identifier id'>hash</span> <span class='assign token'>=</span> <span class='spreadsheet identifier id'>spreadsheet</span><span class='dot token'>.</span><span class='columns identifier id'>columns</span><span class='dot token'>.</span><span class='inject identifier id'>inject</span><span class='lparen token'>(</span><span class='lbrace token'>{</span><span class='rbrace token'>}</span><span class='rparen token'>)</span> <span class='lbrace token'>{</span><span class='bitor op'>|</span><span class='memo identifier id'>memo</span><span class='comma token'>,</span> <span class='column identifier id'>column</span><span class='bitor op'>|</span> <span class='memo identifier id'>memo</span><span class='lbrack token'>[</span><span class='column identifier id'>column</span><span class='dot token'>.</span><span class='to_sym identifier id'>to_sym</span><span class='rbrack token'>]</span> <span class='assign token'>=</span> <span class='row identifier id'>row</span><span class='lbrack token'>[</span><span class='column identifier id'>column</span><span class='rbrack token'>]</span><span class='dot token'>.</span><span class='to_s identifier id'>to_s</span> <span class='semicolon token'>;</span> <span class='memo identifier id'>memo</span><span class='rbrace token'>}</span>
-    <span class='@events ivar id'>@events</span> <span class='lshft op'>&lt;&lt;</span> <span class='hash identifier id'>hash</span>
-  <span class='end end kw'>end</span>
-<span class='end end kw'>end</span>
+  <span class='rubyid_spreadsheet identifier id'>spreadsheet</span><span class='dot token'>.</span><span class='rubyid_rows identifier id'>rows</span><span class='dot token'>.</span><span class='rubyid_each identifier id'>each</span> <span class='rubyid_do do kw'>do</span> <span class='bitor op'>|</span><span class='rubyid_row identifier id'>row</span><span class='bitor op'>|</span>
+    <span class='rubyid_hash identifier id'>hash</span> <span class='assign token'>=</span> <span class='rubyid_spreadsheet identifier id'>spreadsheet</span><span class='dot token'>.</span><span class='rubyid_columns identifier id'>columns</span><span class='dot token'>.</span><span class='rubyid_inject identifier id'>inject</span><span class='lparen token'>(</span><span class='lbrace token'>{</span><span class='rbrace token'>}</span><span class='rparen token'>)</span> <span class='lbrace token'>{</span><span class='bitor op'>|</span><span class='rubyid_memo identifier id'>memo</span><span class='comma token'>,</span> <span class='rubyid_column identifier id'>column</span><span class='bitor op'>|</span> <span class='rubyid_memo identifier id'>memo</span><span class='lbrack token'>[</span><span class='rubyid_column identifier id'>column</span><span class='dot token'>.</span><span class='rubyid_to_sym identifier id'>to_sym</span><span class='rbrack token'>]</span> <span class='assign token'>=</span> <span class='rubyid_row identifier id'>row</span><span class='lbrack token'>[</span><span class='rubyid_column identifier id'>column</span><span class='rbrack token'>]</span><span class='dot token'>.</span><span class='rubyid_to_s identifier id'>to_s</span> <span class='semicolon token'>;</span> <span class='rubyid_memo identifier id'>memo</span><span class='rbrace token'>}</span>
+    <span class='rubyid_@events ivar id'>@events</span> <span class='lshft op'>&lt;&lt;</span> <span class='rubyid_hash identifier id'>hash</span>
+  <span class='rubyid_end end kw'>end</span>
+<span class='rubyid_end end kw'>end</span>
 </pre>
     </td>
   </tr>
@@ -243,12 +254,15 @@ Sheet should contain columns for
   
 </p><div class="docstring">
   <div class="discussion">
-    Returns the value of attribute events
+    
+<p>Returns the value of attribute events</p>
+
 
   </div>
 </div>
 <div class="tags">
   
+
 </div><table class="source_code">
   <tr>
     <td>
@@ -262,9 +276,9 @@ Sheet should contain columns for
     <td>
       <pre class="code"><span class="info file"># File 'lib/timeline_setter/parser.rb', line 3</span>
 
-<span class='def def kw'>def</span> <span class='events identifier id'>events</span>
-  <span class='@events ivar id'>@events</span>
-<span class='end end kw'>end</span>
+<span class='rubyid_def def kw'>def</span> <span class='rubyid_events identifier id'>events</span>
+  <span class='rubyid_@events ivar id'>@events</span>
+<span class='rubyid_end end kw'>end</span>
 </pre>
     </td>
   </tr>
@@ -277,9 +291,9 @@ Sheet should contain columns for
 </div>
     
     <div id="footer">
-  Generated on Mon Nov 21 17:19:25 2011 by 
+  Generated on Mon Mar 12 11:01:44 2012 by 
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.7.2 (ruby-1.8.7).
+  0.7.5 (ruby-1.8.7).
 </div>
 
   </body>

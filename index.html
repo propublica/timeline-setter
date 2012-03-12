@@ -246,7 +246,7 @@ should see a structure much like this where you&rsquo;ve specified your output:<
   |-----timeline-setter.js
   |-----vendor
   |-------underscore-min.js
-  |-------jquery-min.js      
+  |-------jquery-min.js
   |---stylesheets
   |-----timeline-setter.css
 </code></pre>
@@ -281,7 +281,7 @@ associated <em>event cards</em>.</p>
 <pre><code>formatter : function(d, defaults) {
   var months = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
   defaults.month = months[d.getMonth()];
-  return defaults;     
+  return defaults;
 }
 </code></pre>
 
@@ -329,12 +329,12 @@ second      =&gt; 11:59:22
 The interval notches date spans themselves can be customized by using the <code>-i</code> flag when generating a timeline. The available parameters are</p>
 
 <pre><code>Decade
-Lustrum 
+Lustrum
 FullYear
 Month
-Week  
-Date   
-Hours 
+Week
+Date
+Hours
 Minutes
 Seconds
 </code></pre>
@@ -346,7 +346,7 @@ Seconds
 <p>As of version 0.3.0, TimelineSetter has a JavaScript API that allows programmatic access to certain events, and the ability to activate cards. To use the API, assign the <code>TimelineSetter.Timeline.boot()</code> function to a variable, and then use methods in the <code>api</code> object like so:</p>
 
 <pre><code>var currentTimeline = TimelineSetter.Timeline.boot(options);
-currentTimeline.api.onLoad(function() { 
+currentTimeline.api.onLoad(function() {
   console.log("I'm ready")
 });
 </code></pre>
@@ -361,10 +361,13 @@ currentTimeline.api.onLoad(function() {
 
 <p>Register a callback for when a card is added to the timeline. This method has access to the event name and the card object.</p>
 
-<pre><code>currentTimeline.api.onCardAdd(function(evtName, obj) {
+<pre><code>currentTimeline.api.onCardAdd(function(evtName, obj, card) {
   console.log(obj);
+  console.log(card);
 });
 </code></pre>
+
+<p>If you want to customize the card&rsquo;s template, set <code>card.template</code> to an undescore template function.</p>
 
 <h3>onCardActivate</h3>
 

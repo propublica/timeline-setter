@@ -6,7 +6,7 @@
 <title>
   Class: TimelineSetter::CLI
   
-    &mdash; Documentation by YARD 0.7.2
+    &mdash; Documentation by YARD 0.7.5
   
 </title>
 
@@ -91,6 +91,8 @@
   
 </dl>
 <div class="clear"></div>
+
+
 
 
 
@@ -186,7 +188,9 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>A new instance of CLI.</div></span>
+    <span class="summary_desc"><div class='inline'>
+<p>A new instance of CLI.</p>
+</div></span>
   
 </li>
 
@@ -290,12 +294,15 @@
   
 </p><div class="docstring">
   <div class="discussion">
-    A new instance of CLI
+    
+<p>A new instance of CLI</p>
+
 
   </div>
 </div>
 <div class="tags">
   
+
 </div><table class="source_code">
   <tr>
     <td>
@@ -309,9 +316,9 @@
     <td>
       <pre class="code"><span class="info file"># File 'lib/timeline_setter/cli.rb', line 6</span>
 
-<span class='def def kw'>def</span> <span class='initialize identifier id'>initialize</span>
-  <span class='parse_options! fid id'>parse_options!</span>
-<span class='end end kw'>end</span>
+<span class='rubyid_def def kw'>def</span> <span class='rubyid_initialize identifier id'>initialize</span>
+  <span class='rubyid_parse_options! fid id'>parse_options!</span>
+<span class='rubyid_end end kw'>end</span>
 </pre>
     </td>
   </tr>
@@ -355,29 +362,31 @@
 92
 93
 94
-95</pre>
+95
+96</pre>
     </td>
     <td>
       <pre class="code"><span class="info file"># File 'lib/timeline_setter/cli.rb', line 78</span>
 
-<span class='def def kw'>def</span> <span class='compile! fid id'>compile!</span>
-  <span class='if if kw'>if</span> <span class='notop op'>!</span><span class='@options ivar id'>@options</span><span class='lbrack token'>[</span><span class='symbol val'>:no_assets</span><span class='rbrack token'>]</span> <span class='orop op'>||</span> <span class='notop op'>!</span><span class='@options ivar id'>@options</span><span class='lbrack token'>[</span><span class='symbol val'>:min</span><span class='rbrack token'>]</span>
-    <span class='FileUtils constant id'>FileUtils</span><span class='dot token'>.</span><span class='cp_r identifier id'>cp_r</span><span class='lparen token'>(</span><span class='Dir constant id'>Dir</span><span class='dot token'>.</span><span class='glob identifier id'>glob</span><span class='lparen token'>(</span><span class='dstring node'>&quot;#{TimelineSetter::ROOT}/public/*&quot;</span><span class='rparen token'>)</span><span class='comma token'>,</span> <span class='outdir identifier id'>outdir</span><span class='rparen token'>)</span>
+<span class='rubyid_def def kw'>def</span> <span class='rubyid_compile! fid id'>compile!</span>
+  <span class='rubyid_FileUtils constant id'>FileUtils</span><span class='dot token'>.</span><span class='rubyid_mkdir_p identifier id'>mkdir_p</span> <span class='rubyid_outdir identifier id'>outdir</span> <span class='rubyid_unless unless_mod kw'>unless</span> <span class='rubyid_File constant id'>File</span><span class='dot token'>.</span><span class='rubyid_exists? fid id'>exists?</span> <span class='rubyid_outdir identifier id'>outdir</span>
+  <span class='rubyid_if if kw'>if</span> <span class='notop op'>!</span><span class='rubyid_@options ivar id'>@options</span><span class='lbrack token'>[</span><span class='symbol val'>:no_assets</span><span class='rbrack token'>]</span> <span class='orop op'>||</span> <span class='notop op'>!</span><span class='rubyid_@options ivar id'>@options</span><span class='lbrack token'>[</span><span class='symbol val'>:min</span><span class='rbrack token'>]</span>
+    <span class='rubyid_FileUtils constant id'>FileUtils</span><span class='dot token'>.</span><span class='rubyid_cp_r identifier id'>cp_r</span><span class='lparen token'>(</span><span class='rubyid_Dir constant id'>Dir</span><span class='dot token'>.</span><span class='rubyid_glob identifier id'>glob</span><span class='lparen token'>(</span><span class='dstring node'>&quot;#{TimelineSetter::ROOT}/public/*&quot;</span><span class='rparen token'>)</span><span class='comma token'>,</span> <span class='rubyid_outdir identifier id'>outdir</span><span class='rparen token'>)</span>
     <span class='comment val'># Concatenate JSTs to timeline-setter.js and remove templates.js</span>
     <span class='dxstring node'>`cat #{outdir}/javascripts/templates.js &gt;&gt; #{outdir}/javascripts/timeline-setter.js &amp;&amp; rm -rf #{outdir}/javascripts/templates*`</span>
-  <span class='end end kw'>end</span>
+  <span class='rubyid_end end kw'>end</span>
 
-  <span class='File constant id'>File</span><span class='dot token'>.</span><span class='open identifier id'>open</span><span class='lparen token'>(</span><span class='timeline_page_path identifier id'>timeline_page_path</span><span class='comma token'>,</span> <span class='string val'>'w+'</span><span class='rparen token'>)</span> <span class='do do kw'>do</span> <span class='bitor op'>|</span><span class='doc identifier id'>doc</span><span class='bitor op'>|</span>
-    <span class='doc identifier id'>doc</span><span class='dot token'>.</span><span class='write identifier id'>write</span> <span class='html identifier id'>html</span>
-  <span class='end end kw'>end</span>
+  <span class='rubyid_File constant id'>File</span><span class='dot token'>.</span><span class='rubyid_open identifier id'>open</span><span class='lparen token'>(</span><span class='rubyid_timeline_page_path identifier id'>timeline_page_path</span><span class='comma token'>,</span> <span class='string val'>'w+'</span><span class='rparen token'>)</span> <span class='rubyid_do do kw'>do</span> <span class='bitor op'>|</span><span class='rubyid_doc identifier id'>doc</span><span class='bitor op'>|</span>
+    <span class='rubyid_doc identifier id'>doc</span><span class='dot token'>.</span><span class='rubyid_write identifier id'>write</span> <span class='rubyid_html identifier id'>html</span>
+  <span class='rubyid_end end kw'>end</span>
 
-  <span class='puts identifier id'>puts</span> <span class='dstring node'>&quot;== Files copied to #{outdir}&quot;</span>
+  <span class='rubyid_puts identifier id'>puts</span> <span class='dstring node'>&quot;== Files copied to #{outdir}&quot;</span>
 
-  <span class='if if kw'>if</span> <span class='@options ivar id'>@options</span><span class='lbrack token'>[</span><span class='symbol val'>:open</span><span class='rbrack token'>]</span>
-    <span class='puts identifier id'>puts</span> <span class='string val'>&quot;== Opening ...&quot;</span>
+  <span class='rubyid_if if kw'>if</span> <span class='rubyid_@options ivar id'>@options</span><span class='lbrack token'>[</span><span class='symbol val'>:open</span><span class='rbrack token'>]</span>
+    <span class='rubyid_puts identifier id'>puts</span> <span class='string val'>&quot;== Opening ...&quot;</span>
     <span class='dxstring node'>%x[ open #{timeline_page_path} ]</span>
-  <span class='end end kw'>end</span>
-<span class='end end kw'>end</span>
+  <span class='rubyid_end end kw'>end</span>
+<span class='rubyid_end end kw'>end</span>
 </pre>
     </td>
   </tr>
@@ -404,9 +413,9 @@
     <td>
       <pre class="code"><span class="info file"># File 'lib/timeline_setter/cli.rb', line 59</span>
 
-<span class='def def kw'>def</span> <span class='events identifier id'>events</span>
-  <span class='TimelineSetter constant id'>TimelineSetter</span><span class='colon2 op'>::</span><span class='Parser constant id'>Parser</span><span class='dot token'>.</span><span class='new identifier id'>new</span> <span class='sheet identifier id'>sheet</span>
-<span class='end end kw'>end</span>
+<span class='rubyid_def def kw'>def</span> <span class='rubyid_events identifier id'>events</span>
+  <span class='rubyid_TimelineSetter constant id'>TimelineSetter</span><span class='colon2 op'>::</span><span class='rubyid_Parser constant id'>Parser</span><span class='dot token'>.</span><span class='rubyid_new identifier id'>new</span> <span class='rubyid_sheet identifier id'>sheet</span>
+<span class='rubyid_end end kw'>end</span>
 </pre>
     </td>
   </tr>
@@ -436,12 +445,12 @@
     <td>
       <pre class="code"><span class="info file"># File 'lib/timeline_setter/cli.rb', line 63</span>
 
-<span class='def def kw'>def</span> <span class='html identifier id'>html</span>
-  <span class='TimelineSetter constant id'>TimelineSetter</span><span class='colon2 op'>::</span><span class='Timeline constant id'>Timeline</span><span class='dot token'>.</span><span class='new identifier id'>new</span><span class='lparen token'>(</span><span class='lbrace token'>{</span>
-    <span class='symbol val'>:events</span> <span class='assign token'>=</span><span class='gt op'>&gt;</span> <span class='events identifier id'>events</span><span class='dot token'>.</span><span class='events identifier id'>events</span><span class='comma token'>,</span>
-    <span class='symbol val'>:interval</span> <span class='assign token'>=</span><span class='gt op'>&gt;</span> <span class='@options ivar id'>@options</span><span class='lbrack token'>[</span><span class='symbol val'>:interval</span><span class='rbrack token'>]</span> <span class='orop op'>||</span> <span class='string val'>''</span>
-  <span class='rbrace token'>}</span><span class='rparen token'>)</span><span class='dot token'>.</span><span class='send identifier id'>send</span><span class='lparen token'>(</span><span class='@options ivar id'>@options</span><span class='lbrack token'>[</span><span class='symbol val'>:min</span><span class='rbrack token'>]</span> <span class='question op'>?</span> <span class='symbol val'>:timeline_min</span> <span class='colon op'>:</span> <span class='symbol val'>:timeline</span><span class='rparen token'>)</span>
-<span class='end end kw'>end</span>
+<span class='rubyid_def def kw'>def</span> <span class='rubyid_html identifier id'>html</span>
+  <span class='rubyid_TimelineSetter constant id'>TimelineSetter</span><span class='colon2 op'>::</span><span class='rubyid_Timeline constant id'>Timeline</span><span class='dot token'>.</span><span class='rubyid_new identifier id'>new</span><span class='lparen token'>(</span><span class='lbrace token'>{</span>
+    <span class='symbol val'>:events</span> <span class='assign token'>=</span><span class='gt op'>&gt;</span> <span class='rubyid_events identifier id'>events</span><span class='dot token'>.</span><span class='rubyid_events identifier id'>events</span><span class='comma token'>,</span>
+    <span class='symbol val'>:interval</span> <span class='assign token'>=</span><span class='gt op'>&gt;</span> <span class='rubyid_@options ivar id'>@options</span><span class='lbrack token'>[</span><span class='symbol val'>:interval</span><span class='rbrack token'>]</span> <span class='orop op'>||</span> <span class='string val'>''</span>
+  <span class='rbrace token'>}</span><span class='rparen token'>)</span><span class='dot token'>.</span><span class='rubyid_send identifier id'>send</span><span class='lparen token'>(</span><span class='rubyid_@options ivar id'>@options</span><span class='lbrack token'>[</span><span class='symbol val'>:min</span><span class='rbrack token'>]</span> <span class='question op'>?</span> <span class='symbol val'>:timeline_min</span> <span class='colon op'>:</span> <span class='symbol val'>:timeline</span><span class='rparen token'>)</span>
+<span class='rubyid_end end kw'>end</span>
 </pre>
     </td>
   </tr>
@@ -468,9 +477,9 @@
     <td>
       <pre class="code"><span class="info file"># File 'lib/timeline_setter/cli.rb', line 70</span>
 
-<span class='def def kw'>def</span> <span class='outdir identifier id'>outdir</span>
-  <span class='@options ivar id'>@options</span><span class='lbrack token'>[</span><span class='symbol val'>:output</span><span class='rbrack token'>]</span> <span class='question op'>?</span> <span class='@options ivar id'>@options</span><span class='lbrack token'>[</span><span class='symbol val'>:output</span><span class='rbrack token'>]</span> <span class='colon op'>:</span> <span class='dstring node'>&quot;#{`pwd`.strip}/&quot;</span>
-<span class='end end kw'>end</span>
+<span class='rubyid_def def kw'>def</span> <span class='rubyid_outdir identifier id'>outdir</span>
+  <span class='rubyid_@options ivar id'>@options</span><span class='lbrack token'>[</span><span class='symbol val'>:output</span><span class='rbrack token'>]</span> <span class='question op'>?</span> <span class='rubyid_@options ivar id'>@options</span><span class='lbrack token'>[</span><span class='symbol val'>:output</span><span class='rbrack token'>]</span> <span class='colon op'>:</span> <span class='dstring node'>&quot;#{`pwd`.strip}/&quot;</span>
+<span class='rubyid_end end kw'>end</span>
 </pre>
     </td>
   </tr>
@@ -533,45 +542,45 @@
     <td>
       <pre class="code"><span class="info file"># File 'lib/timeline_setter/cli.rb', line 10</span>
 
-<span class='def def kw'>def</span> <span class='parse_options! fid id'>parse_options!</span>
-  <span class='@options ivar id'>@options</span> <span class='assign token'>=</span> <span class='lbrace token'>{</span><span class='rbrace token'>}</span>
-  <span class='option_parser identifier id'>option_parser</span> <span class='assign token'>=</span> <span class='OptionParser constant id'>OptionParser</span><span class='dot token'>.</span><span class='new identifier id'>new</span> <span class='do do kw'>do</span> <span class='bitor op'>|</span><span class='opts identifier id'>opts</span><span class='bitor op'>|</span>
-    <span class='opts identifier id'>opts</span><span class='dot token'>.</span><span class='banner identifier id'>banner</span> <span class='assign token'>=</span> <span class='string val'>&quot;TimelineSetter: A tool to generate HTML timelines from CSVs.\n\nUsage:\n&quot;</span>
+<span class='rubyid_def def kw'>def</span> <span class='rubyid_parse_options! fid id'>parse_options!</span>
+  <span class='rubyid_@options ivar id'>@options</span> <span class='assign token'>=</span> <span class='lbrace token'>{</span><span class='rbrace token'>}</span>
+  <span class='rubyid_option_parser identifier id'>option_parser</span> <span class='assign token'>=</span> <span class='rubyid_OptionParser constant id'>OptionParser</span><span class='dot token'>.</span><span class='rubyid_new identifier id'>new</span> <span class='rubyid_do do kw'>do</span> <span class='bitor op'>|</span><span class='rubyid_opts identifier id'>opts</span><span class='bitor op'>|</span>
+    <span class='rubyid_opts identifier id'>opts</span><span class='dot token'>.</span><span class='rubyid_banner identifier id'>banner</span> <span class='assign token'>=</span> <span class='string val'>&quot;TimelineSetter: A tool to generate HTML timelines from CSVs.\n\nUsage:\n&quot;</span>
 
-    <span class='opts identifier id'>opts</span><span class='dot token'>.</span><span class='on identifier id'>on</span><span class='lparen token'>(</span><span class='string val'>'-c'</span><span class='comma token'>,</span> <span class='string val'>'--csv CSV'</span><span class='comma token'>,</span> <span class='string val'>'CSV input file'</span><span class='rparen token'>)</span> <span class='do do kw'>do</span> <span class='bitor op'>|</span><span class='c identifier id'>c</span><span class='bitor op'>|</span>
-      <span class='@options ivar id'>@options</span><span class='lbrack token'>[</span><span class='symbol val'>:csv</span><span class='rbrack token'>]</span> <span class='assign token'>=</span> <span class='c identifier id'>c</span>
-    <span class='end end kw'>end</span>
-    <span class='opts identifier id'>opts</span><span class='dot token'>.</span><span class='on identifier id'>on</span><span class='lparen token'>(</span><span class='string val'>'-o'</span><span class='comma token'>,</span> <span class='string val'>'--output OUTPUT'</span><span class='comma token'>,</span> <span class='string val'>'Output directory to install timeline into.'</span><span class='rparen token'>)</span> <span class='do do kw'>do</span> <span class='bitor op'>|</span><span class='o identifier id'>o</span><span class='bitor op'>|</span>
-      <span class='@options ivar id'>@options</span><span class='lbrack token'>[</span><span class='symbol val'>:output</span><span class='rbrack token'>]</span> <span class='assign token'>=</span> <span class='o identifier id'>o</span>
-    <span class='end end kw'>end</span>
-    <span class='opts identifier id'>opts</span><span class='dot token'>.</span><span class='on identifier id'>on</span><span class='lparen token'>(</span><span class='string val'>'-a'</span><span class='comma token'>,</span> <span class='string val'>'--without-assets'</span><span class='comma token'>,</span> <span class='string val'>'Output timeline without supporting assets'</span><span class='rparen token'>)</span> <span class='do do kw'>do</span> <span class='bitor op'>|</span><span class='a identifier id'>a</span><span class='bitor op'>|</span>
-      <span class='@options ivar id'>@options</span><span class='lbrack token'>[</span><span class='symbol val'>:no_assets</span><span class='rbrack token'>]</span> <span class='assign token'>=</span> <span class='a identifier id'>a</span>
-    <span class='end end kw'>end</span>
-    <span class='opts identifier id'>opts</span><span class='dot token'>.</span><span class='on identifier id'>on</span><span class='lparen token'>(</span><span class='string val'>'-O'</span><span class='comma token'>,</span> <span class='string val'>'--open'</span><span class='comma token'>,</span> <span class='string val'>'Open generated timeline in a browser'</span><span class='rparen token'>)</span> <span class='do do kw'>do</span> <span class='bitor op'>|</span><span class='o identifier id'>o</span><span class='bitor op'>|</span>
-      <span class='@options ivar id'>@options</span><span class='lbrack token'>[</span><span class='symbol val'>:open</span><span class='rbrack token'>]</span> <span class='assign token'>=</span> <span class='o identifier id'>o</span>
-    <span class='end end kw'>end</span>
-    <span class='opts identifier id'>opts</span><span class='dot token'>.</span><span class='on identifier id'>on</span><span class='lparen token'>(</span><span class='string val'>'-m'</span><span class='comma token'>,</span> <span class='string val'>'--min'</span><span class='comma token'>,</span> <span class='string val'>'Create a minified one-page version of the timeline'</span><span class='rparen token'>)</span> <span class='do do kw'>do</span> <span class='bitor op'>|</span><span class='m identifier id'>m</span><span class='bitor op'>|</span>
-      <span class='@options ivar id'>@options</span><span class='lbrack token'>[</span><span class='symbol val'>:min</span><span class='rbrack token'>]</span> <span class='assign token'>=</span> <span class='m identifier id'>m</span>
-    <span class='end end kw'>end</span>
-    <span class='opts identifier id'>opts</span><span class='dot token'>.</span><span class='on identifier id'>on</span><span class='lparen token'>(</span><span class='string val'>'-i'</span><span class='comma token'>,</span> <span class='string val'>'--interval INTERVAL'</span><span class='comma token'>,</span> <span class='string val'>'Override automatic interval notches with a custom interval.'</span><span class='rparen token'>)</span> <span class='do do kw'>do</span> <span class='bitor op'>|</span><span class='i identifier id'>i</span><span class='bitor op'>|</span>
-      <span class='@options ivar id'>@options</span><span class='lbrack token'>[</span><span class='symbol val'>:interval</span><span class='rbrack token'>]</span> <span class='assign token'>=</span> <span class='i identifier id'>i</span>
-    <span class='end end kw'>end</span>
+    <span class='rubyid_opts identifier id'>opts</span><span class='dot token'>.</span><span class='rubyid_on identifier id'>on</span><span class='lparen token'>(</span><span class='string val'>'-c'</span><span class='comma token'>,</span> <span class='string val'>'--csv CSV'</span><span class='comma token'>,</span> <span class='string val'>'CSV input file'</span><span class='rparen token'>)</span> <span class='rubyid_do do kw'>do</span> <span class='bitor op'>|</span><span class='rubyid_c identifier id'>c</span><span class='bitor op'>|</span>
+      <span class='rubyid_@options ivar id'>@options</span><span class='lbrack token'>[</span><span class='symbol val'>:csv</span><span class='rbrack token'>]</span> <span class='assign token'>=</span> <span class='rubyid_c identifier id'>c</span>
+    <span class='rubyid_end end kw'>end</span>
+    <span class='rubyid_opts identifier id'>opts</span><span class='dot token'>.</span><span class='rubyid_on identifier id'>on</span><span class='lparen token'>(</span><span class='string val'>'-o'</span><span class='comma token'>,</span> <span class='string val'>'--output OUTPUT'</span><span class='comma token'>,</span> <span class='string val'>'Output directory to install timeline into.'</span><span class='rparen token'>)</span> <span class='rubyid_do do kw'>do</span> <span class='bitor op'>|</span><span class='rubyid_o identifier id'>o</span><span class='bitor op'>|</span>
+      <span class='rubyid_@options ivar id'>@options</span><span class='lbrack token'>[</span><span class='symbol val'>:output</span><span class='rbrack token'>]</span> <span class='assign token'>=</span> <span class='rubyid_o identifier id'>o</span>
+    <span class='rubyid_end end kw'>end</span>
+    <span class='rubyid_opts identifier id'>opts</span><span class='dot token'>.</span><span class='rubyid_on identifier id'>on</span><span class='lparen token'>(</span><span class='string val'>'-a'</span><span class='comma token'>,</span> <span class='string val'>'--without-assets'</span><span class='comma token'>,</span> <span class='string val'>'Output timeline without supporting assets'</span><span class='rparen token'>)</span> <span class='rubyid_do do kw'>do</span> <span class='bitor op'>|</span><span class='rubyid_a identifier id'>a</span><span class='bitor op'>|</span>
+      <span class='rubyid_@options ivar id'>@options</span><span class='lbrack token'>[</span><span class='symbol val'>:no_assets</span><span class='rbrack token'>]</span> <span class='assign token'>=</span> <span class='rubyid_a identifier id'>a</span>
+    <span class='rubyid_end end kw'>end</span>
+    <span class='rubyid_opts identifier id'>opts</span><span class='dot token'>.</span><span class='rubyid_on identifier id'>on</span><span class='lparen token'>(</span><span class='string val'>'-O'</span><span class='comma token'>,</span> <span class='string val'>'--open'</span><span class='comma token'>,</span> <span class='string val'>'Open generated timeline in a browser'</span><span class='rparen token'>)</span> <span class='rubyid_do do kw'>do</span> <span class='bitor op'>|</span><span class='rubyid_o identifier id'>o</span><span class='bitor op'>|</span>
+      <span class='rubyid_@options ivar id'>@options</span><span class='lbrack token'>[</span><span class='symbol val'>:open</span><span class='rbrack token'>]</span> <span class='assign token'>=</span> <span class='rubyid_o identifier id'>o</span>
+    <span class='rubyid_end end kw'>end</span>
+    <span class='rubyid_opts identifier id'>opts</span><span class='dot token'>.</span><span class='rubyid_on identifier id'>on</span><span class='lparen token'>(</span><span class='string val'>'-m'</span><span class='comma token'>,</span> <span class='string val'>'--min'</span><span class='comma token'>,</span> <span class='string val'>'Create a minified one-page version of the timeline'</span><span class='rparen token'>)</span> <span class='rubyid_do do kw'>do</span> <span class='bitor op'>|</span><span class='rubyid_m identifier id'>m</span><span class='bitor op'>|</span>
+      <span class='rubyid_@options ivar id'>@options</span><span class='lbrack token'>[</span><span class='symbol val'>:min</span><span class='rbrack token'>]</span> <span class='assign token'>=</span> <span class='rubyid_m identifier id'>m</span>
+    <span class='rubyid_end end kw'>end</span>
+    <span class='rubyid_opts identifier id'>opts</span><span class='dot token'>.</span><span class='rubyid_on identifier id'>on</span><span class='lparen token'>(</span><span class='string val'>'-i'</span><span class='comma token'>,</span> <span class='string val'>'--interval INTERVAL'</span><span class='comma token'>,</span> <span class='string val'>'Override automatic interval notches with a custom interval.'</span><span class='rparen token'>)</span> <span class='rubyid_do do kw'>do</span> <span class='bitor op'>|</span><span class='rubyid_i identifier id'>i</span><span class='bitor op'>|</span>
+      <span class='rubyid_@options ivar id'>@options</span><span class='lbrack token'>[</span><span class='symbol val'>:interval</span><span class='rbrack token'>]</span> <span class='assign token'>=</span> <span class='rubyid_i identifier id'>i</span>
+    <span class='rubyid_end end kw'>end</span>
 
 
-    <span class='opts identifier id'>opts</span><span class='dot token'>.</span><span class='on_tail identifier id'>on_tail</span><span class='lparen token'>(</span><span class='string val'>&quot;-h&quot;</span><span class='comma token'>,</span> <span class='string val'>&quot;--help&quot;</span><span class='comma token'>,</span> <span class='string val'>&quot;Show this message&quot;</span><span class='rparen token'>)</span> <span class='do do kw'>do</span>
-      <span class='puts identifier id'>puts</span> <span class='opts identifier id'>opts</span>
-      <span class='exit identifier id'>exit</span>
-    <span class='end end kw'>end</span>
-  <span class='end end kw'>end</span>
-  <span class='option_parser identifier id'>option_parser</span><span class='dot token'>.</span><span class='parse! fid id'>parse!</span>
+    <span class='rubyid_opts identifier id'>opts</span><span class='dot token'>.</span><span class='rubyid_on_tail identifier id'>on_tail</span><span class='lparen token'>(</span><span class='string val'>&quot;-h&quot;</span><span class='comma token'>,</span> <span class='string val'>&quot;--help&quot;</span><span class='comma token'>,</span> <span class='string val'>&quot;Show this message&quot;</span><span class='rparen token'>)</span> <span class='rubyid_do do kw'>do</span>
+      <span class='rubyid_puts identifier id'>puts</span> <span class='rubyid_opts identifier id'>opts</span>
+      <span class='rubyid_exit identifier id'>exit</span>
+    <span class='rubyid_end end kw'>end</span>
+  <span class='rubyid_end end kw'>end</span>
+  <span class='rubyid_option_parser identifier id'>option_parser</span><span class='dot token'>.</span><span class='rubyid_parse! fid id'>parse!</span>
 
-  <span class='if if kw'>if</span> <span class='@options ivar id'>@options</span><span class='dot token'>.</span><span class='empty? fid id'>empty?</span>
-    <span class='puts identifier id'>puts</span> <span class='option_parser identifier id'>option_parser</span><span class='dot token'>.</span><span class='on_tail identifier id'>on_tail</span>
-    <span class='exit identifier id'>exit</span>
-  <span class='else else kw'>else</span>
-    <span class='compile! fid id'>compile!</span>
-  <span class='end end kw'>end</span>
-<span class='end end kw'>end</span>
+  <span class='rubyid_if if kw'>if</span> <span class='rubyid_@options ivar id'>@options</span><span class='dot token'>.</span><span class='rubyid_empty? fid id'>empty?</span>
+    <span class='rubyid_puts identifier id'>puts</span> <span class='rubyid_option_parser identifier id'>option_parser</span><span class='dot token'>.</span><span class='rubyid_on_tail identifier id'>on_tail</span>
+    <span class='rubyid_exit identifier id'>exit</span>
+  <span class='rubyid_else else kw'>else</span>
+    <span class='rubyid_compile! fid id'>compile!</span>
+  <span class='rubyid_end end kw'>end</span>
+<span class='rubyid_end end kw'>end</span>
 </pre>
     </td>
   </tr>
@@ -598,9 +607,9 @@
     <td>
       <pre class="code"><span class="info file"># File 'lib/timeline_setter/cli.rb', line 55</span>
 
-<span class='def def kw'>def</span> <span class='sheet identifier id'>sheet</span>
-  <span class='File constant id'>File</span><span class='dot token'>.</span><span class='open identifier id'>open</span><span class='lparen token'>(</span><span class='@options ivar id'>@options</span><span class='lbrack token'>[</span><span class='symbol val'>:csv</span><span class='rbrack token'>]</span><span class='rparen token'>)</span><span class='dot token'>.</span><span class='read identifier id'>read</span>
-<span class='end end kw'>end</span>
+<span class='rubyid_def def kw'>def</span> <span class='rubyid_sheet identifier id'>sheet</span>
+  <span class='rubyid_File constant id'>File</span><span class='dot token'>.</span><span class='rubyid_open identifier id'>open</span><span class='lparen token'>(</span><span class='rubyid_@options ivar id'>@options</span><span class='lbrack token'>[</span><span class='symbol val'>:csv</span><span class='rbrack token'>]</span><span class='rparen token'>)</span><span class='dot token'>.</span><span class='rubyid_read identifier id'>read</span>
+<span class='rubyid_end end kw'>end</span>
 </pre>
     </td>
   </tr>
@@ -627,9 +636,9 @@
     <td>
       <pre class="code"><span class="info file"># File 'lib/timeline_setter/cli.rb', line 74</span>
 
-<span class='def def kw'>def</span> <span class='timeline_page_path identifier id'>timeline_page_path</span>
-  <span class='File constant id'>File</span><span class='dot token'>.</span><span class='join identifier id'>join</span><span class='lparen token'>(</span><span class='outdir identifier id'>outdir</span><span class='comma token'>,</span> <span class='string val'>'timeline.html'</span><span class='rparen token'>)</span>
-<span class='end end kw'>end</span>
+<span class='rubyid_def def kw'>def</span> <span class='rubyid_timeline_page_path identifier id'>timeline_page_path</span>
+  <span class='rubyid_File constant id'>File</span><span class='dot token'>.</span><span class='rubyid_join identifier id'>join</span><span class='lparen token'>(</span><span class='rubyid_outdir identifier id'>outdir</span><span class='comma token'>,</span> <span class='string val'>'timeline.html'</span><span class='rparen token'>)</span>
+<span class='rubyid_end end kw'>end</span>
 </pre>
     </td>
   </tr>
@@ -641,9 +650,9 @@
 </div>
     
     <div id="footer">
-  Generated on Mon Nov 21 17:19:25 2011 by 
+  Generated on Mon Mar 12 11:01:43 2012 by 
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.7.2 (ruby-1.8.7).
+  0.7.5 (ruby-1.8.7).
 </div>
 
   </body>
