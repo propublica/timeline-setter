@@ -8,16 +8,16 @@ require './lib/timeline_setter'
 desc "generate templates and minified JS. Stash them in public/javascripts"
 task :jammit do
   %x{
-    cd #{TimelineSetter::ROOT} && 
-    jammit && 
-    mv public/assets/templates.js public/javascripts/templates.js && 
+    cd #{TimelineSetter::ROOT} &&
+    jammit &&
+    mv public/assets/templates.js public/javascripts/templates.js &&
     mv public/assets/main.js public/javascripts/timeline-setter.min.js
     rm -rf public/assets
   }
 end
 
 desc "build docs"
-task :docs do 
+task :docs do
   require 'rdiscount'
   require 'erb'
   version = TimelineSetter::VERSION
