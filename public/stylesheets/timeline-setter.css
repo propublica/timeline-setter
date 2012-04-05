@@ -193,7 +193,7 @@
       user-select: none;
       -moz-user-select: none;
       -khtml-user-select: none;
-      color: black;
+      color: #444;
       -webkit-user-select: none;
       text-shadow: 1px 1px 0 white;
       background: -webkit-gradient(linear,left top,left bottom,from(white),to(#F0F0F0));
@@ -206,8 +206,6 @@
       text-align: center;
     }
     .TS-controls a.TS-choose:hover {
-      color: black;
-      cursor: pointer;
       text-decoration: none;
       background: -webkit-gradient(linear,left top,left bottom,from(white),to(#DEDEDE));
       background: -moz-linear-gradient(top,white,#DEDEDE);
