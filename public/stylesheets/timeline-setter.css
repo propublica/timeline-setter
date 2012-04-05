@@ -169,7 +169,7 @@
       border:1px solid #cecece;
       background-color:#f0f0f0;
       padding:3px 5px 3px 5px;
-      color:#999;
+      color:#444;
       font-family:"Helvetica Neue",Arial,sans-serif;
       font-weight:normal;
       height: 14px;
@@ -178,13 +178,42 @@
       -moz-border-radius: 2px;
       border-radius: 2px;      
       display: inline;
+      cursor:pointer;
+      -webkit-box-shadow: #f0f0f0 0 0 2px;
+      -moz-box-shadow: #f0f0f0 0 0 2px;
+    }
+    .TS-controls a.TS-choose {
+      padding: 5px;
+      background: white;
+      -webkit-border-radius: 04px;
+      -moz-border-radius: 04px;
+      border-radius: 04px;
+      font-weight: bold;
+      cursor: pointer;
+      user-select: none;
+      -moz-user-select: none;
+      -khtml-user-select: none;
+      color: black;
+      -webkit-user-select: none;
+      text-shadow: 1px 1px 0 white;
+      background: -webkit-gradient(linear,left top,left bottom,from(white),to(#F0F0F0));
+      background: -moz-linear-gradient(top,white,#F0F0F0);
+      text-decoration: none;
+      margin: 3px 0 10px 0;
+      font-family: "Helvetica Neue",arial,sans-serif;
+      font-size: 14px;
+      font-weight: bold;
+      text-align: center;
+    }
+    .TS-controls a.TS-choose:hover {
+      color: black;
+      cursor: pointer;
+      text-decoration: none;
+      background: -webkit-gradient(linear,left top,left bottom,from(white),to(#DEDEDE));
+      background: -moz-linear-gradient(top,white,#DEDEDE);
     }
     .TS-choose_next {
       margin-left:4px;
-    }
-    .TS-controls_inner_text {
-      font-size:11px; 
-      text-transform:uppercase;
     }
     .TS-controls a.TS-controls_disabled {
       color:#cecece;
@@ -228,6 +257,7 @@
       font-size:11px;
       height:30px;
       margin-left:-10px;
+      width:75%;
     }
     .TS-series_legend_swatch {
       background-image:url("data:image/gif;charset=utf-8;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAIBJREFUeNrskksKwCAMBev9byS4UfEOoh7AA4hu9JUG2kVb+8FVoYFsQmbghTAA00ix7wumRfC0nXPYz97Ca70ThBA20hhzL7DWIsZIi957AmutB7gryDkTlFLaYKUUznZPBUIIlFIIbq1BSolevG5uzjnF0Frj6j7sf+VxwSzAAG/ifZQMhRJhAAAAAElFTkSuQmCC");
@@ -248,7 +278,7 @@
     }
     .TS-series_legend_item {
       float:left;
-      margin:-3px 10px 0 10px;
+      margin:-3px 10px 6px 10px;
       cursor:pointer;
     }
     .TS-series_legend_item_inactive {}
