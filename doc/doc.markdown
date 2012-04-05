@@ -314,6 +314,14 @@ questions should go to <a href="mailto:opensource@propublica.org">opensource@pro
 <a id="changelog"></a>
 ## Change Log
 
+<a id="release-031"></a>
+## 0.3.1
+
+* Fix position bug that was preventing card flipping in IE <= 8
+* Add `noscript` fallback
+* Add Century, HalfCentury, Quincenenary, HalfHour, QuarterHour, Millenium intervals
+* Fix CLI in cases where output directory already exists
+
 <a id="release-030"></a>
 ### 0.3.0
 
