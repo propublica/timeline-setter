@@ -773,7 +773,7 @@
     this.series.bind("hideNotch", this.toggleNotch);
     this.series.bind("showNotch", this.toggleNotch);
     this.timeline.bind("render", this.render);
-    this.timeline.bar.bind("flip", this.flip);
+    this.timeline.bar.bind("move", this.flip);
     this.id = [
       this.get('timestamp'),
       this.get('description').split(/ /)[0].replace(/[^a-zA-Z\-]/g,"")
