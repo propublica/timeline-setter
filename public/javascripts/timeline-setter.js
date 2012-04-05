@@ -388,7 +388,7 @@
       // Zero out the rest
       while(idx--){
         intvl = this.INTERVAL_ORDER[idx];
-        if (!(_.include(['Week', 'HalfHour', 'QuarterHour'], intvl)))
+        if (!(_.include(['Week', 'HalfHour', 'QuarterHour'].concat(_.keys(this.YEAR_FRACTIONS)), intvl)))
           date["set" + intvl](intvl === "Date" ? 1 : 0);
       }
 
@@ -412,7 +412,8 @@
           date.setMinutes(this.getQuarterHour(date) + 15);
           break;
         default:
-          date["set" + intvl](date["get" + intvl]() + 1);
+          if (!(_.include(['Week', 'HalfHour', 'QuarterHour'].concat(_.keys(this.YEAR_FRACTIONS)), intvl)))
+            date["set" + intvl](date["get" + intvl]() + 1);
       }
       return date.getTime();
     },
@@ -809,7 +810,7 @@
       var tRightEdge  = this.timeline.$(".timeline_setter").offset().left + this.timeline.$(".timeline_setter").width();
       var margin      = this.el.css("margin-left") === this.originalMargin;
       var flippable   = this.$(".TS-item").width() < this.timeline.$(".timeline_setter").width() / 2;
-      var offTimeline = this.el.position().left - this.$(".TS-item").width() < 0;
+      var offTimeline = (this.el.offset().left - this.el.parent().offset().left) - this.$(".TS-item").width() < 0;
 
       // If the card's right edge is more than the timeline's right edge and
       // it's never been flipped before and it won't go off the timeline when
