@@ -4,15 +4,14 @@
 # -*- encoding: utf-8 -*-
 
 Gem::Specification.new do |s|
-  s.name = %q{timeline_setter}
-  s.version = "0.3.0"
+  s.name = "timeline_setter"
+  s.version = "0.3.1"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Al Shaw", "Jeff Larson"]
-  s.date = %q{2011-11-02}
-  s.default_executable = %q{timeline-setter}
-  s.description = %q{TimelineSetter is a tool to create HTML timelines from spreadsheets of events.}
-  s.email = %q{almshaw@gmail.com}
+  s.date = "2012-04-05"
+  s.description = "TimelineSetter is a tool to create HTML timelines from spreadsheets of events."
+  s.email = "almshaw@gmail.com"
   s.executables = ["timeline-setter"]
   s.extra_rdoc_files = [
     "LICENSE.txt",
@@ -67,23 +66,25 @@ Gem::Specification.new do |s|
     "public/javascripts/timeline-setter.js",
     "public/javascripts/timeline-setter.min.js",
     "public/javascripts/vendor/jquery-min.js",
+    "public/javascripts/vendor/jquery.js",
     "public/javascripts/vendor/underscore-min.js",
+    "public/javascripts/vendor/underscore.js",
     "public/stylesheets/timeline-setter.css",
     "spec/spec_helper.rb",
     "spec/test_data.csv",
+    "spec/timeline-debug.html",
     "spec/timeline_setter_spec.rb",
     "templates/timeline-markup.erb",
     "templates/timeline-min.erb",
     "templates/timeline.erb",
     "timeline_setter.gemspec"
   ]
-  s.homepage = %q{http://github.com/propublica/timeline-setter}
+  s.homepage = "http://github.com/propublica/timeline-setter"
   s.require_paths = ["lib"]
-  s.rubygems_version = %q{1.3.7}
-  s.summary = %q{TimelineSetter is a tool to create HTML timelines from spreadsheets of events.}
+  s.rubygems_version = "1.8.15"
+  s.summary = "TimelineSetter is a tool to create HTML timelines from spreadsheets of events."
 
   if s.respond_to? :specification_version then
-    current_version = Gem::Specification::CURRENT_SPECIFICATION_VERSION
     s.specification_version = 3
 
     if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0') then
