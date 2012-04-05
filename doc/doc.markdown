@@ -315,7 +315,7 @@ questions should go to <a href="mailto:opensource@propublica.org">opensource@pro
 ## Change Log
 
 <a id="release-031"></a>
-## 0.3.1
+### 0.3.1
 
 * Fix position bug that was preventing card flipping in IE <= 8
 * Add `noscript` fallback
