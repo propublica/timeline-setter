@@ -160,10 +160,18 @@
     .TS-controls {
       margin: 0 0 0 0;
       float:right;
-      height:2%;
+      height:40px;
       overflow:visible;
       text-align: right;
-        width: 220px;
+      width: 210px;
+    }
+    .TS-zoom-container {
+      width:50px;
+    }
+    .TS-choose-container {
+      width:155px;
+      margin-left:55px;
+      margin-top:-15px;
     }
     .TS-controls a {
       border:1px solid #cecece;
@@ -184,7 +192,7 @@
     }
     .TS-controls a.TS-choose {
       padding: 7px;
-      background: white;
+      background: #f0f0f0;
       -webkit-border-radius: 04px;
       -moz-border-radius: 04px;
       border-radius: 04px;
@@ -193,11 +201,8 @@
       user-select: none;
       -moz-user-select: none;
       -khtml-user-select: none;
-      color: #444;
       -webkit-user-select: none;
-      text-shadow: 1px 1px 0 white;
-      background: -webkit-gradient(linear,left top,left bottom,from(white),to(#F0F0F0));
-      background: -moz-linear-gradient(top,white,#F0F0F0);
+      color: #444;
       text-decoration: none;
       margin: 3px 0 10px 0;
       font-family: "Helvetica",Arial,sans-serif;
@@ -207,8 +212,7 @@
     }
     .TS-controls a.TS-choose:hover {
       text-decoration: none;
-      background: -webkit-gradient(linear,left top,left bottom,from(white),to(#DEDEDE));
-      background: -moz-linear-gradient(top,white,#DEDEDE);
+      background: #fff;
     }
     .TS-choose_next {
       margin-left:4px;
