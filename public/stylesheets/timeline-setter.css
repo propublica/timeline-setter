@@ -183,7 +183,7 @@
       -moz-box-shadow: #f0f0f0 0 0 2px;
     }
     .TS-controls a.TS-choose {
-      padding: 5px;
+      padding: 7px;
       background: white;
       -webkit-border-radius: 04px;
       -moz-border-radius: 04px;
@@ -200,7 +200,7 @@
       background: -moz-linear-gradient(top,white,#F0F0F0);
       text-decoration: none;
       margin: 3px 0 10px 0;
-      font-family: "Helvetica Neue",arial,sans-serif;
+      font-family: "Helvetica",Arial,sans-serif;
       font-size: 14px;
       font-weight: bold;
       text-align: center;
