@@ -6,7 +6,7 @@
 <title>
   Class: TimelineSetter::Timeline
   
-    &mdash; Documentation by YARD 0.7.5
+    &mdash; Documentation by YARD 0.8.4.1
   
 </title>
 
@@ -15,9 +15,11 @@
   <link rel="stylesheet" href="../css/common.css" type="text/css" media="screen" charset="utf-8" />
 
 <script type="text/javascript" charset="utf-8">
-  relpath = '..';
-  if (relpath != '') relpath += '/';
+  hasFrames = window.top.frames.main ? true : false;
+  relpath = '../';
+  framesUrl = "../frames.html#!" + escape(window.location.href);
 </script>
+
 
   <script type="text/javascript" charset="utf-8" src="../js/jquery.js"></script>
 
@@ -26,36 +28,41 @@
 
   </head>
   <body>
-    <script type="text/javascript" charset="utf-8">
-      if (window.top.frames.main) document.body.className = 'frames';
-    </script>
-    
     <div id="header">
       <div id="menu">
   
-    <a href="../_index.html">Index (T)</a> &raquo; 
+    <a href="../_index.html">Index (T)</a> &raquo;
     <span class='title'><span class='object_link'><a href="../TimelineSetter.html" title="TimelineSetter (module)">TimelineSetter</a></span></span>
      &raquo; 
     <span class="title">Timeline</span>
   
-  
+
   <div class="noframes"><span class="title">(</span><a href="." target="_top">no frames</a><span class="title">)</span></div>
 </div>
 
       <div id="search">
   
-    <a id="class_list_link" href="#">Class List</a>
+    <a class="full_list_link" id="class_list_link"
+        href="../class_list.html">
+      Class List
+    </a>
   
-    <a id="method_list_link" href="#">Method List</a>
+    <a class="full_list_link" id="method_list_link"
+        href="../method_list.html">
+      Method List
+    </a>
   
-    <a id="file_list_link" href="#">File List</a>
+    <a class="full_list_link" id="file_list_link"
+        href="../file_list.html">
+      File List
+    </a>
   
 </div>
       <div class="clear"></div>
     </div>
-    
+
     <iframe id="search_frame"></iframe>
-    
+
     <div id="content"><h1>Class: TimelineSetter::Timeline
   
   
@@ -109,7 +116,10 @@
   </span>
   
   
-    <span class="note title readonly">readonly</span>
+  
+    
+      <span class="note title readonly">readonly</span>
+    
     
   
   
@@ -152,6 +162,7 @@
   
   
   
+  
 
   
     <span class="summary_desc"><div class='inline'></div></span>
@@ -167,6 +178,7 @@
 
     
   </span>
+  
   
     <span class="note title constructor">constructor</span>
   
@@ -199,6 +211,7 @@ Parser#initialize.</p>
   
   
   
+  
 
   
     <span class="summary_desc"><div class='inline'></div></span>
@@ -214,6 +227,7 @@ Parser#initialize.</p>
 
     
   </span>
+  
   
   
   
@@ -244,6 +258,7 @@ and embedding all assets into our ERB template.</p>
   
   
   
+  
 
   
     <span class="summary_desc"><div class='inline'></div></span>
@@ -259,6 +274,7 @@ and embedding all assets into our ERB template.</p>
 
     
   </span>
+  
   
   
   
@@ -282,13 +298,15 @@ the events hash to JSON to stick into our HTML.</p>
   <h2>Constructor Details</h2>
   
     <div class="method_details first">
-  <p class="signature first" id="initialize-instance_method">
+  <h3 class="signature first" id="initialize-instance_method">
   
     - (<tt><span class='object_link'><a href="" title="TimelineSetter::Timeline (class)">Timeline</a></span></tt>) <strong>initialize</strong>(opts = {}) 
   
 
   
-</p><div class="docstring">
+
+  
+</h3><div class="docstring">
   <div class="discussion">
     
 <p>Instantiate a new timeline from an events array created in
@@ -331,15 +349,16 @@ Parser#initialize</p>
     
       
       <span id=""></span>
-      <span id="timeline-instance_method"></span>
       <div class="method_details first">
-  <p class="signature first" id="timeline-instance_method">
+  <h3 class="signature first" id="timeline-instance_method">
   
     - (<tt>Object</tt>) <strong>timeline</strong>  <span class="extras">(readonly)</span>
   
 
   
-</p><div class="docstring">
+
+  
+</h3><div class="docstring">
   <div class="discussion">
     
 <p>Create timeline HTML by interpolating events hash into an ERB template.
@@ -366,7 +385,7 @@ preserves external links to CSS and JS.</p>
       <pre class="code"><span class="info file"># File 'lib/timeline_setter/timeline.rb', line 32</span>
 
 <span class='rubyid_def def kw'>def</span> <span class='rubyid_timeline identifier id'>timeline</span>
-  <span class='rubyid_@timeline ivar id'>@timeline</span> <span class='assign token'>=</span> <span class='rubyid_tmpl identifier id'>tmpl</span><span class='lparen token'>(</span><span class='string val'>&quot;timeline.erb&quot;</span><span class='rparen token'>)</span>
+  <span class='rubyid_@timeline ivar id'>@timeline</span>
 <span class='rubyid_end end kw'>end</span>
 </pre>
     </td>
@@ -379,16 +398,18 @@ preserves external links to CSS and JS.</p>
 
   <div id="instance_method_details" class="method_details_list">
     <h2>Instance Method Details</h2>
-    
+
     
       <div class="method_details first">
-  <p class="signature first" id="config_json-instance_method">
+  <h3 class="signature first" id="config_json-instance_method">
   
     - (<tt>Object</tt>) <strong>config_json</strong> 
   
 
   
-</p><table class="source_code">
+
+  
+</h3><table class="source_code">
   <tr>
     <td>
       <pre class="lines">
@@ -417,13 +438,15 @@ preserves external links to CSS and JS.</p>
 </div>
     
       <div class="method_details ">
-  <p class="signature " id="timeline_markup-instance_method">
+  <h3 class="signature " id="timeline_markup-instance_method">
   
     - (<tt>Object</tt>) <strong>timeline_markup</strong> 
   
 
   
-</p><table class="source_code">
+
+  
+</h3><table class="source_code">
   <tr>
     <td>
       <pre class="lines">
@@ -446,13 +469,15 @@ preserves external links to CSS and JS.</p>
 </div>
     
       <div class="method_details ">
-  <p class="signature " id="timeline_min-instance_method">
+  <h3 class="signature " id="timeline_min-instance_method">
   
     - (<tt>Object</tt>) <strong>timeline_min</strong> 
   
 
   
-</p><div class="docstring">
+
+  
+</h3><div class="docstring">
   <div class="discussion">
     
 <p>Create a minified one-page version of a timeline by minifying CSS and JS
@@ -499,13 +524,15 @@ and embedding all assets into our ERB template.</p>
 </div>
     
       <div class="method_details ">
-  <p class="signature " id="tmpl-instance_method">
+  <h3 class="signature " id="tmpl-instance_method">
   
     - (<tt>Object</tt>) <strong>tmpl</strong>(tmpl_file) 
   
 
   
-</p><table class="source_code">
+
+  
+</h3><table class="source_code">
   <tr>
     <td>
       <pre class="lines">
@@ -528,13 +555,15 @@ and embedding all assets into our ERB template.</p>
 </div>
     
       <div class="method_details ">
-  <p class="signature " id="to_json-instance_method">
+  <h3 class="signature " id="to_json-instance_method">
   
     - (<tt>Object</tt>) <strong>to_json</strong> 
   
 
   
-</p><div class="docstring">
+
+  
+</h3><div class="docstring">
   <div class="discussion">
     
 <p>Convert human dates to timestamps, sort the hash by timestamp, and convert
@@ -573,11 +602,11 @@ the events hash to JSON to stick into our HTML.</p>
   </div>
 
 </div>
-    
+
     <div id="footer">
-  Generated on Fri Aug 10 12:50:19 2012 by 
+  Generated on Thu Feb 21 11:04:16 2013 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.7.5 (ruby-1.8.7).
+  0.8.4.1 (ruby-1.8.7).
 </div>
 
   </body>

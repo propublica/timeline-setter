@@ -6,7 +6,7 @@
 <title>
   Class: TimelineSetter::Parser
   
-    &mdash; Documentation by YARD 0.7.5
+    &mdash; Documentation by YARD 0.8.4.1
   
 </title>
 
@@ -15,9 +15,11 @@
   <link rel="stylesheet" href="../css/common.css" type="text/css" media="screen" charset="utf-8" />
 
 <script type="text/javascript" charset="utf-8">
-  relpath = '..';
-  if (relpath != '') relpath += '/';
+  hasFrames = window.top.frames.main ? true : false;
+  relpath = '../';
+  framesUrl = "../frames.html#!" + escape(window.location.href);
 </script>
+
 
   <script type="text/javascript" charset="utf-8" src="../js/jquery.js"></script>
 
@@ -26,36 +28,41 @@
 
   </head>
   <body>
-    <script type="text/javascript" charset="utf-8">
-      if (window.top.frames.main) document.body.className = 'frames';
-    </script>
-    
     <div id="header">
       <div id="menu">
   
-    <a href="../_index.html">Index (P)</a> &raquo; 
+    <a href="../_index.html">Index (P)</a> &raquo;
     <span class='title'><span class='object_link'><a href="../TimelineSetter.html" title="TimelineSetter (module)">TimelineSetter</a></span></span>
      &raquo; 
     <span class="title">Parser</span>
   
-  
+
   <div class="noframes"><span class="title">(</span><a href="." target="_top">no frames</a><span class="title">)</span></div>
 </div>
 
       <div id="search">
   
-    <a id="class_list_link" href="#">Class List</a>
+    <a class="full_list_link" id="class_list_link"
+        href="../class_list.html">
+      Class List
+    </a>
   
-    <a id="method_list_link" href="#">Method List</a>
+    <a class="full_list_link" id="method_list_link"
+        href="../method_list.html">
+      Method List
+    </a>
   
-    <a id="file_list_link" href="#">File List</a>
+    <a class="full_list_link" id="file_list_link"
+        href="../file_list.html">
+      File List
+    </a>
   
 </div>
       <div class="clear"></div>
     </div>
-    
+
     <iframe id="search_frame"></iframe>
-    
+
     <div id="content"><h1>Class: TimelineSetter::Parser
   
   
@@ -109,7 +116,10 @@
   </span>
   
   
-    <span class="note title readonly">readonly</span>
+  
+    
+      <span class="note title readonly">readonly</span>
+    
     
   
   
@@ -147,6 +157,7 @@
     
   </span>
   
+  
     <span class="note title constructor">constructor</span>
   
   
@@ -171,27 +182,28 @@ row (event) in the sheet to an events array.</p>
   <h2>Constructor Details</h2>
   
     <div class="method_details first">
-  <p class="signature first" id="initialize-instance_method">
+  <h3 class="signature first" id="initialize-instance_method">
   
     - (<tt><span class='object_link'><a href="" title="TimelineSetter::Parser (class)">Parser</a></span></tt>) <strong>initialize</strong>(sheet) 
   
 
   
-</p><div class="docstring">
+
+  
+</h3><div class="docstring">
   <div class="discussion">
     
 <p>Initialize a new timeline from a CSV file via TableFu, add a hash for each
 row (event) in the sheet to an events array. Sheet should contain columns
 for</p>
 
-<pre class="code ruby"><code><span class='mult op'>*</span> <span class='rubyid_date identifier id'>date</span>
-<span class='mult op'>*</span> <span class='rubyid_display_date identifier id'>display_date</span>
-<span class='mult op'>*</span> <span class='rubyid_description identifier id'>description</span>
-<span class='mult op'>*</span> <span class='rubyid_link identifier id'>link</span>
-<span class='mult op'>*</span> <span class='rubyid_thumbnail identifier id'>thumbnail</span>
-<span class='mult op'>*</span> <span class='rubyid_series identifier id'>series</span>
-<span class='mult op'>*</span> <span class='rubyid_html identifier id'>html</span>
-</code></pre>
+<pre class="code ruby18"><code class="ruby18">* date
+* display_date
+* description
+* link
+* thumbnail
+* series
+* html</code></pre>
 
 
   </div>
@@ -244,15 +256,16 @@ for</p>
     
       
       <span id=""></span>
-      <span id="events-instance_method"></span>
       <div class="method_details first">
-  <p class="signature first" id="events-instance_method">
+  <h3 class="signature first" id="events-instance_method">
   
     - (<tt>Object</tt>) <strong>events</strong>  <span class="extras">(readonly)</span>
   
 
   
-</p><div class="docstring">
+
+  
+</h3><div class="docstring">
   <div class="discussion">
     
 <p>Returns the value of attribute events</p>
@@ -289,11 +302,11 @@ for</p>
 
 
 </div>
-    
+
     <div id="footer">
-  Generated on Fri Aug 10 12:50:19 2012 by 
+  Generated on Thu Feb 21 11:04:16 2013 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.7.5 (ruby-1.8.7).
+  0.8.4.1 (ruby-1.8.7).
 </div>
 
   </body>
