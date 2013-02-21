@@ -749,7 +749,14 @@
       if (this.name.length === 0) return;
       this.el = $(JST.series_legend(this));
       this.timeline.$(".TS-series_nav_container").append(this.el);
-      this.el.toggle(this.hideNotches, this.showNotches);
+      var counter = 0, that = this;
+      this.el.on("click", function(){
+        counter++;
+        if(counter % 2)
+          that.hideNotches();
+        else
+          that.showNotches();
+      });
     }
   });
 
