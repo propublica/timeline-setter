@@ -5,7 +5,7 @@
   var TimelineSetter = window.TimelineSetter = (window.TimelineSetter || {});
 
   // Current version of `TimelineSetter`
-  TimelineSetter.VERSION = "0.3.1";
+  TimelineSetter.VERSION = "0.3.2";
 
   // Mixins
   // ------

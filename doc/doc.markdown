@@ -315,6 +315,11 @@ questions should go to <a href="mailto:opensource@propublica.org">opensource@pro
 <a id="changelog"></a>
 ## Change Log
 
+<a id="release-032"></a>
+### 0.3.2
+
+* Fix reliance on jQuery's `.toggle(handler, handler)` which was deprecated in 1.8
+
 <a id="release-031"></a>
 ### 0.3.1
 
