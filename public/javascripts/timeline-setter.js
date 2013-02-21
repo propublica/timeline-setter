@@ -731,14 +731,14 @@
 
     // Inactivate this series legend item and trigger a `hideNotch` event.
     hideNotches : function(e){
-      e.preventDefault();
+      if(e) e.preventDefault();
       this.el.addClass("TS-series_legend_item_inactive");
       this.trigger("hideNotch");
     },
 
     // Activate the legend item and trigger the `showNotch` event.
     showNotches : function(e){
-      e.preventDefault();
+      if(e) e.preventDefault();
       this.el.removeClass("TS-series_legend_item_inactive");
       this.trigger("showNotch");
     },
