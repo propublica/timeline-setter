@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = "timeline_setter"
-  s.version = "0.3.1"
+  s.version = "0.3.2"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Al Shaw", "Jeff Larson"]
-  s.date = "2012-04-05"
+  s.date = "2013-02-21"
   s.description = "TimelineSetter is a tool to create HTML timelines from spreadsheets of events."
   s.email = "almshaw@gmail.com"
   s.executables = ["timeline-setter"]
@@ -27,6 +27,7 @@ Gem::Specification.new do |s|
     "doc/doc.markdown",
     "doc/doc_wrapper.erb",
     "doc/docco.css",
+    "doc/static-demo.html",
     "doc/templates.html",
     "doc/timeline-setter.html",
     "doc/timeline-setter.min.html",
@@ -81,7 +82,7 @@ Gem::Specification.new do |s|
   ]
   s.homepage = "http://github.com/propublica/timeline-setter"
   s.require_paths = ["lib"]
-  s.rubygems_version = "1.8.15"
+  s.rubygems_version = "1.8.24"
   s.summary = "TimelineSetter is a tool to create HTML timelines from spreadsheets of events."
 
   if s.respond_to? :specification_version then
