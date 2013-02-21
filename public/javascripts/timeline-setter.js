@@ -731,14 +731,14 @@
 
     // Inactivate this series legend item and trigger a `hideNotch` event.
     hideNotches : function(e){
-      e.preventDefault();
+      if(e) e.preventDefault();
       this.el.addClass("TS-series_legend_item_inactive");
       this.trigger("hideNotch");
     },
 
     // Activate the legend item and trigger the `showNotch` event.
     showNotches : function(e){
-      e.preventDefault();
+      if(e) e.preventDefault();
       this.el.removeClass("TS-series_legend_item_inactive");
       this.trigger("showNotch");
     },
@@ -749,7 +749,14 @@
       if (this.name.length === 0) return;
       this.el = $(JST.series_legend(this));
       this.timeline.$(".TS-series_nav_container").append(this.el);
-      this.el.toggle(this.hideNotches, this.showNotches);
+      var counter = 0, that = this;
+      this.el.on("click", function(){
+        counter++;
+        if(counter % 2)
+          that.hideNotches();
+        else
+          that.showNotches();
+      });
     }
   });
 
