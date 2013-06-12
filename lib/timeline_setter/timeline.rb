@@ -11,10 +11,10 @@ module TimelineSetter
     # Convert human dates to timestamps, sort the hash by timestamp, and
     # convert the events hash to JSON to stick into our HTML.
     def to_json
-      @events.each {|r| r[:timestamp] = Time.parse(r[:date]).to_i * 1000 }
+      @events.each {|r| r[:timestamp] = Chronic.parse(r[:date]).to_i * 1000 }
       @events.to_json
     end
-    
+
     def config_json
       {
         "interval"  => "#{@interval}",
@@ -44,7 +44,7 @@ module TimelineSetter
       @js << File.open("#{TimelineSetter::ROOT}/public/javascripts/timeline-setter.min.js", 'r').read
       @timeline = tmpl("timeline-min.erb")
     end
-    
+
     def tmpl(tmpl_file)
       ERB.new(File.open("#{TimelineSetter::ROOT}/templates/#{tmpl_file}").read).result(binding)
     end
