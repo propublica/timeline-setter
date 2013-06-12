@@ -93,12 +93,14 @@ Gem::Specification.new do |s|
       s.add_runtime_dependency(%q<table_fu>, [">= 0"])
       s.add_runtime_dependency(%q<kompress>, [">= 0.0.2"])
       s.add_runtime_dependency(%q<jammit>, [">= 0"])
+      s.add_runtime_dependency(%q<chronic>, [">= 0"])
       s.add_development_dependency(%q<rspec>, [">= 2.0.0"])
     else
       s.add_dependency(%q<json>, [">= 0"])
       s.add_dependency(%q<table_fu>, [">= 0"])
       s.add_dependency(%q<kompress>, [">= 0.0.2"])
       s.add_dependency(%q<jammit>, [">= 0"])
+      s.add_dependency(%q<chronic>, [">= 0"])
       s.add_dependency(%q<rspec>, [">= 2.0.0"])
     end
   else
@@ -106,7 +108,7 @@ Gem::Specification.new do |s|
     s.add_dependency(%q<table_fu>, [">= 0"])
     s.add_dependency(%q<kompress>, [">= 0.0.2"])
     s.add_dependency(%q<jammit>, [">= 0"])
+    s.add_dependency(%q<chronic>, [">= 0"])
     s.add_dependency(%q<rspec>, [">= 2.0.0"])
   end
 end
-

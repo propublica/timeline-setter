@@ -5,10 +5,12 @@ end
 
 require 'date'
 require 'time'
+require 'chronic'
 require 'erb'
 require 'table_fu'
 require 'json'
 require 'kompress'
+
 
 require "#{TimelineSetter::ROOT}/lib/timeline_setter/version"
 require "#{TimelineSetter::ROOT}/lib/timeline_setter/parser"
